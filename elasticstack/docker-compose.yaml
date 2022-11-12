@@ -1,0 +1,46 @@
+version: "3"
+services:
+    elasticsearch:
+      container_name: elastic-exp
+      image: "docker.elastic.co/elasticsearch/elasticsearch:7.17.7"
+      environment:
+        - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+        - "discovery.type=single-node"
+        # disable security localy!
+        - "xpack.security.enabled=false"
+      ports:
+        - "9200:9200"
+      volumes:
+        - elasticsearch_data:/usr/share/elasticsearch/data
+      networks:
+        - elastic
+
+    kibana:
+      container_name: kibana-exp
+      image: "docker.elastic.co/kibana/kibana:7.17.7"
+      environment:
+        - "elasticsearch.hosts=http://elastic-exp:9200"
+      ports:
+        - "5601:5601"
+      depends_on:
+        - elasticsearch
+      networks:
+        - elastic  
+
+    # filebeat:
+    #   container_name: filebeat-exp
+    #   image: "docker.elastic.co/beats/filebeat:7.2.0"
+    #   # image: filebeat-exp
+    #   # build: filebeat/Dockerfile
+    #   # user: root
+    #   volumes:
+    #     - /$PWD/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    #     - /var/lib/docker:/var/lib/docker:ro
+    #     - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  elasticsearch_data:
+
+networks:
+  elastic:
+    driver: bridge
