@@ -1,0 +1,24 @@
+groups:
+  - name: system-alerts
+    rules:
+    - alert: ApplicationDown
+      expr: up == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: 'Application {{ $labels.application }} is down'
+        description: 'Application {{ $labels.instance }} is unavailable. Go here: {{ $labels.application }}'
+    - alert: AlwaysFiring
+      expr: vector(1)
+      annotations:
+        summary: 'Always up'
+        description: "Something went truly wrong"
+    - alert: BusinessProcessFailure
+      expr: random_business_metric == 0
+      for: 5m
+      labels:
+        application: "Critical business thing"
+        severity: critical
+      annotations:
+        description: Process {{ $labels.application }} has failed!
