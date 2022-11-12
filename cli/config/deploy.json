@@ -1,0 +1,14 @@
+{
+  "user": "monitor",
+  "secrets-path": "/home/monitor/.secrets",
+  "deploy-dir": "/home/monitor/deploy",
+  "machines": [
+    {
+      "name": "monitor-droplet",
+      "hosts": [],
+      "apps": [
+        "prometheus"
+      ]
+    }
+  ]
+}
