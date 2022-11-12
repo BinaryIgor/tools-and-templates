@@ -48,7 +48,7 @@ def new_log(name=None):
 log = new_log('meta')
 
 
-def cmd_args(args_definitions=None, env=LOCAL_ENV, prod_env=False, env_arg=True, script_description=None,
+def cmd_args(args_definitions=None, env=None, prod_env=False, env_arg=True, script_description=None,
              requires_confirm=False):
     if args_definitions is None:
         args_definitions = {}
@@ -210,6 +210,11 @@ def app_config(app):
     config_path = path.join(root_dir(), app_dir(app), "config", f"{current_env()}.json")
     json_file = replaced_placeholders_file(config_path, env_config())
     return json.loads(json_file)
+
+
+def deploy_config():
+    with open(path.join(config_dir(), "deploy.json")) as f:
+        return json.load(f)
 
 
 def current_env():

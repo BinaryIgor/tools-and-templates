@@ -1,0 +1,11 @@
+{
+    "volumes": [
+      "promethues-volume:/prometheus"
+    ],
+    "prepare_run_cmd": "docker volume create promethues-volume",
+    "env": {},
+    "secrets": {},
+    "network":"host",
+    "memory": "500M",
+    "cpus": "0.5"
+  }
