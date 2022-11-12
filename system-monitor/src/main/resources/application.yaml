@@ -7,6 +7,9 @@ log-mappings:
     warningKeywords: [ "WARNING", "WARN" ]
     errorKeywords: [ "ERROR" ]
 
+logs-storage:
+  filePath: "/tmp/logs"
+
 management:
   endpoints:
     web:
