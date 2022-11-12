@@ -30,6 +30,12 @@ scrape_configs:
       - targets: ['localhost:9100']
         labels:
           application: 'node'
+  - job_name: system-monitor
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+        - targets: ['localhost:10101']
+          labels: 
+           application: 'system-monitor'
   - job_name: some-custom-app
     static_configs:
         - targets: ['localhost:8080']

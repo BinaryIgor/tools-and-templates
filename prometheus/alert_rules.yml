@@ -8,6 +8,13 @@ groups:
       annotations:
         summary: "Machine {{ $labels.job }} high CPU usage"
         description: "Machine {{ $labels.job }} of {{ $labels.instance }} is using more then 80% of CPU for 5 minutes"
+    - alert: ApplicationLogsErrors
+      expr: 'sum by (monitored_application, source, instance_id) (increase(application_logs_errors_total[5m])) > 0'
+      labels:
+        severity: critical
+      annotations:
+        summary: "Application {{ $labels.monitored_application }} has errors in logs"
+        description: "Application {{ $labels.monitored_application }} from {{ $labels.source }} source of {{ $labels.instance_id }} instance_id has errors in its logs."
     - alert: ApplicationDown
       expr: up == 0
       for: 1m
