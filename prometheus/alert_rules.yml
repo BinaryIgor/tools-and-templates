@@ -1,6 +1,13 @@
 groups:
   - name: system-alerts
     rules:
+    - alert: HighMachineCpuUsage
+      expr: '(100 - (avg by (job, instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80'
+      labels:
+        severity: critical
+      annotations:
+        summary: "Machine {{ $labels.job }} high CPU usage"
+        description: "Machine {{ $labels.job }} of {{ $labels.instance }} is using more then 80% of CPU for 5 minutes"
     - alert: ApplicationDown
       expr: up == 0
       for: 1m
