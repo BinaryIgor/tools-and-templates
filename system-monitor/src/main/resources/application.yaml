@@ -1,0 +1,14 @@
+server:
+  port: 10101
+
+log-mappings:
+  applications: [ ]
+  defaultMapping:
+    warningKeywords: [ "WARNING", "WARN" ]
+    errorKeywords: [ "ERROR" ]
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "health", "info", "prometheus" ]
