@@ -19,12 +19,24 @@ route:
   # resend them.
   repeat_interval: 4h
   receiver: 'slack-receiver'
-  
+
+# Data structures reference: https://prometheus.io/docs/alerting/latest/notifications/
+# Other good sources: https://harthoover.com/pretty-alertmanager-alerts-in-slack/
 receivers:
   - name: 'slack-receiver'  
     slack_configs:
       - channel: '#${slack_channel}'
         send_resolved: true
-        icon_url: https://avatars3.githubusercontent.com/u/3380462
-        title: "New alert ({{ .Status }}): {{ .CommonAnnotations.summary }}"
-        text: "Something went wrong: {{ .CommonAnnotations.description }}"
+        color: '{{ if eq .Status "firing" }}danger{{ else }}good{{ end }}'
+        icon_url: "https://avatars3.githubusercontent.com/u/3380462"
+        # title_link: "https://link"
+        # If the same alerts are groupped together (like ApplicationDown) there is no CommonAnnotations.summary here
+        title: '[{{ .Status | toUpper }}] [{{ .CommonAnnotations.env | toUpper }}] alert: {{ if .CommonAnnotations.summary }}{{ .CommonAnnotations.summary }}{{ else }}{{ .GroupLabels.SortedPairs.Values | join " " }}{{ end }}'
+        text: |-
+          {{ range .Alerts }}
+          *Alert:* {{ .Annotations.summary }}
+          *Description:* {{ .Annotations.description }}
+          *Details:*
+            {{ range .Labels.SortedPairs }}• *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
