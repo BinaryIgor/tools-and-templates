@@ -37,12 +37,5 @@ public class LogsController {
     @PostMapping("/fluentd")
     void appendFluentd(@RequestBody List<Map<String, Object>> logs) {
         log.info("Receiving some logs...{}", logs.size());
-//        logs.forEach(l -> {
-//            System.out.println(l.keySet());
-//            if (l.getOrDefault("message", "").toString().contains("WARN")) {
-//                System.out.println("WARNING!");
-//            }
-//            System.out.println();
-//        });
     }
 }

@@ -30,6 +30,11 @@ scrape_configs:
       - targets: ['localhost:9100']
         labels:
           application: 'node'
+  - job_name: fluentd
+    static_configs:
+      - targets: ['localhost:24231']
+        labels:
+          application: 'fluentd'
   - job_name: system-monitor
     metrics_path: "/actuator/prometheus"
     static_configs:

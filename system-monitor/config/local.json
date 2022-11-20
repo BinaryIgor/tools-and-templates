@@ -1,0 +1,8 @@
+{
+  "build_cmd": "mvn clean install",
+  "env": {},
+  "secrets": {},
+  "network": "host",
+  "memory": "500M",
+  "cpus": "0.5"
+}

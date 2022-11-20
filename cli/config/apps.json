@@ -2,5 +2,13 @@
   {
     "name": "prometheus",
     "dir": "prometheus"
+  },
+  {
+    "name": "fluentd",
+    "dir": "fluentd"
+  },
+  {
+    "name": "system-monitor",
+    "dir": "system-monitor"
   }
 ]

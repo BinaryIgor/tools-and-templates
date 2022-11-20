@@ -188,12 +188,13 @@ def app_name(app):
     return app[NAME]
 
 
+# TODO: refactor
 def app_build_cmd(app):
-    return app.get(BUILD_CMD)
+    return app_config(app).get(BUILD_CMD)
 
 
 def app_build_actions(app):
-    return app.get(BUILD_ACTIONS, [])
+    return app_config(app).get(BUILD_ACTIONS, [])
 
 
 def app_package_actions(app):

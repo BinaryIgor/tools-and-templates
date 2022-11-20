@@ -128,7 +128,8 @@ def prepared_run_script(app_name, app_config, tagged_image_name):
     if prep_run_cmd:
         run_lines.append(f'{prep_run_cmd}\n')
 
-    run_lines.append(f'exec docker run -d {restart_policy} \\\n')
+    log_driver = "" if "fluentd" in app_name else '--log-driver=fluentd --log-opt tag="docker.{{.ID}}"'
+    run_lines.append(f'exec docker run {log_driver} -d {restart_policy} \\\n')
 
     params = docker_params(app_config)
     for p in params:
@@ -144,13 +145,13 @@ def prepared_run_script(app_name, app_config, tagged_image_name):
     return meta.replaced_placeholders_file(run_script_template_path, {
         "comment": comment,
         "app": app_name,
-        LAST_DOCKER_LOGS_COLLECTOR_READ_AT_FILE_VARIABLE: LAST_DOCKER_LOGS_COLLECTOR_READ_AT_FILE,
         "stop_timeout": stop_timeout,
         "should_wait": should_wat_for_last_logs_collection(),
         "run_cmd": "".join(run_lines)
     })
 
 
+# deprecated, just use fluentd
 def should_wat_for_last_logs_collection():
     return "not" if meta.is_local_env() else "should_wait"
 
