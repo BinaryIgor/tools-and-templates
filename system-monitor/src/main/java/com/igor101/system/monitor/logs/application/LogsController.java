@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/logs")
@@ -30,5 +32,17 @@ public class LogsController {
                 .toList();
 
         logsService.handle(logs, Instant.now());
+    }
+
+    @PostMapping("/fluentd")
+    void appendFluentd(@RequestBody List<Map<String, Object>> logs) {
+        log.info("Receiving some logs...{}", logs.size());
+//        logs.forEach(l -> {
+//            System.out.println(l.keySet());
+//            if (l.getOrDefault("message", "").toString().contains("WARN")) {
+//                System.out.println("WARNING!");
+//            }
+//            System.out.println();
+//        });
     }
 }
