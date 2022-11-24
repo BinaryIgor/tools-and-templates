@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -26,18 +24,8 @@ public class LogsController {
     }
 
     @PostMapping
-    void append(@RequestBody LogsApi logsApi) {
-        log.info("Receiving some {} logs from {} source...", logsApi.logs().size(), logsApi.source());
-        var logs = logsApi.logs().stream()
-                .map(l -> l.toLogData(logsApi.source()))
-                .toList();
-
-        logsService.handle(logs, Instant.now());
-    }
-
-    @PostMapping("/fluentd")
-    void appendFluentd(@RequestBody List<Map<String, Object>> logs) {
-        log.info("Receiving some logs...{}", logs.size());
-        logs.forEach(l -> System.out.println(l));
+    void append(@RequestBody List<Map<String, String>> logs) {
+        log.info("Receiving some {} logs...", logs.size());
+        logsService.handle(ApiLogsMapper.fromApiLogs(logs));
     }
 }

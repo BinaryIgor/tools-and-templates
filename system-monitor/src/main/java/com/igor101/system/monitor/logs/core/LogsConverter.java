@@ -2,7 +2,6 @@ package com.igor101.system.monitor.logs.core;
 
 import com.igor101.system.monitor.logs.core.model.*;
 
-import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,9 +17,8 @@ public class LogsConverter {
     }
 
 
-    public LogRecord converted(LogData log, Instant receivedTimestamp) {
-        return new LogRecord(log.source(), log.application(), log.instanceId(), logLevel(log), log.log(),
-                receivedTimestamp, Instant.ofEpochSecond(log.from()), Instant.ofEpochSecond(log.to()));
+    public LogRecord converted(LogData log) {
+        return new LogRecord(log.source(), log.application(), log.instanceId(), logLevel(log), log.log());
     }
 
     private ApplicationLogLevel logLevel(LogData log) {

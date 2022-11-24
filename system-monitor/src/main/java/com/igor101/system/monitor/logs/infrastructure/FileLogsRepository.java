@@ -13,6 +13,9 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class FileLogsRepository implements LogsRepository {
 
@@ -20,6 +23,7 @@ public class FileLogsRepository implements LogsRepository {
             "yyyyMMdd-HHmmss");
     private static final String LOG_FILE_EXTENSION = ".logs";
     private static final Logger log = LoggerFactory.getLogger(FileLogsRepository.class);
+    private final Map<LogKey, Object> logsLocks = new ConcurrentHashMap<>();
     private final File logsRoot;
     private final int maxFileSize;
 
@@ -30,14 +34,18 @@ public class FileLogsRepository implements LogsRepository {
 
     @Override
     public void store(List<LogRecord> logs) {
+        var groupedLogs = groupedLogs(logs);
+
         Exception lastException = null;
-        for (var l : logs) {
+        for (var e : groupedLogs.entrySet()) {
             try {
-                saveLogToFile(l);
-            } catch (Exception e) {
-                log.error("Problem while saving log {}:{}:{} to file...",
-                        l.application(), l.source(), l.instanceId(), e);
-                lastException = e;
+                var messages = e.getValue().stream()
+                        .map(LogRecord::log)
+                        .toList();
+                saveLogGroupToFile(e.getKey(), messages);
+            } catch (Exception ex) {
+                log.error("Problem while saving log({}) to file...", e.getKey(), ex);
+                lastException = ex;
             }
         }
 
@@ -46,34 +54,38 @@ public class FileLogsRepository implements LogsRepository {
         }
     }
 
-    private void saveLogToFile(LogRecord logRecord) {
-        try {
-            var lDir = Path.of(logsRoot.getAbsolutePath(), logRecord.application());
-            Files.createDirectories(lDir);
+    private Map<LogKey, List<LogRecord>> groupedLogs(List<LogRecord> logs) {
+        return logs.stream()
+                .collect(Collectors.groupingBy(e ->
+                        new LogKey(e.source(), e.application(), e.instanceId())));
+    }
 
-            var lFile = new File(lDir.toFile(),
-                    "%s_%s_%s".formatted(logRecord.application(), logRecord.source(),
-                            logRecord.instanceId())
-                            + LOG_FILE_EXTENSION);
+    private void saveLogGroupToFile(LogKey key, List<String> logs) {
+        synchronized (lockForLogsGroup(key)) {
+            try {
+                var lDir = Path.of(logsRoot.getAbsolutePath(), key.application());
+                Files.createDirectories(lDir);
 
-            var lBlock = """
-                    receivedTimestamp: %s
-                    fromTimestamp: %s
-                    toTimestamp: %s
-                    level: %s
-                                            
-                    %s
-                    """.formatted(logRecord.receivedTimestamp(), logRecord.fromTimestamp(), logRecord.toTimestamp(),
-                    logRecord.level(), logRecord.log());
+                var lFile = new File(lDir.toFile(),
+                        "%s_%s_%s".formatted(key.application(), key.source(),
+                                key.instanceId())
+                                + LOG_FILE_EXTENSION);
 
-            if (lFile.exists() && shouldRotateLogFile(lFile, lBlock)) {
-                rotateLogFile(lFile);
+                var lBlock = String.join("\n", logs);
+
+                if (lFile.exists() && shouldRotateLogFile(lFile, lBlock)) {
+                    rotateLogFile(lFile);
+                }
+
+                Files.writeString(lFile.toPath(), lBlock, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            } catch (Exception e) {
+                log.error("Failed to save logs group for {} key..", key, e);
             }
-
-            Files.writeString(lFile.toPath(), lBlock, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        } catch (Exception e) {
-            log.error("Failed to save logs for {} application...", logRecord.application(), e);
         }
+    }
+
+    private Object lockForLogsGroup(LogKey logKey) {
+        return logsLocks.computeIfAbsent(logKey, k -> new Object());
     }
 
     private boolean shouldRotateLogFile(File logFile, String newContent) {
@@ -89,5 +101,8 @@ public class FileLogsRepository implements LogsRepository {
         var newName = "%s_%s%s".formatted(fileNameWithoutExtension, endDateFormatted, LOG_FILE_EXTENSION);
 
         Files.move(logFilePath, logFilePath.resolveSibling(newName));
+    }
+
+    private record LogKey(String source, String application, String instanceId) {
     }
 }

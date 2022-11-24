@@ -6,7 +6,6 @@ import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.Instant;
 import java.util.List;
 
 public class LogsService {
@@ -30,12 +29,12 @@ public class LogsService {
     }
 
     //TODO: global error handler
-    public void handle(List<LogData> logs, Instant receivedTimestamp) {
+    public void handle(List<LogData> logs) {
         log.info("Have {} logs to handle...", logs.size());
 
         var records = logs.stream()
                 .map(l -> {
-                    var r = logsConverter.converted(l, receivedTimestamp);
+                    var r = logsConverter.converted(l);
                     updateLogsMetrics(r.source(), r.application(), r.instanceId(), r.level());
                     return r;
                 })
