@@ -10,5 +10,9 @@
   {
     "name": "system-monitor",
     "dir": "system-monitor"
+  },
+  {
+    "name": "test-app",
+    "dir": "test-app"
   }
 ]

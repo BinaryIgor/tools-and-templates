@@ -9,7 +9,8 @@
       "apps": [
         "prometheus",
         "fluentd",
-        "system-monitor"
+        "system-monitor",
+        "test-app"
       ]
     }
   ]
