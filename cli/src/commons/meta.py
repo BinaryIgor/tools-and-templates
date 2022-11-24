@@ -9,6 +9,9 @@ import re
 import subprocess as sp
 import pathlib
 
+# TODO: change it!
+CLI_NAME = "system-cli"
+
 APPS_JSON = "apps.json"
 
 ORDER_KEY = "order"
@@ -151,6 +154,15 @@ def cli_target_dir():
 
 def cli_templates_dir():
     return path.join(root_cli_dir(), "templates")
+
+
+def cli_files_dir():
+    cli_dir = path.join(pathlib.Path.home(), f".{CLI_NAME}")
+
+    if not path.exists(cli_dir):
+        create_dir(cli_dir)
+
+    return cli_dir
 
 
 def sorted_apps(reverse=False, names=None):

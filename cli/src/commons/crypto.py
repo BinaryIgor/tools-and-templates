@@ -15,6 +15,7 @@ PASSWORD_CHARACTERS = f'{string.ascii_letters}{string.digits}'
 
 TOKEN_KEY = 'token-key'
 
+# TODO: change its name!
 CLI_SECRETS_PASSWORD_ENV = "CLI_SECRETS_PASSWORD"
 
 
@@ -58,9 +59,9 @@ def encrypted_secrets(secrets_map, password=None):
 
 def _given_or_from_env_password(password):
     if password is None:
-        password = os.environ.get(HAIRO_CLI_SECRETS_PASSWORD_ENV)
+        password = os.environ.get(CLI_SECRETS_PASSWORD_ENV)
         if password is None:
-            raise Exception(f"Both given and from {HAIRO_CLI_SECRETS_PASSWORD_ENV} env passwords are null")
+            raise Exception(f"Both given and from {CLI_SECRETS_PASSWORD_ENV} env passwords are null")
 
     return password
 
@@ -82,10 +83,10 @@ def decrypted_data(data, password=None):
 
 def system_secrets(local_env=None):
     if local_env is False or not meta.is_local_env():
-        password = os.environ.get(HAIRO_CLI_SECRETS_PASSWORD_ENV)
+        password = os.environ.get(CLI_SECRETS_PASSWORD_ENV)
         if password is None:
             raise Exception(
-                f"For non local env secrets password is required, set in {HAIRO_CLI_SECRETS_PASSWORD_ENV} env variable")
+                f"For non local env secrets password is required, set in {CLI_SECRETS_PASSWORD_ENV} env variable")
 
         print(f"Taking encrypted secrets from: {secrets_path()}")
 
