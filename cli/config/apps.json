@@ -4,6 +4,10 @@
     "dir": "prometheus"
   },
   {
+    "name": "node-exporter",
+    "dir": "prometheus/exporters/node-exporter"
+  },
+  {
     "name": "fluentd",
     "dir": "fluentd"
   },

@@ -8,6 +8,7 @@
       "hosts": [],
       "apps": [
         "prometheus",
+        "node-exporter",
         "fluentd",
         "system-monitor",
         "test-app"
