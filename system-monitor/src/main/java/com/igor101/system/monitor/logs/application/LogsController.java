@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +38,6 @@ public class LogsController {
     @PostMapping("/fluentd")
     void appendFluentd(@RequestBody List<Map<String, Object>> logs) {
         log.info("Receiving some logs...{}", logs.size());
+        logs.forEach(l -> System.out.println(l));
     }
 }
