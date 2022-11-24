@@ -1,6 +1,11 @@
 {
   "build_cmd": "mvn clean install",
-  "env": {},
+  "env": {
+    "LOGS_STORAGE_FILE_PATH": "/home/monitor/system-logs"
+  },
+  "volumes": [
+    "/home/monitor/system-logs:/home/monitor/system-logs"
+  ],
   "secrets": {},
   "network": "host",
   "memory": "500M",

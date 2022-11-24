@@ -8,7 +8,7 @@ log-mappings:
     errorKeywords: [ "ERROR" ]
 
 logs-storage:
-  filePath: "/tmp/logs"
+  filePath: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
 
 management:
   endpoints:
