@@ -71,7 +71,7 @@ public class FileLogsRepository implements LogsRepository {
                                 key.instanceId())
                                 + LOG_FILE_EXTENSION);
 
-                var lBlock = String.join("\n", logs);
+                var lBlock = String.join("\n", logs) + "\n";
 
                 if (lFile.exists() && shouldRotateLogFile(lFile, lBlock)) {
                     rotateLogFile(lFile);
