@@ -3,9 +3,13 @@
     "prometheus-volume:/prometheus"
   ],
   "prepare_run_cmd": "docker volume create prometheus-volume",
+  "run_args": [
+    "--storage.tsdb.retention.time=90d",
+    "--config.file=/etc/prometheus/prometheus.yml"
+  ],
   "env": {},
   "secrets": {},
-  "network":"host",
+  "network": "host",
   "memory": "500M",
   "cpus": "0.5"
 }
