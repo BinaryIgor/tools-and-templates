@@ -1,6 +1,8 @@
 {
   "build_cmd": "mvn clean install",
-  "env": {},
+  "env": {
+    "JVM_OPTS": "-Xmx450m"
+  },
   "secrets": {},
   "network": "host",
   "memory": "500M",

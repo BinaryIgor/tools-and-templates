@@ -1,7 +1,8 @@
 {
   "build_cmd": "mvn clean install",
   "env": {
-    "LOGS_STORAGE_FILE_PATH": "/home/monitor/system-logs"
+    "LOGS_STORAGE_FILE_PATH": "/home/monitor/system-logs",
+    "JVM_OPTS": "-Xmx450m"
   },
   "volumes": [
     "/home/monitor/system-logs:/home/monitor/system-logs"
