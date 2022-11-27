@@ -31,8 +31,8 @@ public class MetricsService {
                     secondsTimestamp);
 
             meterRegistry.gauge(APPLICATION_UP_TIMESTAMP, tags, secondsTimestamp);
-            meterRegistry.gauge(APPLICATION_USED_MEMORY, tags, (double) m.usedMemory());
-            meterRegistry.gauge(APPLICATION_MAX_MEMORY, tags, (double) m.maxMemory());
+            meterRegistry.gauge(APPLICATION_USED_MEMORY, tags, m.usedMemory());
+            meterRegistry.gauge(APPLICATION_MAX_MEMORY, tags, m.maxMemory());
             meterRegistry.gauge(APPLICATION_CPU_USAGE, tags, m.cpuUsage());
         }
     }

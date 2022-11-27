@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.9-slim
 
 COPY src/docker_metrics_collector.py /docker_metrics_collector.py
 COPY requirements.txt requirements.txt

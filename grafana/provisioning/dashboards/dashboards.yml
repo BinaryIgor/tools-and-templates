@@ -11,6 +11,17 @@ providers:
     options:
       path: /var/lib/grafana/dashboards/monitoring/node.json
 
+  - name: application
+    orgId: 1
+    folder: "Monitoring"
+    folderUid: "monitoring"
+    type: file
+    disableDeletion: false
+    editable: false
+    allowUiUpdates: false
+    options:
+      path: /var/lib/grafana/dashboards/monitoring/application.json
+
   - name: prometheus
     orgId: 1
     folder: "Monitoring"
