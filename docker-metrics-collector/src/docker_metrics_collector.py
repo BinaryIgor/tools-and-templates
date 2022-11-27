@@ -164,8 +164,7 @@ def gather_and_send_metrics():
 
     last_data_read_at = current_timestamp()
 
-    LOG.info(
-        f"Have {len(running_containers)} running containers, checking their metrics/stats...")
+    LOG.info(f"Have {len(running_containers)} running containers, checking their metrics/stats...")
 
     c_metrics = containers_metrics(running_containers)
 
@@ -276,8 +275,8 @@ def fetched_container_metrics(container_id, container_name, instance_id):
 def formatted_container_metrics(name, instance_id, memory_metrics, cpu_metrics, precpu_metrics):
     try:
         return {
-            'name': name,
-            'id': instance_id,
+            'containerName': name,
+            'instanceId': instance_id,
             'timestamp': current_timestamp_millis(),
             'usedMemory': memory_metrics['usage'],
             'maxMemory': memory_metrics['limit'],
