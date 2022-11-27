@@ -1,5 +1,6 @@
 package com.igor101.system.monitor.logs.core;
 
+import com.igor101.system.monitor.common.Metrics;
 import com.igor101.system.monitor.logs.core.model.ApplicationLogLevel;
 import com.igor101.system.monitor.logs.core.model.LogData;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -10,11 +11,8 @@ import java.util.List;
 
 public class LogsService {
 
-    static final String APPLICATION_LOGS_ERRORS_TOTAL_METRIC = "application_logs_errors_total";
-    static final String APPLICATION_LOGS_WARNINGS_TOTAL_METRIC = "application_logs_warnings_total";
-    static final String APPLICATION_LABEL = "monitored_application";
-    static final String INSTANCE_ID_LABEL = "instance_id";
-    static final String SOURCE_LABEL = "source";
+    static final String APPLICATION_LOGS_ERRORS_TOTAL_METRIC = Metrics.fullName("application_logs_errors_total");
+    static final String APPLICATION_LOGS_WARNINGS_TOTAL_METRIC = Metrics.fullName("application_logs_warnings_total");
     private static final Logger log = LoggerFactory.getLogger(LogsService.class);
     private final LogsConverter logsConverter;
     private final LogsRepository logsRepository;
@@ -62,10 +60,7 @@ public class LogsService {
                                            String source,
                                            String application,
                                            String instanceId) {
-        meterRegistry.counter(metricName,
-                        SOURCE_LABEL, source,
-                        APPLICATION_LABEL, application,
-                        INSTANCE_ID_LABEL, instanceId)
+        meterRegistry.counter(metricName, Metrics.applicationLabels(source, application, instanceId))
                 .increment();
     }
 }
