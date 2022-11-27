@@ -1,0 +1,13 @@
+{
+  "env": {
+    "METRICS_TARGET_URL": "http://localhost:10101/metrics",
+    "COLLECTION_INTERVAL": "15"
+  },
+  "volumes": [
+    "/var/run/docker.sock:/var/run/docker.sock"
+  ],
+  "secrets": {},
+  "network": "host",
+  "memory": "250M",
+  "cpus": "0.25"
+}

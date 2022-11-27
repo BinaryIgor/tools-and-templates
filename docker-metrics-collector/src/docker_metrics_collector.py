@@ -2,6 +2,7 @@ import json
 import logging
 import random
 import signal
+import sys
 import time
 from os import environ
 
@@ -101,6 +102,10 @@ def connected_docker_client_retrying():
             LOG.info(f"Client connected, docker ver: {ver}")
             return client
         except Exception:
+            if SHUTDOWN.stop:
+                LOG.info("Shutdown requested, exiting")
+                sys.exit(1)
+
             retry_interval = random_retry_interval()
             log_exception(
                 f"Problem while connecting to docker client, retrying in {retry_interval}s...")
@@ -298,9 +303,10 @@ def container_cpu_metrics(cpu_metrics, precpu_metrics):
 
     cpu_delta = current_container_usage - prev_container_usage
     system_delta = current_system_usage - prev_system_usage
-    cores_num = len(current_usage.get('percpu_usage', 1))
 
     if cpu_delta > 0 and system_delta > 0:
+        percpu_usages = current_usage.get('percpu_usage')
+        cores_num = len(percpu_usages) if percpu_usages else 1
         cpu_usage = (cpu_delta / system_delta) * cores_num
         # Value is in the range of 0 - 1, so multiplying it by 100 we need only up to 2 digits precision like 12.34%
         return round(cpu_usage, 4)

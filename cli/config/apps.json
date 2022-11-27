@@ -16,6 +16,10 @@
     "dir": "system-monitor"
   },
   {
+    "name": "docker-metrics-collector",
+    "dir": "docker-metrics-collector"
+  },
+  {
     "name": "test-app",
     "dir": "test-app"
   }

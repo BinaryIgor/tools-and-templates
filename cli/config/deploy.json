@@ -11,6 +11,7 @@
         "node-exporter",
         "fluentd",
         "system-monitor",
+        "docker-metrics-collector",
         "test-app"
       ]
     }
