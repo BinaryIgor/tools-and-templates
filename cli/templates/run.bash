@@ -1,5 +1,5 @@
 #!/bin/bash
-${comment}
+set -eu
 
 found_container=$(docker ps -q -f name="${app}")
 
@@ -15,4 +15,6 @@ echo
 echo "Starting new ${app} version..."
 echo
 
+${pre_run_cmd}
 ${run_cmd}
+${post_run_cmd}

@@ -152,6 +152,10 @@ def cli_target_dir():
     return path.join(root_cli_dir(), "target")
 
 
+def cli_app_package_dir(app_name):
+    return path.join(cli_target_dir(), app_name)
+
+
 def cli_templates_dir():
     return path.join(root_cli_dir(), "templates")
 
@@ -239,9 +243,13 @@ def is_local_env():
 
 
 def replaced_placeholders_file(file_path, placeholders_values, objects_values=None):
+    with_placeholders_file = file_content(file_path)
+    return replaced_placeholders_content(with_placeholders_file, placeholders_values, objects_values)
+
+
+def file_content(file_path):
     with open(file_path) as f:
-        with_placeholders_file = f.read()
-        return replaced_placeholders_content(with_placeholders_file, placeholders_values, objects_values)
+        return f.read()
 
 
 def replaced_placeholders_content(content, placeholders_values, objects_values=None):

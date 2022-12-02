@@ -3,6 +3,8 @@ from datetime import datetime
 from os import path
 import shutil
 
+CI_PACKAGE_TARGET = "CI_PACKAGE_TARGET"
+
 SECRETS_BUILD_ENV_PREFIX = "secrets:"
 BUILD_ENV = "build_env"
 LOAD_AND_RUN_SCRIPT = "load_and_run.bash"
@@ -44,7 +46,7 @@ def build_app(app, app_name, tag):
 
         meta.execute_bash_script(f"""
             cd {app_dir}
-            {app_build_env_exports_str(app_config)}
+            {app_build_env_exports_str(app_config, app_name)}
             {build_cmd}
         """)
         log.info("build cmd executed")
@@ -54,9 +56,9 @@ def build_app(app, app_name, tag):
     docker build . -t {app_name}:{tag}""")
 
 
-def app_build_env_exports_str(app_config):
+def app_build_env_exports_str(app_config, app_name):
     env = app_config.get(BUILD_ENV, {})
-    exports = []
+    exports = [f'export {CI_PACKAGE_TARGET}={meta.cli_app_package_dir(app_name)}']
 
     for k, v in env.items():
         v_str = str(v)
@@ -66,7 +68,7 @@ def app_build_env_exports_str(app_config):
         else:
             value = v
 
-        exports.append(f"export {k}={value}")
+        exports.append(f'export {k}="{value}"')
 
     return "\n".join(exports)
 
@@ -80,16 +82,9 @@ def package_app(app, app_name, tag, skip_image_export=False):
 
     tagged_image_name = f'{app_name}:{tag}'
 
-    app_package_dir = path.join(meta.cli_target_dir(), app_name)
-
-    log.info(f"Prepare target dir: {app_package_dir}...")
-
-    if path.exists(app_package_dir):
-        shutil.rmtree(app_package_dir)
-    meta.create_dir(app_package_dir)
-
     decrypt_needed_locally_secrets(app_config)
 
+    app_package_dir = meta.cli_app_package_dir(app_name)
     docker_image_tar = f'{app_name}.tar.gz'
     docker_image_path = path.join(app_package_dir, docker_image_tar)
 
@@ -109,7 +104,9 @@ def package_app(app, app_name, tag, skip_image_export=False):
 
 
 def prepared_run_script(app_name, app_config, tagged_image_name):
-    run_script_template_path = path.join(meta.cli_templates_dir(), "run_template.bash")
+    zero_downtime_deploy = zero_downtime_deploy_config(app_config)
+    run_script_template_path = run_template(zero_downtime_deploy)
+
     restart_policy = "" if meta.is_local_env() else "--restart unless-stopped"
     stop_timeout = meta.env_config().get('apps-stop-timeout', "30")
 
@@ -124,12 +121,9 @@ def prepared_run_script(app_name, app_config, tagged_image_name):
     for key, value in script_env(app_config).items():
         run_lines.append(f'export {key}="{value}"\n')
 
-    prep_run_cmd = prepare_run_cmd(app_config)
-    if prep_run_cmd:
-        run_lines.append(f'{prep_run_cmd}\n')
-
-    log_driver = "" if "fluentd" in app_name else '--log-driver=fluentd --log-opt tag="docker.{{.ID}}"'
-    run_lines.append(f'exec docker run {log_driver} -d {restart_policy} \\\n')
+    log_driver = "" if "fluentd" in app_name or meta.is_local_env() \
+        else '--log-driver=fluentd --log-opt tag="docker.{{.ID}}"'
+    run_lines.append(f'docker run {log_driver} -d {restart_policy} \\\n')
 
     params = docker_params(app_config)
     for p in params:
@@ -142,18 +136,46 @@ def prepared_run_script(app_name, app_config, tagged_image_name):
         run_lines.append(f" \\\n")
         run_lines.append(rp)
 
-    return meta.replaced_placeholders_file(run_script_template_path, {
+    return meta.replaced_placeholders_file(run_script_template_path,
+                                           run_script_placeholders(comment=comment,
+                                                                   app_name=app_name,
+                                                                   stop_timeout=stop_timeout,
+                                                                   pre_run_cmd=pre_run_cmd(app_config),
+                                                                   run_cmd="".join(run_lines),
+                                                                   post_run_cmd=post_run_cmd(app_config),
+                                                                   zero_downtime_deploy_config=zero_downtime_deploy))
+
+
+def run_script_placeholders(comment, app_name,
+                            stop_timeout,
+                            pre_run_cmd,
+                            run_cmd,
+                            post_run_cmd,
+                            zero_downtime_deploy_config):
+    placeholders = {
         "comment": comment,
         "app": app_name,
         "stop_timeout": stop_timeout,
-        "should_wait": should_wat_for_last_logs_collection(),
-        "run_cmd": "".join(run_lines)
-    })
+        "pre_run_cmd": pre_run_cmd,
+        "run_cmd": run_cmd,
+        "post_run_cmd": post_run_cmd
+    }
+
+    if zero_downtime_deploy_config:
+        placeholders['upstream_nginx_dir'] = zero_downtime_deploy_config['upstream_nginx_dir']
+        new_app_url_file = path.join(meta.cli_app_package_dir(app_name),
+                                     zero_downtime_deploy_config['app_url_file'])
+        placeholders['app_url'] = meta.file_content(new_app_url_file).strip()
+
+    return placeholders
 
 
-# deprecated, just use fluentd
-def should_wat_for_last_logs_collection():
-    return "not" if meta.is_local_env() else "should_wait"
+def run_template(requires_zero_downtime_deploy):
+    if requires_zero_downtime_deploy:
+        run_tmpl = "run_zero_downtime.bash"
+    else:
+        run_tmpl = "run.bash"
+    return path.join(meta.cli_templates_dir(), run_tmpl)
 
 
 def prepared_load_and_run_script(tagged_image_name, docker_image_tar):
@@ -189,26 +211,20 @@ def decrypt_needed_locally_secrets(app_config):
     print()
 
 
-def copy_file_from_app_target_to_package(app, app_package_dir, to_copy_file):
-    full_file_path = path.join(meta.root_dir(), meta.app_dir(app), "target", to_copy_file)
-    log.info(f"Copying file: {full_file_path} to deploy target")
-
-    new_path = path.join(app_package_dir, to_copy_file)
-
-    if path.isdir(full_file_path):
-        shutil.copytree(full_file_path, new_path)
-    else:
-        shutil.copy2(full_file_path, new_path)
-
-    return new_path
-
-
 def script_comments(app_config):
     return app_config.get("comments", [])
 
 
-def prepare_run_cmd(app_config):
-    return app_config.get("prepare_run_cmd", "")
+def pre_run_cmd(app_config):
+    return app_config.get("pre_run_cmd", "")
+
+
+def zero_downtime_deploy_config(app_config):
+    return app_config.get("zero_downtime_deploy", {})
+
+
+def post_run_cmd(app_config):
+    return app_config.get("post_run_cmd", "")
 
 
 def script_env(app_config):
@@ -273,6 +289,13 @@ app = meta.app_of_name(app_name)
 
 tag = new_tag(app_name)
 log.info(f"Config read, package will be created with a tag: {tag}")
+
+app_package_dir = meta.cli_app_package_dir(app_name)
+log.info(f"Prepare target dir: {app_package_dir}...")
+
+if path.exists(app_package_dir):
+    shutil.rmtree(app_package_dir)
+meta.create_dir(app_package_dir)
 
 log.info("About to build app...")
 build_app(app, app_name, tag)

@@ -22,5 +22,13 @@
   {
     "name": "test-app",
     "dir": "test-app"
+  },
+  {
+    "name": "nginx-reverse-proxy",
+    "dir": "nginx/reverse-proxy"
+  },
+  {
+    "name": "nginx-api",
+    "dir": "nginx/api"
   }
 ]

@@ -1,532 +1,609 @@
 {
     "annotations": {
-        "list": [
-            {
-                "builtIn": 1,
-                "datasource": "-- Grafana --",
-                "enable": true,
-                "hide": true,
-                "iconColor": "rgba(0, 211, 255, 1)",
-                "name": "Annotations & Alerts",
-                "target": {
-                    "limit": 100,
-                    "matchAny": false,
-                    "tags": [],
-                    "type": "dashboard"
-                },
-                "type": "dashboard"
-            }
-        ]
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
     },
     "editable": true,
     "fiscalYearStartMonth": 0,
-    "gnetId": null,
     "graphTooltip": 0,
+    "id": 6,
     "links": [],
     "liveNow": false,
     "panels": [
-        {
-            "datasource": "system-postgres-db",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 0,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 3,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "auto",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "mappings": [],
-                    "max": 100,
-                    "min": 0,
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    }
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 0,
-                "y": 0
-            },
-            "id": 2,
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom"
-                },
-                "tooltip": {
-                    "mode": "single"
-                }
-            },
-            "targets": [
-                {
-                    "format": "time_series",
-                    "group": [],
-                    "metricColumn": "none",
-                    "rawQuery": true,
-                    "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  (used_memory * 100) / (max_memory)::real AS \"memory usage\"\nFROM application_state\nWHERE\n  name = '$application' AND $__timeFilter(\"timestamp\")\nORDER BY 1",
-                    "refId": "A",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "cpu_usage"
-                                ],
-                                "type": "column"
-                            }
-                        ]
-                    ],
-                    "table": "application_state",
-                    "timeColumn": "\"timestamp\"",
-                    "timeColumnType": "timestamp",
-                    "where": [
-                        {
-                            "name": "$__timeFilter",
-                            "params": [],
-                            "type": "macro"
-                        }
-                    ]
-                }
-            ],
-            "title": "Memory usage",
-            "type": "timeseries"
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
         },
-        {
-            "datasource": "system-postgres-db",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "custom": {
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "drawStyle": "line",
-                        "fillOpacity": 0,
-                        "gradientMode": "none",
-                        "hideFrom": {
-                            "legend": false,
-                            "tooltip": false,
-                            "viz": false
-                        },
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 3,
-                        "scaleDistribution": {
-                            "type": "linear"
-                        },
-                        "showPoints": "auto",
-                        "spanNulls": false,
-                        "stacking": {
-                            "group": "A",
-                            "mode": "none"
-                        },
-                        "thresholdsStyle": {
-                            "mode": "off"
-                        }
-                    },
-                    "mappings": [],
-                    "max": 100,
-                    "min": 0,
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    }
-                },
-                "overrides": []
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
             },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 12,
-                "y": 0
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 3,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
             },
-            "id": 4,
-            "options": {
-                "legend": {
-                    "calcs": [],
-                    "displayMode": "list",
-                    "placement": "bottom"
-                },
-                "tooltip": {
-                    "mode": "single"
-                }
-            },
-            "targets": [
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
                 {
-                    "format": "time_series",
-                    "group": [],
-                    "metricColumn": "none",
-                    "rawQuery": true,
-                    "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  cpu_usage * 100 as \"CPU usage\"\nFROM application_state\nWHERE\n  name = '$application' AND $__timeFilter(\"timestamp\")\nORDER BY 1",
-                    "refId": "A",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "cpu_usage"
-                                ],
-                                "type": "column"
-                            }
-                        ]
-                    ],
-                    "table": "application_state",
-                    "timeColumn": "\"timestamp\"",
-                    "timeColumnType": "timestamp",
-                    "where": [
-                        {
-                            "name": "$__timeFilter",
-                            "params": [],
-                            "type": "macro"
-                        }
-                    ]
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
                 }
-            ],
-            "title": "CPU  usage",
-            "type": "timeseries"
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
         },
-        {
-            "datasource": "system-postgres-db",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "custom": {
-                        "align": "auto",
-                        "displayMode": "auto"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    }
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 9,
-                "w": 24,
-                "x": 0,
-                "y": 8
-            },
-            "id": 10,
-            "options": {
-                "showHeader": true
-            },
-            "pluginVersion": "8.2.0",
-            "targets": [
-                {
-                    "format": "table",
-                    "group": [],
-                    "metricColumn": "none",
-                    "rawQuery": true,
-                    "rawSql": "SELECT\n  name,\n  rounded_timestamp,\n  pg_size_pretty(used_memory) as used_memory,\n  pg_size_pretty(max_memory) as max_memory,\n  concat(((used_memory * 100 / max_memory)::bigint)::text, '%') as memory_usage,\n  concat(((cpu_usage * 100)::bigint)::text, '%') as cpu_usage\nFROM (\n  SELECT name,\n   (date_trunc('hour', timestamp) + date_part('minute', timestamp)::int / 5 * interval '5 min') as \"rounded_timestamp\",\n   AVG(used_memory) as used_memory,\n   AVG(max_memory) as max_memory,\n   AVG(cpu_usage) as cpu_usage\n  FROM application_state\n  WHERE name = '$application' AND $__timeFilter(timestamp)\n  GROUP BY name, rounded_timestamp\n) as application_average_state\nORDER BY rounded_timestamp DESC;",
-                    "refId": "A",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "cpu_usage"
-                                ],
-                                "type": "column"
-                            }
-                        ]
-                    ],
-                    "table": "application_state",
-                    "timeColumn": "\"timestamp\"",
-                    "timeColumnType": "timestamp",
-                    "where": [
-                        {
-                            "name": "$__timeFilter",
-                            "params": [],
-                            "type": "macro"
-                        }
-                    ]
-                }
-            ],
-            "title": "Last stats 5m averages",
-            "type": "table"
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 0
         },
-        {
-            "aliasColors": {
-                "Count ERROR": "red",
-                "Count INFO": "green",
-                "Count WARNING": "light-orange",
-                "ERROR": "red",
-                "INFO": "green",
-                "WARNING": "light-orange",
-                "count ERROR": "red",
-                "count INFO": "green",
-                "count WARNING": "light-orange"
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
             },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "datasource": "system-postgres-db",
-            "decimals": 0,
-            "fill": 1,
-            "fillGradient": 0,
-            "gridPos": {
-                "h": 9,
-                "w": 12,
-                "x": 0,
-                "y": 17
+            "editorMode": "code",
+            "expr": "monitoring_application_used_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"} / monitoring_application_max_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Memory usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
             },
-            "hiddenSeries": false,
-            "id": 6,
-            "legend": {
-                "alignAsTable": false,
-                "avg": false,
-                "current": false,
-                "max": false,
-                "min": false,
-                "rightSide": false,
-                "show": true,
-                "total": true,
-                "values": true
+            "custom": {
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 3,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
             },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "options": {
-                "alertThreshold": true
-            },
-            "percentage": false,
-            "pluginVersion": "8.2.0",
-            "pointradius": 2,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "targets": [
+            "mappings": [],
+            "max": 1,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
                 {
-                    "format": "time_series",
-                    "group": [],
-                    "metricColumn": "none",
-                    "rawQuery": true,
-                    "rawSql": "SELECT\n  level as \"metric\",\n  (date_trunc('hour', timestamp) + date_part('minute', timestamp)::int / 5 * interval '5 min') as \"time\",\n  count(*)\nFROM application_log\nWHERE\n  name = '$application' AND $__timeFilter(\"timestamp\")\nGROUP BY level, time\nORDER BY time, level;",
-                    "refId": "A",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "cpu_usage"
-                                ],
-                                "type": "column"
-                            }
-                        ]
-                    ],
-                    "table": "application_state",
-                    "timeColumn": "\"timestamp\"",
-                    "timeColumnType": "timestamp",
-                    "where": [
-                        {
-                            "name": "$__timeFilter",
-                            "params": [],
-                            "type": "macro"
-                        }
-                    ]
-                }
-            ],
-            "thresholds": [],
-            "timeFrom": null,
-            "timeRegions": [],
-            "timeShift": null,
-            "title": "Logs",
-            "tooltip": {
-                "shared": true,
-                "sort": 0,
-                "value_type": "individual"
-            },
-            "transformations": [],
-            "type": "graph",
-            "xaxis": {
-                "buckets": null,
-                "mode": "time",
-                "name": null,
-                "show": true,
-                "values": []
-            },
-            "yaxes": [
-                {
-                    "$$hashKey": "object:104",
-                    "decimals": 0,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
+                  "color": "green",
+                  "value": null
                 },
                 {
-                    "$$hashKey": "object:105",
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1,
-                    "max": null,
-                    "min": null,
-                    "show": true
+                  "color": "red",
+                  "value": 80
                 }
-            ],
-            "yaxis": {
-                "align": false,
-                "alignLevel": null
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
+            "expr": "monitoring_application_cpu_usage_percent{application=\"$application\", instance_id=\"$instance_id\"}",
+            "interval": "",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "CPU  usage",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "P1809F7CD0C75ACF3"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto",
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
             }
-        },
-        {
-            "datasource": "system-postgres-db",
-            "description": "",
-            "gridPos": {
-                "h": 9,
-                "w": 12,
-                "x": 12,
-                "y": 17
-            },
-            "id": 8,
-            "options": {
-                "dedupStrategy": "none",
-                "enableLogDetails": true,
-                "prettifyLogMessage": false,
-                "showCommonLabels": false,
-                "showLabels": false,
-                "showTime": true,
-                "sortOrder": "Descending",
-                "wrapLogMessage": true
-            },
-            "pluginVersion": "8.2.0",
-            "targets": [
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": [
                 {
-                    "format": "time_series",
-                    "group": [],
-                    "metricColumn": "none",
-                    "rawQuery": true,
-                    "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n log,\n level\nFROM application_log\nWHERE\n  name = '$application' AND level != 'INFO' AND $__timeFilter(\"timestamp\")\nORDER BY timestamp DESC LIMIT 1000;",
-                    "refId": "A",
-                    "select": [
-                        [
-                            {
-                                "params": [
-                                    "cpu_usage"
-                                ],
-                                "type": "column"
-                            }
-                        ]
-                    ],
-                    "table": "application_state",
-                    "timeColumn": "\"timestamp\"",
-                    "timeColumnType": "timestamp",
-                    "where": [
-                        {
-                            "name": "$__timeFilter",
-                            "params": [],
-                            "type": "macro"
-                        }
-                    ]
+                  "id": "custom.width",
+                  "value": 185
                 }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Used memory"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 405
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName"
+              },
+              "properties": []
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 24,
+          "x": 0,
+          "y": 8
+        },
+        "id": 10,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
             ],
-            "title": "ERROR and WARNING logs",
-            "type": "logs"
+            "show": false
+          },
+          "frameIndex": 1,
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "9.2.4",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "monitoring_application_used_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
+            "format": "time_series",
+            "instant": false,
+            "legendFormat": "Used memory",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "P1809F7CD0C75ACF3"
+            },
+            "editorMode": "code",
+            "expr": "monitoring_application_cpu_usage_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
+            "hide": false,
+            "legendFormat": "CPU usage",
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "Last stats",
+        "transformations": [
+          {
+            "id": "sortBy",
+            "options": {
+              "fields": {},
+              "sort": [
+                {
+                  "desc": true,
+                  "field": "Time"
+                }
+              ]
+            }
+          },
+          {
+            "id": "joinByLabels",
+            "options": {
+              "value": "job"
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "aliasColors": {
+          "Count ERROR": "red",
+          "Count INFO": "green",
+          "Count WARNING": "light-orange",
+          "ERROR": "red",
+          "INFO": "green",
+          "WARNING": "light-orange",
+          "count ERROR": "red",
+          "count INFO": "green",
+          "count WARNING": "light-orange"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": {
+          "uid": "system-postgres-db"
+        },
+        "decimals": 0,
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 0,
+          "y": 17
+        },
+        "hiddenSeries": false,
+        "id": 6,
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": false,
+          "show": true,
+          "total": true,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "9.2.4",
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "datasource": {
+              "uid": "system-postgres-db"
+            },
+            "format": "time_series",
+            "group": [],
+            "metricColumn": "none",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  level as \"metric\",\n  (date_trunc('hour', timestamp) + date_part('minute', timestamp)::int / 5 * interval '5 min') as \"time\",\n  count(*)\nFROM application_log\nWHERE\n  name = '$application' AND $__timeFilter(\"timestamp\")\nGROUP BY level, time\nORDER BY time, level;",
+            "refId": "A",
+            "select": [
+              [
+                {
+                  "params": [
+                    "cpu_usage"
+                  ],
+                  "type": "column"
+                }
+              ]
+            ],
+            "table": "application_state",
+            "timeColumn": "\"timestamp\"",
+            "timeColumnType": "timestamp",
+            "where": [
+              {
+                "name": "$__timeFilter",
+                "params": [],
+                "type": "macro"
+              }
+            ]
+          }
+        ],
+        "thresholds": [],
+        "timeRegions": [],
+        "title": "Logs",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "transformations": [],
+        "type": "graph",
+        "xaxis": {
+          "mode": "time",
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "$$hashKey": "object:104",
+            "decimals": 0,
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          },
+          {
+            "$$hashKey": "object:105",
+            "format": "short",
+            "logBase": 1,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false
         }
+      },
+      {
+        "datasource": {
+          "uid": "system-postgres-db"
+        },
+        "description": "",
+        "gridPos": {
+          "h": 9,
+          "w": 12,
+          "x": 12,
+          "y": 17
+        },
+        "id": 8,
+        "options": {
+          "dedupStrategy": "none",
+          "enableLogDetails": true,
+          "prettifyLogMessage": false,
+          "showCommonLabels": false,
+          "showLabels": false,
+          "showTime": true,
+          "sortOrder": "Descending",
+          "wrapLogMessage": true
+        },
+        "pluginVersion": "8.2.0",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "system-postgres-db"
+            },
+            "format": "time_series",
+            "group": [],
+            "metricColumn": "none",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n log,\n level\nFROM application_log\nWHERE\n  name = '$application' AND level != 'INFO' AND $__timeFilter(\"timestamp\")\nORDER BY timestamp DESC LIMIT 1000;",
+            "refId": "A",
+            "select": [
+              [
+                {
+                  "params": [
+                    "cpu_usage"
+                  ],
+                  "type": "column"
+                }
+              ]
+            ],
+            "table": "application_state",
+            "timeColumn": "\"timestamp\"",
+            "timeColumnType": "timestamp",
+            "where": [
+              {
+                "name": "$__timeFilter",
+                "params": [],
+                "type": "macro"
+              }
+            ]
+          }
+        ],
+        "title": "ERROR and WARNING logs",
+        "type": "logs"
+      }
     ],
     "refresh": "",
-    "schemaVersion": 31,
+    "schemaVersion": 37,
     "style": "dark",
     "tags": [],
     "templating": {
-        "list": [
-            {
-                "allValue": null,
-                "current": {
-                    "selected": true,
-                    "text": "nginx",
-                    "value": "nginx"
-                },
-                "datasource": "system-postgres-db",
-                "definition": "SELECT DISTINCT name FROM application_state ORDER BY name ASC",
-                "description": null,
-                "error": null,
-                "hide": 0,
-                "includeAll": false,
-                "label": null,
-                "multi": false,
-                "name": "application",
-                "options": [],
-                "query": "SELECT DISTINCT name FROM application_state ORDER BY name ASC",
-                "refresh": 1,
-                "regex": "",
-                "skipUrlSync": false,
-                "sort": 0,
-                "type": "query"
-            }
-        ]
+      "list": [
+        {
+          "current": {
+            "selected": true,
+            "text": "docker-metrics-collector",
+            "value": "docker-metrics-collector"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "definition": "label_values(monitoring_application_up_timestamp_seconds, application)",
+          "hide": 0,
+          "includeAll": false,
+          "multi": false,
+          "name": "application",
+          "options": [],
+          "query": {
+            "query": "label_values(monitoring_application_up_timestamp_seconds, application)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "docker-metrics-collector-default",
+            "value": "docker-metrics-collector-default"
+          },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "definition": "label_values(monitoring_application_up_timestamp_seconds{application=\"$application\"}, instance_id)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "instance",
+          "multi": false,
+          "name": "instance_id",
+          "options": [],
+          "query": {
+            "query": "label_values(monitoring_application_up_timestamp_seconds{application=\"$application\"}, instance_id)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
     },
     "time": {
-        "from": "now-24h",
-        "to": "now"
+      "from": "now-6h",
+      "to": "now"
     },
     "timepicker": {},
     "timezone": "",
     "title": "Application",
     "uid": "application",
-    "version": 1
-}
+    "version": 1,
+    "weekStart": ""
+  }

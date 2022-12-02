@@ -12,7 +12,9 @@
         "fluentd",
         "system-monitor",
         "docker-metrics-collector",
-        "test-app"
+        "test-app",
+        "nginx-reverse-proxy",
+        "nginx-api"
       ]
     }
   ]

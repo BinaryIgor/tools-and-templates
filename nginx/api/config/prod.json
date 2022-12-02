@@ -1,0 +1,16 @@
+{
+  "volumes": [
+    "$PWD/nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+  ],
+  "build_env": {
+    "APP_URL_FILE": "${app-url-file}"
+  },
+  "network": "host",
+  "memory": "500M",
+  "cpus": "0.5",
+  "build_cmd": "bash build.bash",
+  "zero_downtime_deploy": {
+    "upstream_nginx_dir": "${upstream-nginx-dir}",
+    "app_url_file": "${app-url-file}"
+  }
+}
