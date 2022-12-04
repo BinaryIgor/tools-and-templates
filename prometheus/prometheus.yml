@@ -14,6 +14,8 @@ alerting:
         - targets:
             - localhost:9093
 
+# For dynamic, custom urls strategy!
+# https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config
 scrape_configs:
   - job_name: prometheus
     static_configs:
