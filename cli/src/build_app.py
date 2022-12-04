@@ -136,6 +136,10 @@ def prepared_run_script(app_name, app_config, tagged_image_name):
         run_lines.append(f" \\\n")
         run_lines.append(rp)
 
+    for ep in app_config.get("container_extra_args", []):
+        run_lines.append(f" \\\n")
+        run_lines.append(ep)
+
     return meta.replaced_placeholders_file(run_script_template_path,
                                            run_script_placeholders(comment=comment,
                                                                    app_name=app_name,
@@ -262,6 +266,9 @@ def docker_params(app_config):
 
     for u in app_config.get('ulimits', []):
         params.append(f'--ulimit "{u}"')
+
+    for ep in app_config.get("docker_extra_args", []):
+        params.append(ep)
 
     return params
 
