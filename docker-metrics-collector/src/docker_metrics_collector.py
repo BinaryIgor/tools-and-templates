@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 import random
@@ -263,8 +264,12 @@ def fetched_container_metrics(container_id, container_name, instance_id):
         prev_cpu_metrics = c_metrics['precpu_stats']
         cpu_metrics = c_metrics['cpu_stats']
 
+        inspection_result = DOCKER_CONTAINERS.client.inspect_container(container_id)
+        started_at = inspection_result['State'].get('StartedAt', datetime.utcnow().isoformat(sep="T"))
+
         metrics_object = formatted_container_metrics(name=container_name,
                                                      instance_id=instance_id,
+                                                     started_at=started_at,
                                                      memory_metrics=memory_metrics,
                                                      cpu_metrics=cpu_metrics,
                                                      precpu_metrics=prev_cpu_metrics)
@@ -277,11 +282,12 @@ def fetched_container_metrics(container_id, container_name, instance_id):
         return None
 
 
-def formatted_container_metrics(name, instance_id, memory_metrics, cpu_metrics, precpu_metrics):
+def formatted_container_metrics(name, instance_id, started_at, memory_metrics, cpu_metrics, precpu_metrics):
     try:
         return {
             'containerName': name,
             'instanceId': instance_id,
+            'startedAt': started_at,
             'timestamp': current_timestamp_millis(),
             'usedMemory': memory_metrics['usage'],
             'maxMemory': memory_metrics['limit'],

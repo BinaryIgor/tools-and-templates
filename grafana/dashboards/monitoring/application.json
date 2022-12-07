@@ -68,7 +68,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 12,
         "x": 0,
         "y": 0
@@ -126,44 +126,24 @@
         "type": "prometheus",
         "uid": "P1809F7CD0C75ACF3"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 3,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
-          },
-          "mappings": [],
-          "max": 1,
-          "min": 0,
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -177,45 +157,51 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "ms"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 12,
         "x": 12,
         "y": 0
       },
-      "id": 4,
+      "hideTimeOverride": true,
+      "id": 14,
+      "links": [],
+      "maxDataPoints": 100,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "textMode": "auto"
       },
+      "pluginVersion": "9.2.4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P1809F7CD0C75ACF3"
+            "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_cpu_usage_percent{application=\"$application\", instance_id=\"$instance_id\"}",
-          "interval": "",
-          "legendFormat": "CPU usage",
+          "expr": "monitoring_application_started_at_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
+          "intervalFactor": 1,
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "step": 240
         }
       ],
-      "title": "CPU  usage",
-      "type": "timeseries"
+      "title": "Application instance uptime",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -281,9 +267,9 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 5
       },
-      "id": 2,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
@@ -303,13 +289,14 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_used_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"} / monitoring_application_max_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
-          "legendFormat": "Memory usage",
+          "expr": "monitoring_application_cpu_usage_percent{application=\"$application\", instance_id=\"$instance_id\"}",
+          "interval": "",
+          "legendFormat": "CPU usage",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Memory usage",
+      "title": "CPU  usage",
       "type": "timeseries"
     },
     {
@@ -535,7 +522,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 5
       },
       "id": 6,
       "options": {
@@ -580,6 +567,101 @@
       ],
       "title": "Logs",
       "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P1809F7CD0C75ACF3"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 3,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P1809F7CD0C75ACF3"
+          },
+          "editorMode": "code",
+          "expr": "monitoring_application_used_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"} / monitoring_application_max_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
+          "legendFormat": "Memory usage",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Memory usage",
       "type": "timeseries"
     },
     {
@@ -674,7 +756,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 21
       },
       "id": 10,
       "interval": "5m",
@@ -775,8 +857,8 @@
       {
         "current": {
           "selected": true,
-          "text": "docker-metrics-collector",
-          "value": "docker-metrics-collector"
+          "text": "system-monitor",
+          "value": "system-monitor"
         },
         "datasource": {
           "type": "prometheus",
@@ -800,9 +882,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "docker-metrics-collector-default",
-          "value": "docker-metrics-collector-default"
+          "selected": true,
+          "text": "system-monitor-default",
+          "value": "system-monitor-default"
         },
         "datasource": {
           "type": "prometheus",
