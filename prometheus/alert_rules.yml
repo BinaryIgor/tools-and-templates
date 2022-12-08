@@ -49,20 +49,20 @@ groups:
       labels:
         severity: critical
       annotations:
-        summary: "Application {{ $labels.job }} high Memory Usage"
-        decription: "Application {{ $labels.job }} is using more than 80% of memory for 5 minutes" 
+        summary: "Application {{ $labels.application }} high Memory Usage"
+        decription: "Application {{ $labels.application }} is using more than 80% of memory for 5 minutes" 
     - alert: ApplicationHighCpuUsage
       expr: monitoring_application_cpu_usage_percent > 0.8
       for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Application {{ $labels.job }} high CPU usage"
-        decription: "Application {{ $labels.job }} is using more than 80% of CPU for 5 minutes"
+        summary: "Application {{ $labels.application }} high CPU usage"
+        decription: "Application {{ $labels.application }} is using more than 80% of CPU for 5 minutes"
     - alert: "ApplicationLogsErrors"
       expr: increase(monitoring_application_logs_errors_total[5m]) > 0
       labels:
         severity: critical
       annotations:
-        summary: "Application {{ $labels.job }} ERROR"
-        description: "Application {{ $labels.job }} is having errors in its logs"
+        summary: "Application {{ $labels.application }} ERROR"
+        description: "Application {{ $labels.application }} is having errors in its logs"

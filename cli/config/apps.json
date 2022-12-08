@@ -4,6 +4,10 @@
     "dir": "prometheus"
   },
   {
+    "name": "prometheus-alertmanager",
+    "dir": "prometheus/alertmanager"
+  },
+  {
     "name": "node-exporter",
     "dir": "prometheus/exporters/node-exporter"
   },

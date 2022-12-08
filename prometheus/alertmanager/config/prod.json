@@ -1,0 +1,8 @@
+{
+  "volumes": [],
+  "env": {},
+  "secrets": {},
+  "network": "host",
+  "memory": "500M",
+  "cpus": "0.5"
+}
