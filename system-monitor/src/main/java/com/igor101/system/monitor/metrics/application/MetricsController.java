@@ -1,6 +1,6 @@
 package com.igor101.system.monitor.metrics.application;
 
-import com.igor101.system.monitor.metrics.infrastructure.MetricsService;
+import com.igor101.system.monitor.metrics.core.MetricsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;

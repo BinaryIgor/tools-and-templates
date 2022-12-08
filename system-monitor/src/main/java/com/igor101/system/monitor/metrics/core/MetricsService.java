@@ -1,4 +1,4 @@
-package com.igor101.system.monitor.metrics.infrastructure;
+package com.igor101.system.monitor.metrics.core;
 
 import com.igor101.system.monitor.common.Metrics;
 import com.igor101.system.monitor.metrics.application.ContainersMetrics;
