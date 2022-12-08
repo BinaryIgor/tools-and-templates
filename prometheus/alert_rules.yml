@@ -1,38 +1,68 @@
 groups:
-  - name: system-alerts
+  - name: machine-alerts
     rules:
+    - alert: HighMachineMemoryUsage
+      expr: '(1 - sum by(job) (node_memory_MemAvailable_bytes) / sum by(job) (node_memory_MemTotal_bytes)) > 0.8'
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Machine {{ $labels.job }} high Memory Usage"
+        decription: "Machine {{ $labels.job }} is using more than 80% of memory for 5 minutes"
     - alert: HighMachineCpuUsage
-      expr: '(100 - (avg by (job, instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100)) > 80'
+      expr: '(sum by(job) (irate(node_cpu_seconds_total{mode!="idle"}[5m])) / sum by (job)((irate(node_cpu_seconds_total[5m])))) > 0.8'
+      for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Machine {{ $labels.job }} high CPU usage"
-        description: "Machine {{ $labels.job }} of {{ $labels.instance }} is using more then 80% of CPU for 5 minutes"
-    - alert: ApplicationLogsErrors
-      expr: 'sum by (monitored_application, source, instance_id) (increase(application_logs_errors_total[5m])) > 0'
+        summary: "Machine {{ $labels.job }} high CPU Usage"
+        description: "Machine {{ $labels.job }} is using more than 80% of CPU for 5 minutes"
+    - alert: HighMachineSystemLoad
+      expr: '(avg by (job) (node_load5)) / (count by (job) (count(node_cpu_seconds_total) by (job, cpu))) > 0.8'
+      for: 5m
+      labels:
+        severity: critical
+      annotations: 
+        summary: "Machine {{ $labels.job }} high System Load"
+        description: "Machine {{ $labels.job }} is under more than 80% of load for 5 minutes"
+    - alert: HighMachineDiskSpaceUsage
+      expr: '(sum by (job) (1 - ((node_filesystem_avail_bytes) / node_filesystem_size_bytes))) > 0.8'
+      for: 5m
       labels:
         severity: critical
       annotations:
-        summary: "Application {{ $labels.monitored_application }} has errors in logs"
-        description: "Application {{ $labels.monitored_application }} from {{ $labels.source }} source of {{ $labels.instance_id }} instance_id has errors in its logs."
+        summary: "Machine {{ $labels.job }} high Disk Space Usage"
+        description: "Machine {{ $labels.job }} is using more than 80% of Disk Space for 5 minutes"
+  - name: application-alerts
+    rules:
     - alert: ApplicationDown
       expr: up == 0
       for: 1m
       labels:
         severity: critical
       annotations:
-        summary: 'Application {{ $labels.application }} is down'
-        description: 'Application {{ $labels.instance }} is unavailable. Go here: {{ $labels.application }}'
-    - alert: AlwaysFiring
-      expr: vector(1)
-      annotations:
-        summary: 'Always up'
-        description: "Something went truly wrong"
-    - alert: BusinessProcessFailure
-      expr: random_business_metric == 0
+        summary: "Application {{ $labels.job }} is DOWN"
+        decription: "Application {{ $labels.job }} has been down for over 1 minute"
+    - alert: ApplicationHighMemoryUsage
+      expr: (monitoring_application_used_memory_bytes / monitoring_application_max_memory_bytes) > 0.8
       for: 5m
       labels:
-        application: "Critical business thing"
         severity: critical
       annotations:
-        description: Process {{ $labels.application }} has failed!
+        summary: "Application {{ $labels.job }} high Memory Usage"
+        decription: "Application {{ $labels.job }} is using more than 80% of memory for 5 minutes" 
+    - alert: ApplicationHighCpuUsage
+      expr: monitoring_application_cpu_usage_percent > 0.8
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Application {{ $labels.job }} high CPU usage"
+        decription: "Application {{ $labels.job }} is using more than 80% of CPU for 5 minutes"
+    - alert: "ApplicationLogsErrors"
+      expr: increase(monitoring_application_logs_errors_total[5m]) > 0
+      labels:
+        severity: critical
+      annotations:
+        summary: "Application {{ $labels.job }} ERROR"
+        description: "Application {{ $labels.job }} is having errors in its logs"
