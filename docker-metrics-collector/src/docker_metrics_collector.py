@@ -8,6 +8,7 @@ import time
 from os import environ
 
 import docker
+from docker.errors import NotFound
 import requests
 
 logging.basicConfig(level=logging.INFO,
@@ -277,6 +278,10 @@ def fetched_container_metrics(container_id, container_name, instance_id):
         LOG.info("Metrics gathered")
 
         return metrics_object
+    except NotFound:
+        LOG.info(f"Container {container_id}:{container_id} not found, skipping!")
+        print()
+        return None
     except Exception:
         log_exception("Failed to gather metrics")
         return None

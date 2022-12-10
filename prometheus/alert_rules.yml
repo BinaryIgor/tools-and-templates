@@ -8,7 +8,7 @@ groups:
         severity: critical
       annotations:
         summary: "Machine {{ $labels.job }} high Memory Usage"
-        decription: "Machine {{ $labels.job }} is using more than 80% of memory for 5 minutes"
+        description: "Machine {{ $labels.job }} is using more than 80% of memory for 5 minutes"
     - alert: HighMachineCpuUsage
       expr: '(sum by(job) (irate(node_cpu_seconds_total{mode!="idle"}[5m])) / sum by (job)((irate(node_cpu_seconds_total[5m])))) > 0.8'
       for: 5m
