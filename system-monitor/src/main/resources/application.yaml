@@ -2,7 +2,20 @@ server:
   port: 10101
 
 log-mappings:
-  applications: [ ]
+  applications:
+    - supportedApplicationsKeywords: [ nginx ]
+      mapping:
+        warningKeywords: [ "warn", "warning" ]
+        errorKeywords:
+          - "[error]"
+          - "[ERROR]"
+          - "[crit]"
+          - "[CRIT]"
+          - "[alert]"
+          - "[ALERT]"
+          - "[emerg]"
+          - "[EMERG]"
+
   defaultMapping:
     warningKeywords: [ "WARNING", "WARN" ]
     errorKeywords: [ "ERROR" ]

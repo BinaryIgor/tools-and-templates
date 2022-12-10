@@ -1,5 +1,16 @@
 apiVersion: 1
 providers:
+  - name: alerts
+    orgId: 1
+    folder: "Monitoring"
+    folderUid: "monitoring"
+    type: file
+    disableDeletion: false
+    editable: false
+    allowUiUpdates: false
+    options:
+      path: /var/lib/grafana/dashboards/monitoring/alerts.json
+
   - name: machine
     orgId: 1
     folder: "Monitoring"
