@@ -49,6 +49,18 @@
                 "to": 60
               },
               "type": "range"
+            },
+            {
+              "options": {
+                "from": 61,
+                "result": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "DOWN"
+                },
+                "to": 9999999
+              },
+              "type": "range"
             }
           ],
           "thresholds": {
@@ -687,30 +699,6 @@
                 }
               }
             ]
-          },
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "Errors"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
           }
         ]
       },
@@ -766,7 +754,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "1m",
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],
@@ -775,8 +763,8 @@
       {
         "current": {
           "selected": false,
-          "text": "system-monitor",
-          "value": "system-monitor"
+          "text": "nginx-api",
+          "value": "nginx-api"
         },
         "datasource": {
           "type": "prometheus",
@@ -801,8 +789,8 @@
       {
         "current": {
           "selected": false,
-          "text": "system-monitor-default",
-          "value": "system-monitor-default"
+          "text": "nginx-api-default",
+          "value": "nginx-api-default"
         },
         "datasource": {
           "type": "prometheus",
