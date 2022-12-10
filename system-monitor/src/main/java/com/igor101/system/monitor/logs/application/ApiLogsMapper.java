@@ -19,7 +19,7 @@ public class ApiLogsMapper {
                 .map(l -> {
                     var source = l.getOrDefault(HOST, DEFAULT_NO_VALUE);
                     var application = l.getOrDefault(CONTAINER_NAME, DEFAULT_NO_VALUE).replaceFirst("/", "");
-                    var instanceId = l.getOrDefault(INSTANCE_ID, application);
+                    var instanceId = l.getOrDefault(INSTANCE_ID, application + "-default");
                     var log = l.get(LOG);
 
                     return log == null ? null : new LogData(source, application, instanceId, log);
