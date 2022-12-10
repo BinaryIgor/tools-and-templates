@@ -279,7 +279,7 @@ def fetched_container_metrics(container_id, container_name, instance_id):
 
         return metrics_object
     except NotFound:
-        LOG.info(f"Container {container_id}:{container_id} not found, skipping!")
+        LOG.info(f"Container {container_name}:{container_id} not found, skipping!")
         print()
         return None
     except Exception:
