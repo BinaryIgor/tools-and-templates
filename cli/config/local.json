@@ -1,5 +1,6 @@
 {
   "app-url-file": "app_url.txt",
   "current-app-url-file-path": "$PWD/../nginx-api/app_url.txt",
-  "upstream-nginx-dir": "$PWD/../nginx-reverse-proxy"
+  "upstream-nginx-dir": "$PWD/../nginx-reverse-proxy",
+  "static-path": "/home/monitor/static"
 }

@@ -1,6 +1,7 @@
 {
   "volumes": [
-    "$PWD/conf:/etc/nginx/conf.d"
+    "$PWD/conf:/etc/nginx/conf.d",
+    "${static-path}:/usr/share/nginx/site:ro"
   ],
   "build_cmd": "bash build.bash",
   "build_env": {
