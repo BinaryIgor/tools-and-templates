@@ -1,5 +1,4 @@
 import base64
-import hashlib
 import os
 import secrets
 import string
@@ -12,8 +11,6 @@ from commons import meta
 KEYS_BYTES_LENGTH = 32
 PASSWORD_LENGTH = 48
 PASSWORD_CHARACTERS = f'{string.ascii_letters}{string.digits}'
-
-TOKEN_KEY = 'token-key'
 
 # TODO: change its name!
 CLI_SECRETS_PASSWORD_ENV = "CLI_SECRETS_PASSWORD"
@@ -119,17 +116,3 @@ def local_system_secrets():
         secrets_values[key] = value
 
     return secrets_values
-
-
-def rabbitmq_hashed_password(password):
-    salt = os.urandom(4)
-    password_utf8 = password.encode("utf8")
-    salt_password = salt + password_utf8
-
-    hashed_salt_password = hashlib.sha256(salt_password).digest()
-
-    salted_hash = salt + hashed_salt_password
-
-    based64_salt_hash = base64.b64encode(salted_hash)
-
-    return based64_salt_hash.decode("utf8")

@@ -21,9 +21,6 @@ BLOCKING_OTHERS = "blocking_others"
 
 NAME = "name"
 DIR = "dir"
-BUILD_CMD = "build_cmd"
-BUILD_ACTIONS = "build_actions"
-PACKAGE_ACTIONS = "package_actions"
 
 _APPS = None
 
@@ -204,20 +201,6 @@ def app_name(app):
     return app[NAME]
 
 
-# TODO: refactor
-def app_build_cmd(app):
-    return app_config(app).get(BUILD_CMD)
-
-
-def app_build_actions(app):
-    return app_config(app).get(BUILD_ACTIONS, [])
-
-
-def app_package_actions(app):
-    return app.get(PACKAGE_ACTIONS, [])
-
-
-# TODO: fix
 def env_config():
     with open(path.join(config_dir(), f'{current_env()}.json')) as f:
         return json.load(f)

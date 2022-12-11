@@ -38,16 +38,15 @@ def build_app(app, app_name, tag):
 
     log.info(f"About to build {app_name} app docker image ({tag}) from path: {app_dir}")
 
-    build_cmd = meta.app_build_cmd(app)
-    if build_cmd:
-        log.info(f"Executing build cmd with app env: {build_cmd}")
-
-        app_config = meta.app_config(app)
+    app_config = meta.app_config(app)
+    app_build_cmd = build_cmd(app_config)
+    if app_build_cmd:
+        log.info(f"Executing build cmd with app env: {app_build_cmd}")
 
         meta.execute_bash_script(f"""
             cd {app_dir}
             {app_build_env_exports_str(app_config, app_name)}
-            {build_cmd}
+            {app_build_cmd}
         """)
         log.info("build cmd executed")
 
@@ -217,6 +216,10 @@ def decrypt_needed_locally_secrets(app_config):
 
 def script_comments(app_config):
     return app_config.get("comments", [])
+
+
+def build_cmd(app_config):
+    return app_config.get("build_cmd", "")
 
 
 def pre_run_cmd(app_config):

@@ -4,9 +4,6 @@ from os import path
 
 log = meta.new_log("deploy_app")
 
-PRE_DEPLOY_ACTIONS = "pre_deploy_actions"
-POST_DEPLOY_ACTIONS = "post_deploy_actions"
-
 args = meta.cmd_args(
     args_definitions={
         "app": {
@@ -49,16 +46,6 @@ def app_latest_package_dir(app_name):
     return f'{app_package_dir(app_name, deploy_config)}/latest'
 
 
-def perform_pre_deploy_actions(remote_host, app, deploy_dir):
-    actions = app.get(PRE_DEPLOY_ACTIONS)
-    if not actions:
-        return
-
-    print()
-    log.info("Performing pre deploy actions...")
-    perform_deploy_actions(actions, remote_host, deploy_dir)
-
-
 def perform_deploy_actions(actions, remote_host, deploy_dir):
     for a in actions:
         cmd = meta.replaced_placeholders_content(a, {
@@ -66,16 +53,6 @@ def perform_deploy_actions(actions, remote_host, deploy_dir):
         })
         log.info(f"Executing: {cmd}")
         meta.execute_bash_script(f'ssh {remote_host} "{cmd}"')
-
-
-def perform_post_deploy_actions(remote_host, app, deploy_dir):
-    actions = app.get(POST_DEPLOY_ACTIONS)
-    if not actions:
-        return
-
-    print()
-    log.info("Performing post deploy actions...")
-    perform_deploy_actions(actions, remote_host, deploy_dir)
 
 
 def copy_app_package(remote_host, previous_deploy_dir, latest_deploy_dir, package_dir):
@@ -148,11 +125,9 @@ def check_app_status(app_name, remote_host, previous_deploy_dir, multiple_checks
 
     if status == 'running':
         log.info(f"Last status is running, app is up!")
-        return True
-
-    log.error(f"""Failed to deploy app, it's status: {status}.
-             You should revert to previous version (in: {previous_deploy_dir}) or diagnose a problem""")
-    return False
+    else:
+        log.error(f"""Failed to deploy app, it's status: {status}.
+                 You should revert to previous version (in: {previous_deploy_dir}) or diagnose a problem""")
 
 
 app_name = args['app']
@@ -193,14 +168,9 @@ copy_app_package(remote_host, previous_deploy_dir, latest_deploy_dir, package_di
 
 log.info("About to start app....")
 
-perform_pre_deploy_actions(remote_host, app, latest_deploy_dir)
-
 meta.execute_bash_script(f'ssh {remote_host} "cd {latest_deploy_dir}; bash load_and_run.bash"')
 
-deployed = check_app_status(app_name, remote_host, previous_deploy_dir)
-
-if deployed:
-    perform_post_deploy_actions(remote_host, app, deploy_dir)
+check_app_status(app_name, remote_host, previous_deploy_dir)
 
 print()
 log.info(f"{app_name} is deployed, but check logs to make sure that it runs as desired or run system_status script")

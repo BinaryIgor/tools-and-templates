@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eu
 
 found_container=$(docker ps -q -f name="${app}")
 app_backup="${app}-backup"
@@ -10,7 +9,7 @@ if [ "$found_container" ]; then
 fi
 
 echo "Removing previous container, if wasn't running..."
-docker rm ${app} || true
+docker rm ${app}
 
 echo
 echo "Starting new ${app} version..."
@@ -53,4 +52,4 @@ if [ "$found_container" ]; then
 fi
 
 echo "Removing previous container...."
-docker rm ${app_backup} || true
+docker rm ${app_backup}
