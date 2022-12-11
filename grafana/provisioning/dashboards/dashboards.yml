@@ -22,17 +22,6 @@ providers:
     options:
       path: /var/lib/grafana/dashboards/monitoring/machine.json
 
-  - name: node
-    orgId: 1
-    folder: "Monitoring"
-    folderUid: "monitoring"
-    type: file
-    disableDeletion: false
-    editable: false
-    allowUiUpdates: false
-    options:
-      path: /var/lib/grafana/dashboards/monitoring/node.json
-
   - name: application
     orgId: 1
     folder: "Monitoring"
@@ -44,7 +33,7 @@ providers:
     options:
       path: /var/lib/grafana/dashboards/monitoring/application.json
 
-  - name: prometheus
+  - name: node
     orgId: 1
     folder: "Monitoring"
     folderUid: "monitoring"
@@ -53,7 +42,7 @@ providers:
     editable: false
     allowUiUpdates: false
     options:
-      path: /var/lib/grafana/dashboards/monitoring/prometheus.json
+      path: /var/lib/grafana/dashboards/monitoring/node.json
 
   - name: jvm
     orgId: 1
@@ -65,3 +54,14 @@ providers:
     allowUiUpdates: false
     options:
       path: /var/lib/grafana/dashboards/monitoring/jvm.json
+
+  - name: prometheus
+    orgId: 1
+    folder: "Monitoring"
+    folderUid: "monitoring"
+    type: file
+    disableDeletion: false
+    editable: false
+    allowUiUpdates: false
+    options:
+      path: /var/lib/grafana/dashboards/monitoring/prometheus.json

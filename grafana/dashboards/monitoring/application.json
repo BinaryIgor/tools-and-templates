@@ -108,9 +108,11 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "time() - monitoring_application_up_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -200,9 +202,11 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "time() - monitoring_application_started_at_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
+          "instant": true,
           "intervalFactor": 1,
-          "range": true,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -555,10 +559,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -711,9 +711,7 @@
       "id": 6,
       "options": {
         "legend": {
-          "calcs": [
-            "sum"
-          ],
+          "calcs": [],
           "displayMode": "list",
           "placement": "bottom",
           "showLegend": true
@@ -731,7 +729,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_logs_warnings_total{application=\"$application\", instance_id=\"$instance_id\"} or vector(0)",
+          "expr": "increase(monitoring_application_logs_warnings_total{application=\"$application\", instance_id=\"$instance_id\"}[$__rate_interval])",
           "legendFormat": "Warnings",
           "range": true,
           "refId": "A"
@@ -742,14 +740,14 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_logs_errors_total{application=\"$application\", instance_id=\"$instance_id\"} or vector(0)",
+          "expr": "increase(monitoring_application_logs_errors_total{application=\"$application\", instance_id=\"$instance_id\"}[$__rate_interval])",
           "hide": false,
           "legendFormat": "Errors",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "Logs",
+      "title": "Logs warnings/errors",
       "transformations": [],
       "type": "timeseries"
     }
@@ -762,9 +760,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "nginx-api",
-          "value": "nginx-api"
+          "selected": true,
+          "text": "docker-metrics-collector",
+          "value": "docker-metrics-collector"
         },
         "datasource": {
           "type": "prometheus",
@@ -788,9 +786,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "nginx-api-default",
-          "value": "nginx-api-default"
+          "selected": true,
+          "text": "docker-metrics-collector-default",
+          "value": "docker-metrics-collector-default"
         },
         "datasource": {
           "type": "prometheus",

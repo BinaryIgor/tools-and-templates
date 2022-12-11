@@ -105,11 +105,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "100 - ((node_memory_MemAvailable_bytes{instance=\"$node\",job=\"$job\"} / node_memory_MemTotal_bytes{instance=\"$node\",job=\"$job\"}) * 100)",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "intervalFactor": 1,
-          "range": true,
+          "range": false,
           "refId": "B",
           "step": 240
         }
@@ -190,11 +192,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "(sum by(instance) (irate(node_cpu_seconds_total{instance=\"$node\",job=\"$job\", mode!=\"idle\"}[$__rate_interval])) / on(instance) group_left sum by (instance)((irate(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}[$__rate_interval])))) * 100",
           "hide": false,
+          "instant": true,
           "intervalFactor": 1,
           "legendFormat": "",
-          "range": true,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -275,11 +279,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "avg(node_load5{instance=\"$node\",job=\"$job\"}) / count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu)) * 100",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "intervalFactor": 1,
-          "range": true,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -360,10 +366,12 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "avg(node_load15{instance=\"$node\",job=\"$job\"}) /  count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu)) * 100",
           "hide": false,
+          "instant": true,
           "intervalFactor": 1,
-          "range": true,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -374,7 +382,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "P1809F7CD0C75ACF3"
       },
       "description": "Used Swap",
       "fieldConfig": {
@@ -443,8 +451,12 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
+          "editorMode": "code",
+          "exemplar": false,
           "expr": "((node_memory_SwapTotal_bytes{instance=\"$node\",job=\"$job\"} - node_memory_SwapFree_bytes{instance=\"$node\",job=\"$job\"}) / (node_memory_SwapTotal_bytes{instance=\"$node\",job=\"$job\"} )) * 100",
+          "instant": true,
           "intervalFactor": 1,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -455,7 +467,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "P1809F7CD0C75ACF3"
       },
       "description": "Used Root File System",
       "fieldConfig": {
@@ -524,9 +536,13 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "100 - ((node_filesystem_avail_bytes{instance=\"$node\",job=\"$job\",mountpoint=\"/\",fstype!=\"rootfs\"} * 100) / node_filesystem_size_bytes{instance=\"$node\",job=\"$job\",mountpoint=\"/\",fstype!=\"rootfs\"})",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "100 - ((node_filesystem_avail_bytes{instance=\"$node\",job=\"$job\",mountpoint=\"/\"} * 100) / node_filesystem_size_bytes{instance=\"$node\",job=\"$job\",mountpoint=\"/\"})",
           "format": "time_series",
+          "instant": true,
           "intervalFactor": 1,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -537,7 +553,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "P1809F7CD0C75ACF3"
       },
       "description": "Total number of CPU cores",
       "fieldConfig": {
@@ -603,10 +619,14 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
+          "editorMode": "code",
+          "exemplar": false,
           "expr": "count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu))",
+          "instant": true,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -617,7 +637,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "P1809F7CD0C75ACF3"
       },
       "description": "Total RAM",
       "fieldConfig": {
@@ -684,8 +704,12 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
+          "editorMode": "code",
+          "exemplar": false,
           "expr": "node_memory_MemTotal_bytes{instance=\"$node\",job=\"$job\"}",
+          "instant": true,
           "intervalFactor": 1,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -764,9 +788,11 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "node_memory_SwapTotal_bytes{instance=\"$node\",job=\"$job\"}",
+          "instant": true,
           "intervalFactor": 1,
-          "range": true,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -814,7 +840,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -849,11 +875,13 @@
             "uid": "prometheus"
           },
           "editorMode": "code",
-          "expr": "node_filesystem_size_bytes{instance=\"$node\",job=\"$job\",mountpoint=\"/\",fstype!=\"rootfs\"}",
+          "exemplar": false,
+          "expr": "node_filesystem_size_bytes{instance=\"$node\",job=\"$job\",mountpoint=\"/\"}",
           "format": "time_series",
           "hide": false,
+          "instant": true,
           "intervalFactor": 1,
-          "range": true,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -864,7 +892,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "prometheus"
+        "uid": "P1809F7CD0C75ACF3"
       },
       "description": "System uptime",
       "fieldConfig": {
@@ -932,8 +960,12 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
+          "editorMode": "code",
+          "exemplar": false,
           "expr": "node_time_seconds{instance=\"$node\",job=\"$job\"} - node_boot_time_seconds{instance=\"$node\",job=\"$job\"}",
+          "instant": true,
           "intervalFactor": 1,
+          "range": false,
           "refId": "A",
           "step": 240
         }
@@ -961,7 +993,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -1026,7 +1058,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -1522,7 +1554,7 @@
               }
             ]
           },
-          "unit": "Bps"
+          "unit": "binBps"
         },
         "overrides": []
       },
@@ -1629,7 +1661,7 @@
               }
             ]
           },
-          "unit": "Bps"
+          "unit": "binBps"
         },
         "overrides": []
       },
@@ -1742,7 +1774,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1758,7 +1791,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 15
+            "y": 11
           },
           "id": 44,
           "links": [],
@@ -1889,7 +1922,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1897,7 +1931,7 @@
                   }
                 ]
               },
-              "unit": "decbytes"
+              "unit": "bytes"
             },
             "overrides": [
               {
@@ -1930,7 +1964,7 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 15
+            "y": 11
           },
           "id": 40,
           "options": {
@@ -2008,7 +2042,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2055,7 +2090,7 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 23
+            "y": 19
           },
           "id": 42,
           "options": {
@@ -2104,7 +2139,7 @@
       "type": "row"
     }
   ],
-  "refresh": "1m",
+  "refresh": "5m",
   "schemaVersion": 37,
   "style": "dark",
   "tags": [],

@@ -17,7 +17,7 @@ route:
 
   # If an alert has successfully been sent, wait 'repeat_interval' to
   # resend them.
-  repeat_interval: 4h
+  repeat_interval: 8h
   receiver: 'alerts-receiver'
 
 # Data structures reference: https://prometheus.io/docs/alerting/latest/notifications/
