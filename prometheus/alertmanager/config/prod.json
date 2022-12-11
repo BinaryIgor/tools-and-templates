@@ -3,6 +3,6 @@
   "env": {},
   "secrets": {},
   "network": "host",
-  "memory": "500M",
+  "memory": "250M",
   "cpus": "0.5"
 }

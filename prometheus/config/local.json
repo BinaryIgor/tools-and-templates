@@ -2,7 +2,8 @@
   "volumes": [
     "prometheus-volume:/prometheus"
   ],
-  "pre_run_cmd": "docker volume create prometheus-volume",
+  "build_cmd": "bash build.bash",
+  "pre_run_cmd": "bash init_volume.bash prometheus-volume",
   "run_args": [
     "--storage.tsdb.retention.time=90d",
     "--config.file=/etc/prometheus/prometheus.yml"
