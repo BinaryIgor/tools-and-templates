@@ -22,7 +22,7 @@ public class LogsConfig {
 
     @Bean
     public LogsRepository logsRepository(LogsStorageConfig config) {
-        return new FileLogsRepository(new File(config.filePath()), 3_000_000);
+        return new FileLogsRepository(new File(config.filePath()), config.maxFileSize());
     }
 
     @Bean
