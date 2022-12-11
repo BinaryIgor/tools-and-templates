@@ -26,6 +26,6 @@ public class LogsController {
     @PostMapping
     public void append(@RequestBody List<Map<String, String>> logs) {
         log.info("Receiving some {} logs...", logs.size());
-        logsService.handle(ApiLogsMapper.fromApiLogs(logs));
+        logsService.add(ApiLogsMapper.fromApiLogs(logs));
     }
 }

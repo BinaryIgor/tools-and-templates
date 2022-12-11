@@ -8,6 +8,6 @@ public class SystemMonitorApplicationTest {
 
     @Test
     void shouldLoadContext() {
-
+        System.out.println("Testing context load...");
     }
 }

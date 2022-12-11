@@ -10,5 +10,5 @@ public record PrometheusAlerts(String groupKey,
                                Map<String, String> groupLabels,
                                Map<String, String> commonLabels,
                                String externalURL,
-                               List<PrometheusAlert> alerts) {
+                               List<Alert> alerts) {
 }

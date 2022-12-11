@@ -22,7 +22,7 @@ log-mappings:
 
 logs-storage:
   filePath: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
-  maxFileSize: 5000000
+  maxFileSize: 10_000_000
 
 management:
   endpoints:

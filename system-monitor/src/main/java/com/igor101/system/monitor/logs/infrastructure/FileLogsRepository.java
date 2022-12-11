@@ -12,11 +12,14 @@ import java.nio.file.StandardOpenOption;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+//TODO: clean files in a scheduler, upload them to spaces!
+//TODO: upload file to local script
 public class FileLogsRepository implements LogsRepository {
 
     static final DateTimeFormatter ROTATED_LOG_FILE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
@@ -36,7 +39,8 @@ public class FileLogsRepository implements LogsRepository {
     public void store(List<LogRecord> logs) {
         var groupedLogs = groupedLogs(logs);
 
-        Exception lastException = null;
+        var suppressedExceptions = new ArrayList<Exception>();
+
         for (var e : groupedLogs.entrySet()) {
             try {
                 var messages = e.getValue().stream()
@@ -45,12 +49,14 @@ public class FileLogsRepository implements LogsRepository {
                 saveLogGroupToFile(e.getKey(), messages);
             } catch (Exception ex) {
                 log.error("Problem while saving log({}) to file...", e.getKey(), ex);
-                lastException = ex;
+                suppressedExceptions.add(ex);
             }
         }
 
-        if (lastException != null) {
-            throw new RuntimeException(lastException);
+        if (!suppressedExceptions.isEmpty()) {
+            var exception = new RuntimeException();
+            suppressedExceptions.forEach(exception::addSuppressed);
+            throw exception;
         }
     }
 

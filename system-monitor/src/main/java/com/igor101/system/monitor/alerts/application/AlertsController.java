@@ -1,6 +1,6 @@
 package com.igor101.system.monitor.alerts.application;
 
-import com.igor101.system.monitor.alerts.core.PrometheusAlertsService;
+import com.igor101.system.monitor.alerts.core.AlertsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,15 +14,15 @@ public class AlertsController {
 
     private static final Logger log = LoggerFactory.getLogger(AlertsController.class);
 
-    private final PrometheusAlertsService service;
+    private final AlertsService service;
 
-    public AlertsController(PrometheusAlertsService service) {
+    public AlertsController(AlertsService service) {
         this.service = service;
     }
 
     @PostMapping
     public void post(@RequestBody PrometheusAlerts alerts) {
         log.info("Receiving prom alerts...{}", alerts.alerts().size());
-        service.add(alerts);
+        service.add(alerts.alerts());
     }
 }

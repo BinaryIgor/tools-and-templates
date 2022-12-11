@@ -4,8 +4,6 @@ import com.igor101.system.monitor.common.Metrics;
 import com.igor101.system.monitor.logs.core.model.ApplicationLogLevel;
 import com.igor101.system.monitor.logs.core.model.LogData;
 import io.micrometer.core.instrument.MeterRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,7 +11,6 @@ public class LogsService {
 
     static final String APPLICATION_LOGS_ERRORS_TOTAL_METRIC = Metrics.fullName("application_logs_errors_total");
     static final String APPLICATION_LOGS_WARNINGS_TOTAL_METRIC = Metrics.fullName("application_logs_warnings_total");
-    private static final Logger log = LoggerFactory.getLogger(LogsService.class);
     private final LogsConverter logsConverter;
     private final LogsRepository logsRepository;
     private final MeterRegistry meterRegistry;
@@ -27,9 +24,7 @@ public class LogsService {
     }
 
     //TODO: global error handler
-    public void handle(List<LogData> logs) {
-        log.info("Have {} logs to handle...", logs.size());
-
+    public void add(List<LogData> logs) {
         var records = logs.stream()
                 .map(l -> {
                     var r = logsConverter.converted(l);
@@ -39,8 +34,6 @@ public class LogsService {
                 .toList();
 
         logsRepository.store(records);
-
-        log.info("Logs handled");
     }
 
     private void updateLogsMetrics(String source,
