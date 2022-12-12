@@ -2,5 +2,6 @@
   "app-url-file": "app_url.txt",
   "current-app-url-file-path": "$PWD/../../nginx-api/latest/app_url.txt",
   "upstream-nginx-dir": "$PWD/../../nginx-reverse-proxy/latest",
-  "static-path": "/home/monitor/static"
+  "static-path": "/home/monitor/static",
+  "files-path": "/home/monitor/system-logs"
 }

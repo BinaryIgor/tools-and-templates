@@ -15,7 +15,8 @@
         "docker-metrics-collector",
         "test-app",
         "nginx-reverse-proxy",
-        "nginx-api"
+        "nginx-api",
+        "nginx-files-browser"
       ]
     }
   ]

@@ -34,5 +34,9 @@
   {
     "name": "nginx-api",
     "dir": "nginx/api"
+  },
+   {
+    "name": "nginx-files-browser",
+    "dir": "nginx/files-browser"
   }
 ]
