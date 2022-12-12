@@ -12,36 +12,47 @@ import java.nio.file.StandardOpenOption;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 //TODO: clean files in a scheduler, upload them to spaces!
-//TODO: upload file to local script
 public class FileLogsRepository implements LogsRepository {
 
-    static final DateTimeFormatter ROTATED_LOG_FILE_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
-            "yyyyMMdd-HHmmss");
-    private static final String LOG_FILE_EXTENSION = ".logs";
+    static final DateTimeFormatter ROTATED_LOG_FILE_DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+    static final String LOG_FILE_NAME_PARTS_DELIMITER = "__";
+    private static final Pattern LOG_FILE_NAME_PATTERN = Pattern.compile("^(.+?__.+?)([._].*)");
+    private static final String LOG_FILE_EXTENSION = ".log";
     private static final Logger log = LoggerFactory.getLogger(FileLogsRepository.class);
     private final Map<LogKey, Object> logsLocks = new ConcurrentHashMap<>();
+    private final Clock clock;
     private final File logsRoot;
     private final int maxFileSize;
 
-    public FileLogsRepository(File logsRoot, int maxFileSize) {
+    public FileLogsRepository(Clock clock, File logsRoot, int maxFileSize) {
+        this.clock = clock;
         this.logsRoot = logsRoot;
         this.maxFileSize = maxFileSize;
     }
 
+    public FileLogsRepository(File logsRoot, int maxFileSize) {
+        this(Clock.systemUTC(), logsRoot, maxFileSize);
+    }
+
+    public static String extractedLogFilename(String fullLogFileName) {
+        var matcher = LOG_FILE_NAME_PATTERN.matcher(fullLogFileName);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        throw new RuntimeException("%s is not a valid log filename".formatted(fullLogFileName));
+    }
+
     @Override
     public void store(List<LogRecord> logs) {
-        var groupedLogs = groupedLogs(logs);
-
-        var suppressedExceptions = new ArrayList<Exception>();
-
-        for (var e : groupedLogs.entrySet()) {
+        for (var e : groupedLogs(logs).entrySet()) {
             try {
                 var messages = e.getValue().stream()
                         .map(LogRecord::log)
@@ -49,14 +60,8 @@ public class FileLogsRepository implements LogsRepository {
                 saveLogGroupToFile(e.getKey(), messages);
             } catch (Exception ex) {
                 log.error("Problem while saving log({}) to file...", e.getKey(), ex);
-                suppressedExceptions.add(ex);
+                throw new RuntimeException(ex);
             }
-        }
-
-        if (!suppressedExceptions.isEmpty()) {
-            var exception = new RuntimeException();
-            suppressedExceptions.forEach(exception::addSuppressed);
-            throw exception;
         }
     }
 
@@ -73,9 +78,8 @@ public class FileLogsRepository implements LogsRepository {
                 Files.createDirectories(lDir);
 
                 var lFile = new File(lDir.toFile(),
-                        "%s_%s_%s".formatted(key.application(), key.source(),
-                                key.instanceId())
-                                + LOG_FILE_EXTENSION);
+                        String.join(LOG_FILE_NAME_PARTS_DELIMITER, key.source(),
+                                key.instanceId()) + LOG_FILE_EXTENSION);
 
                 var lBlock = String.join("\n", logs) + "\n";
 
@@ -101,10 +105,11 @@ public class FileLogsRepository implements LogsRepository {
     private void rotateLogFile(File logFile) throws Exception {
         var logFilePath = logFile.toPath();
 
-        var endDateFormatted = ROTATED_LOG_FILE_DATE_TIME_FORMATTER.format(LocalDateTime.now(Clock.systemUTC()));
+        var endDateFormatted = ROTATED_LOG_FILE_DATE_TIME_FORMATTER.format(LocalDateTime.now(clock));
 
         var fileNameWithoutExtension = logFile.getName().replace(LOG_FILE_EXTENSION, "");
-        var newName = "%s_%s%s".formatted(fileNameWithoutExtension, endDateFormatted, LOG_FILE_EXTENSION);
+        var newName = String.join(LOG_FILE_NAME_PARTS_DELIMITER, fileNameWithoutExtension,
+                endDateFormatted) + LOG_FILE_EXTENSION;
 
         Files.move(logFilePath, logFilePath.resolveSibling(newName));
     }
