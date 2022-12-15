@@ -50,6 +50,10 @@ public class FileLogsRepository implements LogsRepository {
         throw new RuntimeException("%s is not a valid log filename".formatted(fullLogFileName));
     }
 
+    public static boolean isCurrentFile(String logFile) {
+        return logFile.split(LOG_FILE_NAME_PARTS_DELIMITER).length == 2;
+    }
+
     @Override
     public void store(List<LogRecord> logs) {
         for (var e : groupedLogs(logs).entrySet()) {

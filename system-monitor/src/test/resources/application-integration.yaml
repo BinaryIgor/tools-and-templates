@@ -1,0 +1,3 @@
+logs-cleaner:
+  max-log-files: 2
+  initial-delay: "PT1S"

@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 import java.util.Collection;
 
-@ConfigurationProperties(prefix = "log-mappings")
+@ConfigurationProperties(prefix = "logs-mappings")
 @ConstructorBinding
-public record LogMappingsConfig(Collection<ApplicationLogMapping> applications,
-                                LogMapping defaultMapping) {
+public record LogsMappingsConfig(Collection<ApplicationLogMapping> applications,
+                                 LogMapping defaultMapping) {
 }

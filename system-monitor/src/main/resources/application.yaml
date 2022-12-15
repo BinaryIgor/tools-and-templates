@@ -1,12 +1,12 @@
 server:
   port: 10101
 
-log-mappings:
+logs-mappings:
   applications:
-    - supportedApplicationsKeywords: [ nginx ]
+    - supported-applications-keywords: [ nginx ]
       mapping:
-        warningKeywords: [ "warn", "warning" ]
-        errorKeywords:
+        warning-keywords: [ "warn", "warning" ]
+        error-keywords:
           - "[error]"
           - "[ERROR]"
           - "[crit]"
@@ -16,13 +16,20 @@ log-mappings:
           - "[emerg]"
           - "[EMERG]"
 
-  defaultMapping:
-    warningKeywords: [ "WARNING", "WARN" ]
-    errorKeywords: [ "ERROR" ]
+  default-mapping:
+    warning-keywords: [ "WARNING", "warning", "WARN", "warn" ]
+    error-keywords: [ "ERROR", "error" ]
 
 logs-storage:
-  filePath: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
-  maxFileSize: 10_000_000
+  file-path: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
+  # 25MB
+  max-file-size: 25_000_000
+
+logs-cleaner:
+  max-log-files: 20
+  initial-delay: "PT1M"
+  fixed-delay: "PT1H"
+
 
 management:
   endpoints:

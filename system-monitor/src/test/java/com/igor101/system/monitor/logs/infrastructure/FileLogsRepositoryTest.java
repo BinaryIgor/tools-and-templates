@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 public class FileLogsRepositoryTest {
 
-    private static final Clock FIXE_CLOCK = Clock.fixed(Instant.parse("2022-12-12T20:11:22Z"), ZoneId.of("UTC"));
+    private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-12T20:11:22Z"), ZoneId.of("UTC"));
     private static final String FIXED_DATE_TIME = "20221212-201122";
     @TempDir
     File root;
@@ -38,7 +38,7 @@ public class FileLogsRepositoryTest {
     void setup() {
         logsRoot = new File(root, "logs");
         maxFileSize = Tests.randomInt(100, 1000);
-        repository = new FileLogsRepository(FIXE_CLOCK, logsRoot, maxFileSize);
+        repository = new FileLogsRepository(FIXED_CLOCK, logsRoot, maxFileSize);
     }
 
     @Test

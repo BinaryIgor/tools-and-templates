@@ -5,18 +5,21 @@ import com.igor101.system.monitor.logs.core.LogsRepository;
 import com.igor101.system.monitor.logs.core.LogsService;
 import com.igor101.system.monitor.logs.infrastructure.FileLogsRepository;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.File;
 
 @Configuration
-@EnableConfigurationProperties({LogMappingsConfig.class, LogsStorageConfig.class})
+@EnableScheduling
+@EnableConfigurationProperties({LogsMappingsConfig.class, LogsStorageConfig.class})
 public class LogsConfig {
 
     @Bean
-    public LogsConverter logsConverter(LogMappingsConfig config) {
+    public LogsConverter logsConverter(LogsMappingsConfig config) {
         return new LogsConverter(config.applications(), config.defaultMapping());
     }
 
@@ -24,6 +27,13 @@ public class LogsConfig {
     public LogsRepository logsRepository(LogsStorageConfig config) {
         return new FileLogsRepository(new File(config.filePath()), config.maxFileSize());
     }
+
+    @Bean
+    public LogsCleaner logsCleaner(LogsStorageConfig config,
+                                   @Value("${logs-cleaner.max-log-files}") int maxFiles) {
+        return new LogsCleaner(config.filePath(), maxFiles);
+    }
+
 
     @Bean
     public LogsService logsService(LogsConverter logsConverter,
