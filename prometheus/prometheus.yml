@@ -4,8 +4,7 @@ global:
   evaluation_interval: 30s
 
 rule_files:
-  - "alert_rules.yml"
-  # - "second.rules"
+  - alert_rules.yml
 
 
 alerting:
@@ -33,6 +32,3 @@ scrape_configs:
     metrics_path: "/actuator/prometheus"
     static_configs:
         - targets: ['localhost:10101']
-  - job_name: some-custom-app
-    static_configs:
-        - targets: ['localhost:8080']

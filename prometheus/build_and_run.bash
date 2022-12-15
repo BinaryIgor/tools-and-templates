@@ -12,4 +12,4 @@ docker run \
   --label "instance-id=prometheus-0" \
   --network host -v "prometheus-exp-volume:/prometheus" \
   --name prometheus-exp prometheus-exp  \
-  --storage.tsdb.retention.time=1m  --config.file=/etc/prometheus/prometheus.yml
+  --storage.tsdb.retention.time=30d  --config.file=/etc/prometheus/prometheus.yml
