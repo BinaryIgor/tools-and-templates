@@ -1,30 +1,15 @@
 package com.igor101.system.monitor.logs.application;
 
+import com.igor101.system.monitor.IntegrationTest;
 import com.igor101.system.monitor.test.Tests;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-@ActiveProfiles("integration")
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LogsCleanerTest {
-
-    @TempDir
-    static File root;
-
-    @DynamicPropertySource
-    static void dynamicProperties(DynamicPropertyRegistry registry) {
-        registry.add("logs-storage.file-path", () -> root.getAbsolutePath());
-    }
+public class LogsCleanerTest extends IntegrationTest {
 
     @Test
     void shouldClearOldestLogFiles() throws Exception {
@@ -57,13 +42,13 @@ public class LogsCleanerTest {
     }
 
     private void createLogFile(String dir, String filename) throws Exception {
-        var fileDir = Path.of(root.getAbsolutePath(), dir);
+        var fileDir = Path.of(logsRoot.getAbsolutePath(), dir);
         Files.createDirectories(fileDir);
         Files.writeString(Path.of(fileDir.toString(), filename), Tests.randomString());
     }
 
     private void assertDirHasOnlyFiles(String dir, List<String> expectedFiles) throws Exception {
-        var actualFiles = Files.list(Path.of(root.getAbsolutePath(), dir))
+        var actualFiles = Files.list(Path.of(logsRoot.getAbsolutePath(), dir))
                 .map(p -> p.getFileName().toString())
                 .toList();
 

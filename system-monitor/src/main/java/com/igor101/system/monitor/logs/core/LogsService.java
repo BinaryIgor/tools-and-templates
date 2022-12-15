@@ -23,7 +23,6 @@ public class LogsService {
         this.meterRegistry = meterRegistry;
     }
 
-    //TODO: global error handler
     public void add(List<LogData> logs) {
         var records = logs.stream()
                 .map(l -> {

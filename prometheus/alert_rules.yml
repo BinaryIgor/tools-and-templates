@@ -42,14 +42,14 @@ groups:
         severity: critical
       annotations:
         summary: "Application {{ $labels.job }} is DOWN"
-        description: "Application {{ $labels.job }} has been down for over 1 minute"
+        description: "Application {{ $labels.job }} has been down for a while"
     - alert: ApplicationInstanceDown
-      expr: (time() - monitoring_application_up_timestamp_seconds) > 60
+      expr: (time() - monitoring_application_up_timestamp_seconds) > 90
       labels:
         severity: critical
       annotations:
         summary: "Instance of {{ $labels.application }} application is DOWN"
-        description: "Instance {{ $labels.instance_id }} of {{ $labels.application }} application, running on {{ $labels.source }}, has been down for over 1 minute"
+        description: "Instance {{ $labels.instance_id }} of {{ $labels.application }} application, running on {{ $labels.source }}, has been down for a while"
     - alert: ApplicationHighMemoryUsage
       expr: (monitoring_application_used_memory_bytes / monitoring_application_max_memory_bytes) > 0.8
       for: 5m

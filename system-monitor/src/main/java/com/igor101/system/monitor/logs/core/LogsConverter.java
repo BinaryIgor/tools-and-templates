@@ -7,12 +7,12 @@ import java.util.List;
 
 public class LogsConverter {
 
-    private final Collection<ApplicationLogMapping> applicationsLogMappings;
+    private final Collection<ApplicationLogMapping> applicationLogMappings;
     private final LogMapping defaultLogMapping;
 
-    public LogsConverter(Collection<ApplicationLogMapping> applicationsLogMappings,
+    public LogsConverter(Collection<ApplicationLogMapping> applicationLogMappings,
                          LogMapping defaultLogMapping) {
-        this.applicationsLogMappings = applicationsLogMappings;
+        this.applicationLogMappings = applicationLogMappings;
         this.defaultLogMapping = defaultLogMapping;
     }
 
@@ -24,7 +24,7 @@ public class LogsConverter {
     private ApplicationLogLevel logLevel(LogData log) {
         var mapping = defaultLogMapping;
 
-        for (var m : applicationsLogMappings) {
+        for (var m : applicationLogMappings) {
             if (containsAny(log.application(), m.supportedApplicationsKeywords())) {
                 mapping = m.mapping();
                 break;

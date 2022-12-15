@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-//TODO: clean files in a scheduler, upload them to spaces!
 public class FileLogsRepository implements LogsRepository {
 
     static final DateTimeFormatter ROTATED_LOG_FILE_DATE_TIME_FORMATTER =
@@ -48,6 +47,11 @@ public class FileLogsRepository implements LogsRepository {
             return matcher.group(1);
         }
         throw new RuntimeException("%s is not a valid log filename".formatted(fullLogFileName));
+    }
+
+    public static Path absoluteLogFilePath(File logsRoot, String source, String application, String instanceId) {
+        return Path.of(logsRoot.getAbsolutePath(), application,
+                String.join(LOG_FILE_NAME_PARTS_DELIMITER, source, instanceId + LOG_FILE_EXTENSION));
     }
 
     public static boolean isCurrentFile(String logFile) {
