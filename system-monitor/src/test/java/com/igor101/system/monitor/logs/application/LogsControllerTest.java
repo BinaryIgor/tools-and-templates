@@ -2,11 +2,11 @@ package com.igor101.system.monitor.logs.application;
 
 import com.igor101.system.monitor.IntegrationTest;
 import com.igor101.system.monitor.logs.infrastructure.FileLogsRepository;
+import com.igor101.system.monitor.test.TestHttp;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 
 import java.nio.file.Files;
@@ -19,18 +19,17 @@ import java.util.Map;
 public class LogsControllerTest extends IntegrationTest {
 
     @Autowired
-    TestRestTemplate testRestTemplate;
+    TestHttp testHttp;
 
     @Test
     void shouldAddLogsAndUpdatePrometheusMetrics() {
         var testCase = prepareAddLogsTestCase();
 
-        Assertions.assertThat(testRestTemplate.postForEntity("/logs", testCase.logsToSend(), null).getStatusCode())
-                .isEqualTo(HttpStatus.OK);
+        testHttp.postAndExpectStatus("/logs", testCase.logsToSend, HttpStatus.OK);
 
-        var actualMetrics = testRestTemplate.getForObject("/actuator/prometheus", String.class);
-        Assertions.assertThat(actualMetrics)
-                .contains(testCase.expectedMetrics());
+        testHttp.getAndExpectOkStatusAndBody("/actuator/prometheus", String.class,
+                actualMetrics -> Assertions.assertThat(actualMetrics)
+                        .contains(testCase.expectedMetrics()));
 
         testCase.expectedLogFiles()
                 .forEach(p -> Assertions.assertThat(Files.exists(p))

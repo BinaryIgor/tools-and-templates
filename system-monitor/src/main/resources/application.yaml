@@ -22,11 +22,11 @@ logs-mappings:
 
 logs-storage:
   file-path: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
-  # 25MB
-  max-file-size: 25_000_000
+  # 20MB
+  max-file-size: 20_000_000
 
 logs-cleaner:
-  max-log-files: 20
+  max-log-files: 30
   initial-delay: "PT1M"
   fixed-delay: "PT1H"
 

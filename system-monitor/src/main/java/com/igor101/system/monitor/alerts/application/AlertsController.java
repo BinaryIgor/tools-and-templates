@@ -21,8 +21,8 @@ public class AlertsController {
     }
 
     @PostMapping
-    public void post(@RequestBody PrometheusAlerts alerts) {
-        log.info("Receiving prom alerts...{}", alerts.alerts().size());
+    public void add(@RequestBody PrometheusAlerts alerts) {
+        log.info("Received {} prom alerts", alerts.alerts().size());
         service.add(alerts.alerts());
     }
 }

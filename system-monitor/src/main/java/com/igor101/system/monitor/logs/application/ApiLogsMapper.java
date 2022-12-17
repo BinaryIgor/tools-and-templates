@@ -2,9 +2,7 @@ package com.igor101.system.monitor.logs.application;
 
 import com.igor101.system.monitor.logs.core.model.LogData;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ApiLogsMapper {
 
@@ -30,5 +28,9 @@ public class ApiLogsMapper {
 
     public static String defaultInstanceId(String containerName) {
         return containerName + "-default";
+    }
+
+    public static Collection<String> logsHosts(List<Map<String, String>> logs) {
+        return logs.stream().map(e -> e.getOrDefault(HOST, DEFAULT_NO_VALUE)).distinct().toList();
     }
 }
