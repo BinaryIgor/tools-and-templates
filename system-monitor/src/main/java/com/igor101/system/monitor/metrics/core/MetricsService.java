@@ -7,6 +7,8 @@ import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
@@ -26,14 +28,16 @@ public class MetricsService {
     private static final String APPLICATION_CPU_USAGE = Metrics.fullName("application_cpu_usage_percent");
     private final Map<String, AtomicReference<Double>> metricsReferences = new ConcurrentHashMap<>();
     private final MeterRegistry meterRegistry;
+    private final Clock clock;
 
-    public MetricsService(MeterRegistry meterRegistry) {
+    public MetricsService(MeterRegistry meterRegistry, Clock clock) {
         this.meterRegistry = meterRegistry;
+        this.clock = clock;
     }
 
     public void add(ContainersMetrics containersMetrics) {
         setMetricValue(COLLECTOR_UP_TIMESTAMP, Tags.of(Metrics.SOURCE_LABEL, containersMetrics.source()),
-                secondsTimestamp(System.currentTimeMillis()));
+                secondsTimestamp(clock.instant()));
 
         for (var m : containersMetrics.metrics()) {
             var tags = Tags.of(Metrics.applicationLabels(containersMetrics.source(),
@@ -47,11 +51,15 @@ public class MetricsService {
         }
     }
 
-    private static double secondsTimestamp(LocalDateTime dateTime) {
+    private double secondsTimestamp(LocalDateTime dateTime) {
         return secondsTimestamp(dateTime.toInstant(ZoneOffset.UTC).toEpochMilli());
     }
 
-    private static double secondsTimestamp(long timestamp) {
+    private double secondsTimestamp(Instant timestamp) {
+        return secondsTimestamp(timestamp.toEpochMilli());
+    }
+
+    private double secondsTimestamp(long timestamp) {
         return timestamp / 1000.0;
     }
 

@@ -3,6 +3,8 @@ package com.igor101.system.monitor.logs.application;
 import com.igor101.system.monitor.IntegrationTest;
 import com.igor101.system.monitor.logs.infrastructure.FileLogsRepository;
 import com.igor101.system.monitor.test.TestHttp;
+import com.igor101.system.monitor.test.TestMetric;
+import com.igor101.system.monitor.test.TestMetrics;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ import java.util.Map;
 public class LogsControllerTest extends IntegrationTest {
 
     @Autowired
-    TestHttp testHttp;
+    private TestHttp testHttp;
 
     @Test
     void shouldAddLogsAndUpdatePrometheusMetrics() {
@@ -28,8 +30,11 @@ public class LogsControllerTest extends IntegrationTest {
         testHttp.postAndExpectStatus("/logs", testCase.logsToSend, HttpStatus.OK);
 
         testHttp.getAndExpectOkStatusAndBody("/actuator/prometheus", String.class,
-                actualMetrics -> Assertions.assertThat(actualMetrics)
-                        .contains(testCase.expectedMetrics()));
+                txtMetrics -> {
+                    var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
+                    Assertions.assertThat(actualMetrics)
+                            .containsAll(testCase.expectedMetrics);
+                });
 
         testCase.expectedLogFiles()
                 .forEach(p -> Assertions.assertThat(Files.exists(p))
@@ -45,13 +50,20 @@ public class LogsControllerTest extends IntegrationTest {
                 new LogEntry("anonymousII", "some-containerII", "instance-3", "some-log WARNING"),
                 new LogEntry("anonymousII", "some-containerII", "instance-3", "some-log warn"));
 
-        var expectedMetrics = List.of("""
-                monitoring_application_logs_errors_total{application="some-container",instance_id="some-container-default",source="anonymous",} 2.0
-                """.trim(), """
-                monitoring_application_logs_errors_total{application="some-container-nginx",instance_id="some-container-nginx-default",source="anonymous-x",} 1.0
-                """.trim(), """
-                monitoring_application_logs_warnings_total{application="some-containerII",instance_id="instance-3",source="anonymousII",} 2.0
-                """.trim());
+        var expectedMetrics = List.of(
+                TestMetrics.metric("monitoring_application_logs_errors_total",
+                        Map.of("application", "some-container", "instance_id", "some-container-default",
+                                "source", "anonymous"),
+                        "2.0"),
+                TestMetrics.metric("monitoring_application_logs_errors_total",
+                        Map.of("application", "some-container-nginx",
+                                "instance_id", "some-container-nginx-default",
+                                "source", "anonymous-x"),
+                        "1.0"),
+                TestMetrics.metric("monitoring_application_logs_warnings_total",
+                        Map.of("application", "some-containerII",
+                                "instance_id", "instance-3", "source", "anonymousII"),
+                        "2.0"));
 
         var logsToSend = logs.stream().map(LogEntry::toJson).toList();
 
@@ -88,7 +100,7 @@ public class LogsControllerTest extends IntegrationTest {
     }
 
     private record AddLogsTestCase(List<Map<String, String>> logsToSend,
-                                   List<String> expectedMetrics,
+                                   List<TestMetric> expectedMetrics,
                                    List<Path> expectedLogFiles) {
     }
 }

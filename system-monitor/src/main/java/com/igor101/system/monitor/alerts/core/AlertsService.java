@@ -4,7 +4,6 @@ import com.igor101.system.monitor.alerts.application.Alert;
 import com.igor101.system.monitor.common.Metrics;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
-import io.micrometer.core.instrument.Tags;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,7 +29,8 @@ public class AlertsService {
             tags.addAll(prepareLabelsTags(a));
             tags.addAll(prepareAnnotationsTags(a));
 
-            meterRegistry.counter(ALERTS, Tags.of(tags))
+
+            meterRegistry.counter(ALERTS, tags)
                     .increment();
         }
     }
