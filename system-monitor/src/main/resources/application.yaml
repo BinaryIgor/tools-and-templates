@@ -1,6 +1,12 @@
 server:
   port: 10101
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "health", "info", "prometheus" ]
+
 logs-mappings:
   applications:
     - supported-applications-keywords: [ nginx ]
@@ -30,9 +36,8 @@ logs-cleaner:
   initial-delay: "PT1M"
   fixed-delay: "PT1H"
 
+prometheus-health-check:
+  initial-delay: "PT5S"
+  fixed-delay: "PT60S"
+  url: "http://localhost:9090/-/healthy"
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: [ "health", "info", "prometheus" ]
