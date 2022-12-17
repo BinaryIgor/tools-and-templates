@@ -29,7 +29,6 @@ public class AlertsService {
             tags.addAll(prepareLabelsTags(a));
             tags.addAll(prepareAnnotationsTags(a));
 
-
             meterRegistry.counter(ALERTS, tags)
                     .increment();
         }

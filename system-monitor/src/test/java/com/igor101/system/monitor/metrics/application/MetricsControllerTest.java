@@ -19,7 +19,6 @@ import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.SimpleTimeZone;
 
 @AutoConfigureMetrics
 @Import(MetricsControllerTest.TestConfig.class)
@@ -28,7 +27,6 @@ public class MetricsControllerTest extends IntegrationTest {
     private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-24T22:11:22Z"), ZoneId.of("UTC"));
     @Autowired
     private TestHttp testHttp;
-
 
     @Test
     void shouldAddMetricsToPrometheus() {
@@ -50,11 +48,11 @@ public class MetricsControllerTest extends IntegrationTest {
                         LocalDateTime.parse("2022-10-10T10:00:00"), System.currentTimeMillis(),
                         100_000, 100_000_000, 0.2),
                 new ContainerMetrics("java-app", "java-app-II",
-                        LocalDateTime.parse("2022-12-10T13:00:00"), System.currentTimeMillis(),
+                        LocalDateTime.parse("2022-12-10T13:00:00"), System.currentTimeMillis() - 1000,
                         250_000_000, 100_000_000_000L, 0.1),
-                new ContainerMetrics("nginx", "nginx-default",
-                        LocalDateTime.parse("2022-10-10T10:00:00"), System.currentTimeMillis(),
-                        100_000, 100_000_000, 0.2));
+                new ContainerMetrics("postgres", "postgres-1",
+                        LocalDateTime.parse("2023-01-01T10:00:00"), FIXED_CLOCK.millis(),
+                        99_000_000, 500_000_000, 0.01));
 
         var source = "some-machine";
 
