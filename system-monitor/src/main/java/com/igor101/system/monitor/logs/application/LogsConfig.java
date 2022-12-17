@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.File;
+import java.time.Clock;
 
 @Configuration
 @EnableScheduling
@@ -24,14 +25,13 @@ public class LogsConfig {
     }
 
     @Bean
-    public LogsRepository logsRepository(LogsStorageConfig config) {
-        return new FileLogsRepository(new File(config.filePath()), config.maxFileSize());
+    public LogsRepository logsRepository(LogsStorageConfig config, Clock clock) {
+        return new FileLogsRepository(clock, config.filePath(), config.maxFileSize(), config.maxFiles());
     }
 
     @Bean
-    public LogsCleaner logsCleaner(LogsStorageConfig config,
-                                   @Value("${logs-cleaner.max-log-files}") int maxFiles) {
-        return new LogsCleaner(config.filePath(), maxFiles);
+    public LogsCleaner logsCleaner(LogsRepository logsRepository) {
+        return new LogsCleaner(logsRepository);
     }
 
 

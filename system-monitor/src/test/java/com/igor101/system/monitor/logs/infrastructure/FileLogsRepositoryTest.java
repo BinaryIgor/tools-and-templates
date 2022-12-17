@@ -38,7 +38,7 @@ public class FileLogsRepositoryTest {
     void setup() {
         logsRoot = new File(root, "logs");
         maxFileSize = Tests.randomInt(100, 1000);
-        repository = new FileLogsRepository(FIXED_CLOCK, logsRoot, maxFileSize);
+        repository = new FileLogsRepository(FIXED_CLOCK, logsRoot.getAbsolutePath(), maxFileSize, 10);
     }
 
     @Test

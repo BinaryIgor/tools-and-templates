@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConfigurationProperties(prefix = "logs-storage")
 @ConstructorBinding
 public record LogsStorageConfig(String filePath,
-                                int maxFileSize) {
+                                int maxFileSize,
+                                int maxFiles) {
 
 }

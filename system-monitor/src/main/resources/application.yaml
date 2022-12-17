@@ -24,9 +24,9 @@ logs-storage:
   file-path: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
   # 20MB
   max-file-size: 20_000_000
+  max-files: 30
 
 logs-cleaner:
-  max-log-files: 30
   initial-delay: "PT1M"
   fixed-delay: "PT1H"
 

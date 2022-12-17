@@ -12,6 +12,7 @@ import java.nio.file.StandardOpenOption;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,17 +29,15 @@ public class FileLogsRepository implements LogsRepository {
     private static final Logger log = LoggerFactory.getLogger(FileLogsRepository.class);
     private final Map<LogKey, Object> logsLocks = new ConcurrentHashMap<>();
     private final Clock clock;
-    private final File logsRoot;
+    private final String logsRoot;
     private final int maxFileSize;
+    private final int maxFiles;
 
-    public FileLogsRepository(Clock clock, File logsRoot, int maxFileSize) {
+    public FileLogsRepository(Clock clock, String logsRoot, int maxFileSize, int maxFiles) {
         this.clock = clock;
         this.logsRoot = logsRoot;
         this.maxFileSize = maxFileSize;
-    }
-
-    public FileLogsRepository(File logsRoot, int maxFileSize) {
-        this(Clock.systemUTC(), logsRoot, maxFileSize);
+        this.maxFiles = maxFiles;
     }
 
     public static String extractedLogFilename(String fullLogFileName) {
@@ -82,7 +81,7 @@ public class FileLogsRepository implements LogsRepository {
     private void saveLogGroupToFile(LogKey key, List<String> logs) {
         synchronized (lockForLogsGroup(key)) {
             try {
-                var lDir = Path.of(logsRoot.getAbsolutePath(), key.application());
+                var lDir = Path.of(logsRoot, key.application());
                 Files.createDirectories(lDir);
 
                 var lFile = new File(lDir.toFile(),
@@ -120,6 +119,45 @@ public class FileLogsRepository implements LogsRepository {
                 endDateFormatted) + LOG_FILE_EXTENSION;
 
         Files.move(logFilePath, logFilePath.resolveSibling(newName));
+    }
+
+    @Override
+    public void clear() {
+        try {
+            log.info("About to clean logs in {} dir...", logsRoot);
+
+            var applicationsDirs = Files.list(Path.of(logsRoot)).toList();
+            log.info("Have {} applications, cleaning their dirs...", applicationsDirs);
+
+            for (var a : applicationsDirs) clearApplicationLogsDir(a);
+
+            log.info("Logs cleared.");
+        } catch (Exception e) {
+            throw new RuntimeException("Problem while clearing logs...", e);
+        }
+    }
+
+    private void clearApplicationLogsDir(Path dir) throws Exception {
+        var groupedFiles = Files.list(dir)
+                .collect(Collectors.groupingBy(p -> FileLogsRepository.extractedLogFilename(p.toString())));
+
+        for (var e : groupedFiles.entrySet()) {
+            var toDeleteFiles = e.getValue().stream()
+                    .map(p -> p.toAbsolutePath().toString())
+                    .filter(n -> !FileLogsRepository.isCurrentFile(n))
+                    .sorted(Collections.reverseOrder())
+                    .skip(maxFiles)
+                    .toList();
+
+            if (!toDeleteFiles.isEmpty()) {
+                deleteFiles(toDeleteFiles);
+                log.info("{} log files deleted", toDeleteFiles);
+            }
+        }
+    }
+
+    private void deleteFiles(List<String> files) throws Exception {
+        for (var f : files) Files.delete(Path.of(f));
     }
 
     private record LogKey(String source, String application, String instanceId) {
