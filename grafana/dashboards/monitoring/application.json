@@ -80,7 +80,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 12,
         "x": 0,
         "y": 0
@@ -111,7 +111,7 @@
           "exemplar": false,
           "expr": "time() - monitoring_application_up_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
           "instant": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{source}}-{{application}}-{{instance_id}}",
           "range": false,
           "refId": "A"
         }
@@ -171,7 +171,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 12,
         "x": 12,
         "y": 0
@@ -206,6 +206,7 @@
           "expr": "time() - monitoring_application_started_at_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
           "instant": true,
           "intervalFactor": 1,
+          "legendFormat": "{{source}}-{{application}}-{{instance_id}}",
           "range": false,
           "refId": "A",
           "step": 240
@@ -278,7 +279,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 6
       },
       "id": 2,
       "options": {
@@ -373,7 +374,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 6
       },
       "id": 4,
       "options": {
@@ -468,7 +469,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 14
       },
       "id": 17,
       "options": {
@@ -706,7 +707,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 13
+        "y": 14
       },
       "id": 6,
       "options": {
@@ -786,7 +787,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "docker-metrics-collector-default",
           "value": "docker-metrics-collector-default"
         },

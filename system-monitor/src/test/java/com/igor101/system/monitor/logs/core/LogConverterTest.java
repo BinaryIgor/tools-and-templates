@@ -45,11 +45,38 @@ public class LogConverterTest {
         var appErrorToSwallow = new LogData("machine", "post", "999",
                 "%s PANIC, but operating as usual!".formatted(APPLICATION_MESSAGE_TO_SWALLOW));
 
+        var defaultInfo = new LogData("machine", "business-app", "II",
+                "[2022-12-12T09:00:00] Some log on an INFO lvl");
+        var defaultWarningI = new LogData("machine-2", "business-app", "II",
+                "[2022-12-12T09:00:00] Some log on an warning lvl");
+        var defaultWarningII = new LogData("machine-3", "business-app", "III",
+                "[2022-12-12T09:00:00] Some log on an WARN lvl");
+        var defaultAlmostWarning = new LogData("machine", "business-app", "II",
+                "[2022-12-12T09:00:00] Some log on an almost warn lvl");
+        var defaultErrorI = new LogData("machine-4", "custom-application", "custom-application-default",
+                "[ERROR] something has happened!");
+        var defaultErrorII = new LogData("machine-4", "custom-application", "custom-application-default",
+                "error something has happened!");
+        var defaultAlmostError = new LogData("machine-5", "custom-app", "II",
+                "[2022-12-12T09:00:00] Some log on an almost ERRO lvl");
+        var defaultErrorToSwallow = new LogData("machine-4", "custom-application", "custom-application-default",
+                "error, but operating as usual %s!".formatted(DEFAULT_MESSAGE_TO_SWALLOW));
+
         return Stream.of(
                 Arguments.of(appInfo, toExpectedLogRecord(appInfo, ApplicationLogLevel.INFO)),
                 Arguments.of(appWarning, toExpectedLogRecord(appWarning, ApplicationLogLevel.WARNING)),
                 Arguments.of(appError, toExpectedLogRecord(appError, ApplicationLogLevel.ERROR)),
-                Arguments.of(appErrorToSwallow, toExpectedLogRecord(appErrorToSwallow, ApplicationLogLevel.INFO)));
+                Arguments.of(appErrorToSwallow, toExpectedLogRecord(appErrorToSwallow, ApplicationLogLevel.INFO)),
+                Arguments.of(defaultInfo, toExpectedLogRecord(defaultInfo, ApplicationLogLevel.INFO)),
+                Arguments.of(defaultWarningI, toExpectedLogRecord(defaultWarningI, ApplicationLogLevel.WARNING)),
+                Arguments.of(defaultWarningII, toExpectedLogRecord(defaultWarningII, ApplicationLogLevel.WARNING)),
+                Arguments.of(defaultAlmostWarning,
+                        toExpectedLogRecord(defaultAlmostWarning, ApplicationLogLevel.INFO)),
+                Arguments.of(defaultErrorI, toExpectedLogRecord(defaultErrorI, ApplicationLogLevel.ERROR)),
+                Arguments.of(defaultErrorII, toExpectedLogRecord(defaultErrorII, ApplicationLogLevel.ERROR)),
+                Arguments.of(defaultAlmostError, toExpectedLogRecord(defaultAlmostError, ApplicationLogLevel.INFO)),
+                Arguments.of(defaultErrorToSwallow,
+                        toExpectedLogRecord(defaultErrorToSwallow, ApplicationLogLevel.INFO)));
     }
 
     private static LogRecord toExpectedLogRecord(LogData data, ApplicationLogLevel level) {
