@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.List;
+
 @ControllerAdvice
 //TODO: map more exceptions
 public class ApiExceptionHandler {
@@ -17,10 +19,10 @@ public class ApiExceptionHandler {
                 .body(new ErrorResponse(exception));
     }
 
-    public record ErrorResponse(String exception, String message) {
+    public record ErrorResponse(String exception, String message, List<String> reasons) {
 
-        ErrorResponse(Throwable exception) {
-            this(exception.getClass().getSimpleName(), exception.getMessage());
+        ErrorResponse(Throwable exception, String ...reasons) {
+            this(exception.getClass().getSimpleName(), exception.getMessage(), List.of(reasons));
         }
     }
 }
