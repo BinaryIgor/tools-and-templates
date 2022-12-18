@@ -1,9 +1,10 @@
 package io.codyn.app.template.project.app;
 
+import io.codyn.app.template._shared.app.IdResponse;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
-import io.codyn.app.template.project.domain.model.AddUsersToProjectCommand;
 import io.codyn.app.template.project.domain.ProjectService;
+import io.codyn.app.template.project.domain.model.AddUsersToProjectCommand;
 import io.codyn.app.template.project.domain.model.RemoveUsersFromProjectCommand;
 import io.codyn.app.template.user.api.UserClient;
 import org.springframework.http.HttpStatus;
@@ -27,16 +28,20 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody ApiNewProject request) {
+    public IdResponse create(@RequestBody ApiNewProject request) {
         var userId = userClient.currentUserId();
-        projectService.save(request.toProject(userId), userId);
+        var project = request.toProject(userId);
+
+        projectService.save(project);
+
+        return new IdResponse(project.id());
     }
 
     @PutMapping("/{id}")
     public void update(@RequestBody ApiUpdateProject request,
                        @PathVariable UUID id) {
         var userId = userClient.currentUserId();
-        projectService.save(request.toProject(id, userId), userId);
+        projectService.save(request.toProject(id, userId));
     }
 
     @DeleteMapping("/{id}")

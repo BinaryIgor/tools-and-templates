@@ -1,9 +1,12 @@
 package io.codyn.app.template;
 
 import io.codyn.app.template.test.CustomPostgreSQLContainer;
+import io.codyn.app.template.test.TestHttp;
 import org.junit.jupiter.api.Tag;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 
 @Tag("integration")
@@ -23,6 +26,9 @@ public abstract class IntegrationTest {
     @TestConfiguration
     static class TestConfig {
 
-        //TODO custom config
+        @Bean
+        public TestHttp testHttp(TestRestTemplate restTemplate) {
+            return new TestHttp(restTemplate);
+        }
     }
 }
