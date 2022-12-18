@@ -21,6 +21,9 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <junit.excludedGroups>integration</junit.excludedGroups>
+        <jacoco.version>0.8.7</jacoco.version>
     </properties>
 
     <dependencies>
@@ -45,11 +48,69 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>allTests</id>
+            <properties>
+                <junit.excludedGroups>NONE</junit.excludedGroups>
+            </properties>
+        </profile>
+        <profile>
+            <id>testsReport</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco.version}</version>
+                        <configuration>
+                            <!--TODO: revisit-->
+                            <!--                            <excludes>-->
+                            <!--                                <exclude>**/model/**</exclude>-->
+                            <!--                                <exclude>**/types/**</exclude>-->
+                            <!--                                <exclude>**/error/**</exclude>-->
+                            <!--                                <exclude>**/jooq/**</exclude>-->
+                            <!--                                <exclude>**/test/**</exclude>-->
+                            <!--                                <exclude>**/endpoint/**</exclude>-->
+                            <!--                                <exclude>**/*Config.*</exclude>-->
+                            <!--                                <exclude>**/*Module*</exclude>-->
+                            <!--                                <exclude>**/*Controller*</exclude>-->
+                            <!--                                <exclude>**/*Fake*</exclude>-->
+                            <!--                                <exclude>**/*MapperImpl.*</exclude>-->
+                            <!--                            </excludes>-->
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludedGroups>${junit.excludedGroups}</excludedGroups>
+                </configuration>
             </plugin>
         </plugins>
     </build>
