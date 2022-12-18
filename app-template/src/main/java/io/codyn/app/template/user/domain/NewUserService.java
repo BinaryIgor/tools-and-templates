@@ -12,14 +12,14 @@ public class NewUserService {
 
     private final NewUserRepository newUserRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordHasher passwordHasher;
 
     public NewUserService(NewUserRepository newUserRepository,
                           UserRepository userRepository,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordHasher passwordHasher) {
         this.newUserRepository = newUserRepository;
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        this.passwordHasher = passwordHasher;
     }
 
     @Transactional

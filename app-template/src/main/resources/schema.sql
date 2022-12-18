@@ -14,7 +14,7 @@ CREATE TABLE "user" (
 );
 
 CREATE TABLE activation_token (
-    id UUID REFERENCES user(id) ON DELETE CASCADE,
+    id UUID REFERENCES "user"(id) ON DELETE CASCADE,
     token TEXT NOT NULL UNIQUE,
     expires_at TIMESTAMP NOT NULL,
     type TEXT NOT NULL,
