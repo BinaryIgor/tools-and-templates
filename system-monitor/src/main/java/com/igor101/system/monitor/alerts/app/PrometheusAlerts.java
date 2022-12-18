@@ -1,5 +1,7 @@
 package com.igor101.system.monitor.alerts.app;
 
+import com.igor101.system.monitor.alerts.domain.Alert;
+
 import java.util.List;
 import java.util.Map;
 

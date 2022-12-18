@@ -1,4 +1,4 @@
-package com.igor101.system.monitor.alerts.app;
+package com.igor101.system.monitor.alerts.domain;
 
 import java.util.Map;
 

@@ -1,33 +1,53 @@
 package com.igor101.system.monitor.logs.domain;
 
+import com.igor101.system.monitor._shared.Gauges;
 import com.igor101.system.monitor._shared.Metrics;
 import com.igor101.system.monitor.logs.domain.model.ApplicationLogLevel;
 import com.igor101.system.monitor.logs.domain.model.LogData;
+import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tags;
 
+import java.time.Clock;
 import java.util.List;
 
 public class LogsService {
 
-    static final String APPLICATION_LOGS_ERRORS_TOTAL_METRIC = Metrics.fullName("application_logs_errors_total");
-    static final String APPLICATION_LOGS_WARNINGS_TOTAL_METRIC = Metrics.fullName("application_logs_warnings_total");
+    static final String APPLICATION_LOGS_ERRORS_TOTAL = Metrics.fullName("application_logs_errors_total");
+    static final String APPLICATION_LOGS_WARNINGS_TOTAL = Metrics.fullName("application_logs_warnings_total");
+    static final String APPLICATION_LOGS_ERROR_TIMESTAMP = Metrics.fullName("application_logs_error_timestamp_seconds");
+    static final String APPLICATION_LOGS_WARNING_TIMESTAMP =
+            Metrics.fullName("application_logs_warning_timestamp_seconds");
     private final LogsConverter logsConverter;
     private final LogsRepository logsRepository;
-    private final MeterRegistry meterRegistry;
+    private final Counter logsErrorsCounter;
+    private final Counter logsWarningsCounter;
+    private final Gauges gauges;
+    private final Clock clock;
 
     public LogsService(LogsConverter logsConverter,
                        LogsRepository logsRepository,
-                       MeterRegistry meterRegistry) {
+                       MeterRegistry meterRegistry,
+                       Clock clock) {
         this.logsConverter = logsConverter;
         this.logsRepository = logsRepository;
-        this.meterRegistry = meterRegistry;
+
+        logsErrorsCounter = meterRegistry.counter(APPLICATION_LOGS_ERRORS_TOTAL);
+        logsWarningsCounter = meterRegistry.counter(APPLICATION_LOGS_WARNINGS_TOTAL);
+
+        logsErrorsCounter.increment(0);
+        logsWarningsCounter.increment(0);
+
+        gauges = new Gauges(meterRegistry);
+
+        this.clock = clock;
     }
 
     public void add(List<LogData> logs) {
         var records = logs.stream()
                 .map(l -> {
                     var r = logsConverter.converted(l);
-                    updateLogsMetrics(r.source(), r.application(), r.instanceId(), r.level());
+                    setLogTimestampMetric(r.source(), r.application(), r.instanceId(), r.level());
                     return r;
                 })
                 .toList();
@@ -35,24 +55,27 @@ public class LogsService {
         logsRepository.store(records);
     }
 
-    private void updateLogsMetrics(String source,
-                                   String application,
-                                   String instanceId,
-                                   ApplicationLogLevel logLevel) {
+    private void setLogTimestampMetric(String source,
+                                       String application,
+                                       String instanceId,
+                                       ApplicationLogLevel logLevel) {
         if (logLevel == ApplicationLogLevel.ERROR) {
-            increaseLogsMetricCounter(APPLICATION_LOGS_ERRORS_TOTAL_METRIC,
+            logsErrorsCounter.increment();
+            setLogTimestampMetric(APPLICATION_LOGS_ERROR_TIMESTAMP,
                     source, application, instanceId);
         } else if (logLevel == ApplicationLogLevel.WARNING) {
-            increaseLogsMetricCounter(APPLICATION_LOGS_WARNINGS_TOTAL_METRIC,
+            logsWarningsCounter.increment();
+            setLogTimestampMetric(APPLICATION_LOGS_WARNING_TIMESTAMP,
                     source, application, instanceId);
         }
     }
 
-    private void increaseLogsMetricCounter(String metricName,
-                                           String source,
-                                           String application,
-                                           String instanceId) {
-        meterRegistry.counter(metricName, Metrics.applicationLabels(source, application, instanceId))
-                .increment();
+    private void setLogTimestampMetric(String metricName,
+                                       String source,
+                                       String application,
+                                       String instanceId) {
+        var tags = Tags.of(Metrics.applicationLabels(source, application, instanceId));
+        gauges.updateValue(metricName, tags,
+                Metrics.secondsTimestamp(clock.instant()));
     }
 }

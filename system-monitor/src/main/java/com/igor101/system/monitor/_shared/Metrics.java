@@ -28,4 +28,5 @@ public class Metrics {
     public static double secondsTimestamp(long timestamp) {
         return timestamp / 1000.0;
     }
+
 }

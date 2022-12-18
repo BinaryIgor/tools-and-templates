@@ -34,7 +34,8 @@ public class LogsConfig {
     @Bean
     public LogsService logsService(LogsConverter logsConverter,
                                    LogsRepository logsRepository,
-                                   MeterRegistry meterRegistry) {
-        return new LogsService(logsConverter, logsRepository, meterRegistry);
+                                   MeterRegistry meterRegistry,
+                                   Clock clock) {
+        return new LogsService(logsConverter, logsRepository, meterRegistry, clock);
     }
 }
