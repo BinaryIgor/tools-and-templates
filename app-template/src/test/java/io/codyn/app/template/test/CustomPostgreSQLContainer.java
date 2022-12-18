@@ -2,6 +2,8 @@ package io.codyn.app.template.test;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import java.sql.DriverManager;
+
 public class CustomPostgreSQLContainer extends PostgreSQLContainer<CustomPostgreSQLContainer> {
 
     private static final String IMAGE_VERSION = "postgres:14";
@@ -15,6 +17,7 @@ public class CustomPostgreSQLContainer extends PostgreSQLContainer<CustomPostgre
         if (instance == null) {
             instance = new CustomPostgreSQLContainer();
             instance.start();
+            instance.initSchema();
         }
         return instance;
     }
@@ -25,6 +28,24 @@ public class CustomPostgreSQLContainer extends PostgreSQLContainer<CustomPostgre
         System.setProperty("DB_URL", instance.getJdbcUrl());
         System.setProperty("DB_USERNAME", instance.getUsername());
         System.setProperty("DB_PASSWORD", instance.getPassword());
+
+    }
+
+    //Probably tmp solution, figure out proper migration approach
+    private void initSchema() {
+        try (var connection = DriverManager.getConnection(getJdbcUrl(), getUsername(), getPassword())) {
+            var schema = readSchema();
+            connection.prepareStatement(schema)
+                    .execute();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String readSchema() throws Exception {
+        try (var is = getClass().getResourceAsStream("/schema.sql")) {
+            return new String(is.readAllBytes());
+        }
     }
 
     @Override
