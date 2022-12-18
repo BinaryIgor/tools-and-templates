@@ -76,10 +76,12 @@ groups:
       annotations:
         summary: "Application {{ $labels.application }} high CPU usage"
         description: "Application {{ $labels.application }} is using more than 80% of CPU for 5 minutes"
-    - alert: "ApplicationLogsErrors"
-      expr: increase(monitoring_application_logs_errors_total[5m]) > 0
+    - alert: ApplicationLogsErrors
+      # were there any errors in the last 15 minutes
+      expr: (time() - monitoring_application_logs_error_timestamp_seconds) < 900
       labels:
         severity: critical
       annotations:
         summary: "Application {{ $labels.application }} ERROR"
         description: "Application {{ $labels.application }} is having errors in its logs"
+      

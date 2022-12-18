@@ -5,6 +5,7 @@ global:
 
 rule_files:
   - alert_rules.yml
+  # - domain_alerts_rules.yml
 
 
 alerting:

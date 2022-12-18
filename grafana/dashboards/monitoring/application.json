@@ -563,7 +563,7 @@
               }
             ]
           },
-          "unit": "short"
+          "unit": "dateTimeAsIso"
         },
         "overrides": [
           {
@@ -700,6 +700,30 @@
                 }
               }
             ]
+          },
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "Errors"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
           }
         ]
       },
@@ -710,6 +734,7 @@
         "y": 14
       },
       "id": 6,
+      "interval": "1m",
       "options": {
         "legend": {
           "calcs": [],
@@ -730,7 +755,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "increase(monitoring_application_logs_warnings_total{application=\"$application\", instance_id=\"$instance_id\"}[$__rate_interval])",
+          "expr": "(monitoring_application_logs_warning_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"} * 1000)  > $__from < $__to",
           "legendFormat": "Warnings",
           "range": true,
           "refId": "A"
@@ -741,14 +766,14 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "increase(monitoring_application_logs_errors_total{application=\"$application\", instance_id=\"$instance_id\"}[$__rate_interval])",
+          "expr": "(monitoring_application_logs_error_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"} * 1000)  > $__from < $__to",
           "hide": false,
           "legendFormat": "Errors",
           "range": true,
           "refId": "B"
         }
       ],
-      "title": "Logs warnings/errors",
+      "title": "Logs warnings/errors timestamps",
       "transformations": [],
       "type": "timeseries"
     }
@@ -761,9 +786,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "docker-metrics-collector",
-          "value": "docker-metrics-collector"
+          "selected": false,
+          "text": "nginx-reverse-proxy",
+          "value": "nginx-reverse-proxy"
         },
         "datasource": {
           "type": "prometheus",
@@ -788,8 +813,8 @@
       {
         "current": {
           "selected": false,
-          "text": "docker-metrics-collector-default",
-          "value": "docker-metrics-collector-default"
+          "text": "nginx-reverse-proxy-default",
+          "value": "nginx-reverse-proxy-default"
         },
         "datasource": {
           "type": "prometheus",
