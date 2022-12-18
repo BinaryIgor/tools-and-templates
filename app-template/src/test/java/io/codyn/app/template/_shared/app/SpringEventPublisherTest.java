@@ -1,7 +1,6 @@
-package io.codyn.app.template._shared;
+package io.codyn.app.template._shared.app;
 
 import io.codyn.app.template.IntegrationTest;
-import io.codyn.app.template._shared.app.SpringEventPublisher;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

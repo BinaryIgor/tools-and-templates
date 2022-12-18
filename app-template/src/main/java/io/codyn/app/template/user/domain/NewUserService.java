@@ -1,6 +1,5 @@
 package io.codyn.app.template.user.domain;
 
-import io.codyn.app.template._shared.domain.ResourceExistsException;
 import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
@@ -28,8 +27,7 @@ public class NewUserService {
 
         //TODO: improve
         if (userRepository.findByEmail(user.email()).isPresent()) {
-            throw new ResourceExistsException("User of %s email exists".formatted(user.email()),
-                    "EMAIL_TAKEN");
+            throw UserExceptions.emailTaken();
         }
 
         var userId = newUserRepository.create(user);

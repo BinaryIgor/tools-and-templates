@@ -1,7 +1,7 @@
 package io.codyn.app.template._shared.app;
 
-import io.codyn.app.template._shared.domain.ResourceExistsException;
-import io.codyn.app.template._shared.domain.ValidationException;
+import io.codyn.app.template._shared.domain.exception.ResourceExistsException;
+import io.codyn.app.template._shared.domain.exception.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
