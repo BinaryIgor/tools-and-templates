@@ -1,6 +1,8 @@
 package io.codyn.app.template.user.domain;
 
+import io.codyn.app.template._shared.domain.event.EventPublisher;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
+import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
@@ -13,27 +15,30 @@ public class NewUserService {
     private final NewUserRepository newUserRepository;
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
+    private final EventPublisher eventPublisher;
 
     public NewUserService(NewUserRepository newUserRepository,
                           UserRepository userRepository,
-                          PasswordHasher passwordHasher) {
+                          PasswordHasher passwordHasher,
+                          EventPublisher eventPublisher) {
         this.newUserRepository = newUserRepository;
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
     public void create(NewUser user) {
         validateUser(user);
 
-        //TODO: improve
         if (userRepository.findByEmail(user.email()).isPresent()) {
             throw UserExceptions.emailTaken();
         }
 
         var hashedUser = user.withPassword(passwordHasher.hash(user.password()));
         var userId = newUserRepository.create(hashedUser);
-        //TODO send email!
+
+        eventPublisher.publish(new UserCreatedEvent(userId, user.name(), user.email()));
     }
 
     private void validateUser(NewUser user) {
