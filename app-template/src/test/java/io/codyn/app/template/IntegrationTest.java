@@ -1,5 +1,6 @@
 package io.codyn.app.template;
 
+import io.codyn.app.template.test.CustomPostgreSQLContainer;
 import org.junit.jupiter.api.Tag;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -10,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = IntegrationTest.TestConfig.class)
 public abstract class IntegrationTest {
+
+    protected static CustomPostgreSQLContainer POSTGRES = CustomPostgreSQLContainer.instance();
 
 
 //    @DynamicPropertySource
