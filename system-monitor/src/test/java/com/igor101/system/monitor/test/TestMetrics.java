@@ -79,6 +79,10 @@ public class TestMetrics {
         return labelsValues;
     }
 
+    public static TestMetric metric(String name, String value) {
+        return metric(name, Map.of(), value);
+    }
+
     public static TestMetric metric(String name, Map<String, String> labels, String value) {
         return new TestMetric(name, labels, value);
     }

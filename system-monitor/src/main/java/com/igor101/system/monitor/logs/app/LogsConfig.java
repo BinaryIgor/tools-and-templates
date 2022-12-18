@@ -30,7 +30,6 @@ public class LogsConfig {
         return new LogsCleaner(logsRepository);
     }
 
-
     @Bean
     public LogsService logsService(LogsConverter logsConverter,
                                    LogsRepository logsRepository,

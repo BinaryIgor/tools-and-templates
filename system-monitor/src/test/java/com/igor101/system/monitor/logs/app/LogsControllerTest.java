@@ -6,22 +6,29 @@ import com.igor101.system.monitor.test.TestHttp;
 import com.igor101.system.monitor.test.TestMetric;
 import com.igor101.system.monitor.test.TestMetrics;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.actuate.metrics.AutoConfigureMetrics;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//TODO: fix
-@Disabled
 @AutoConfigureMetrics
+@Import(LogsControllerTest.TestConfig.class)
 public class LogsControllerTest extends IntegrationTest {
+
+    private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-22T19:11:22Z"), ZoneId.of("UTC"));
 
     @Autowired
     private TestHttp testHttp;
@@ -54,19 +61,21 @@ public class LogsControllerTest extends IntegrationTest {
                 new LogEntry("anonymousII", "some-containerII", "instance-3", "some-log warn"));
 
         var expectedMetrics = List.of(
-                TestMetrics.metric("monitoring_application_logs_errors_total",
+                TestMetrics.metric("monitoring_application_logs_errors_total", "3.0"),
+                TestMetrics.metric("monitoring_application_logs_warnings_total", "2.0"),
+                TestMetrics.metric("monitoring_application_logs_error_timestamp_seconds",
                         Map.of("application", "some-container", "instance_id", "some-container-default",
                                 "source", "anonymous"),
-                        "2.0"),
-                TestMetrics.metric("monitoring_application_logs_errors_total",
+                        toSecondsTimestampString()),
+                TestMetrics.metric("monitoring_application_logs_error_timestamp_seconds",
                         Map.of("application", "some-container-nginx",
                                 "instance_id", "some-container-nginx-default",
                                 "source", "anonymous-x"),
-                        "1.0"),
-                TestMetrics.metric("monitoring_application_logs_warnings_total",
+                        toSecondsTimestampString()),
+                TestMetrics.metric("monitoring_application_logs_warning_timestamp_seconds",
                         Map.of("application", "some-containerII",
                                 "instance_id", "instance-3", "source", "anonymousII"),
-                        "2.0"));
+                        toSecondsTimestampString()));
 
         var logsToSend = logs.stream().map(LogEntry::toJson).toList();
 
@@ -78,6 +87,10 @@ public class LogsControllerTest extends IntegrationTest {
                 .toList();
 
         return new AddLogsTestCase(logsToSend, expectedMetrics, expectedLogFiles);
+    }
+
+    private String toSecondsTimestampString() {
+        return String.valueOf(FIXED_CLOCK.instant().toEpochMilli() / 1000.0);
     }
 
     private record LogEntry(String host,
@@ -105,5 +118,14 @@ public class LogsControllerTest extends IntegrationTest {
     private record AddLogsTestCase(List<Map<String, String>> logsToSend,
                                    List<TestMetric> expectedMetrics,
                                    List<Path> expectedLogFiles) {
+    }
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        @Primary
+        Clock fixedClock() {
+            return FIXED_CLOCK;
+        }
     }
 }

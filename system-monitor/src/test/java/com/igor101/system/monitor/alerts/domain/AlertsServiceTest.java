@@ -1,11 +1,11 @@
 package com.igor101.system.monitor.alerts.domain;
 
+import com.igor101.system.monitor._shared.Metrics;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
@@ -16,8 +16,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Disabled
-//TODO: fix
 public class AlertsServiceTest {
 
     private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-12T20:11:22Z"), ZoneId.of("UTC"));
@@ -31,16 +29,29 @@ public class AlertsServiceTest {
     }
 
     @Test
+    void shouldInitializeAlertsTotalCountersWithZeros() {
+        Assertions.assertThat(registry.counter(AlertsService.ALERTS_TOTAL, Alerts.STATUS, Alerts.FIRING).count())
+                .isZero();
+        Assertions.assertThat(registry.counter(AlertsService.ALERTS_TOTAL, Alerts.STATUS, Alerts.RESOLVED).count())
+                .isZero();
+    }
+
+    @Test
     void shouldAddAlertsToMetricsExcludingDescriptions() {
         var testCase = prepareAddTestCase();
 
         service.add(testCase.firstAddAlerts());
         service.add(testCase.secondAddAlerts());
 
-        testCase.expectedCounterTagsValues()
-                .forEach((t, c) -> {
-                    Assertions.assertThat(registry.counter(AlertsService.ALERTS_TOTAL, t).count())
-                            .isEqualTo(c);
+        Assertions.assertThat(registry.counter(AlertsService.ALERTS_TOTAL, Alerts.STATUS, Alerts.FIRING).count())
+                .isEqualTo(testCase.expectedFiringAlertsCounter);
+        Assertions.assertThat(registry.counter(AlertsService.ALERTS_TOTAL, Alerts.STATUS, Alerts.RESOLVED).count())
+                .isEqualTo(testCase.expectedResolvedAlertsCounter);
+
+        testCase.expectedAlertsTimestampsValues()
+                .forEach((t, m) -> {
+                    var actualMetric = registry.get(AlertsService.ALERT_TIMESTAMP).tags(t).gauge().value();
+                    Assertions.assertThat(actualMetric).isEqualTo(m);
                 });
     }
 
@@ -72,10 +83,12 @@ public class AlertsServiceTest {
             tags.addAll(mapToTags("label", a.labels()));
             tags.addAll(mapToTags("annotation", a.annotations()));
 
-            expectedCounterTagsValues.merge(Tags.of(tags), 1.0, Double::sum);
+            expectedCounterTagsValues.put(Tags.of(tags), Metrics.secondsTimestamp(FIXED_CLOCK));
         });
 
-        return new AddTestCase(firstAddAlerts, secondAddAlerts, expectedCounterTagsValues);
+        return new AddTestCase(firstAddAlerts, secondAddAlerts,
+                4, 1,
+                expectedCounterTagsValues);
     }
 
     private List<Tag> mapToTags(String keyPrefix, Map<String, String> map) {
@@ -87,6 +100,8 @@ public class AlertsServiceTest {
 
     private record AddTestCase(List<Alert> firstAddAlerts,
                                List<Alert> secondAddAlerts,
-                               Map<Tags, Double> expectedCounterTagsValues) {
+                               double expectedFiringAlertsCounter,
+                               double expectedResolvedAlertsCounter,
+                               Map<Tags, Double> expectedAlertsTimestampsValues) {
     }
 }

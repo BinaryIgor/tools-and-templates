@@ -1,5 +1,6 @@
 package com.igor101.system.monitor._shared;
 
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -23,6 +24,10 @@ public class Metrics {
 
     public static double secondsTimestamp(Instant timestamp) {
         return secondsTimestamp(timestamp.toEpochMilli());
+    }
+
+    public static double secondsTimestamp(Clock clock) {
+        return secondsTimestamp(clock.instant());
     }
 
     public static double secondsTimestamp(long timestamp) {
