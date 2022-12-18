@@ -1,5 +1,7 @@
 package io.codyn.app.template._shared.domain.validator;
 
+import io.codyn.app.template._shared.domain.exception.AppValidationException;
+
 import java.util.regex.Pattern;
 
 public class FieldValidator {
@@ -45,6 +47,12 @@ public class FieldValidator {
         return false;
     }
 
+    public static void validateEmail(String email) {
+        if (!isEmailValid(email)) {
+            throw new AppValidationException("%s is not a valid email".formatted(email));
+        }
+    }
+
     public static boolean isNameValid(String name) {
         var invalid = name == null ||
                 name.strip().length() < MIN_NAME_LENGTH || name.length() > MAX_NAME_LENGTH ||
@@ -54,6 +62,12 @@ public class FieldValidator {
         }
 
         return hasAtLeastOneLetter(name);
+    }
+
+    public static void validateName(String name) {
+        if (!isNameValid(name)) {
+            throw new AppValidationException("%s is not a valid name".formatted(name));
+        }
     }
 
     private static boolean hasAtLeastOneLetter(String string) {
@@ -91,6 +105,12 @@ public class FieldValidator {
         }
 
         return alpha && digit && upper && lower;
+    }
+
+    public static void validatePassword(String password) {
+        if (!isPasswordValid(password)) {
+            throw new AppValidationException("%s is not a valid password".formatted(password));
+        }
     }
 
     public static boolean hasAnyContent(String string) {

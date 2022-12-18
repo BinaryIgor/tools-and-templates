@@ -1,5 +1,6 @@
 package io.codyn.app.template.user.domain;
 
+import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
@@ -30,11 +31,14 @@ public class NewUserService {
             throw UserExceptions.emailTaken();
         }
 
-        var userId = newUserRepository.create(user);
+        var hashedUser = user.withPassword(passwordHasher.hash(user.password()));
+        var userId = newUserRepository.create(hashedUser);
         //TODO send email!
     }
 
     private void validateUser(NewUser user) {
-        //TODO
+        FieldValidator.validateName(user.name());
+        FieldValidator.validateEmail(user.email());
+        FieldValidator.validatePassword(user.password());
     }
 }
