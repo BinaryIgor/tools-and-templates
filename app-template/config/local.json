@@ -1,0 +1,10 @@
+{
+  "build_cmd": "mvn clean install",
+  "env": {
+    "JVM_OPTS": "-Xmx450m"
+  },
+  "secrets": {},
+  "network": "host",
+  "memory": "500M",
+  "cpus": "0.5"
+}
