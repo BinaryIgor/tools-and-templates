@@ -2,7 +2,7 @@
   "env": {
     "METRICS_TARGET_URL": "http://localhost:10101/metrics",
     "MACHINE_NAME": "monitor",
-    "COLLECTION_INTERVAL": "15"
+    "COLLECTION_INTERVAL": "10"
   },
   "volumes": [
     "/var/run/docker.sock:/var/run/docker.sock"
