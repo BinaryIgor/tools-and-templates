@@ -1,4 +1,4 @@
-package io.codyn.app.template.project.domain;
+package io.codyn.app.template.project.domain.model;
 
 import java.util.UUID;
 

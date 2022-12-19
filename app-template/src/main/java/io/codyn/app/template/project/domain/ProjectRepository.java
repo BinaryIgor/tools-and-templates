@@ -1,6 +1,7 @@
 package io.codyn.app.template.project.domain;
 
-import java.util.List;
+import io.codyn.app.template.project.domain.model.Project;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -12,8 +13,4 @@ public interface ProjectRepository {
     Optional<UUID> findOwnerById(UUID id);
 
     void delete(UUID id);
-
-    void addUsers(UUID id, List<UUID> userIds);
-
-    void removeUsers(UUID id, List<UUID> userIds);
 }

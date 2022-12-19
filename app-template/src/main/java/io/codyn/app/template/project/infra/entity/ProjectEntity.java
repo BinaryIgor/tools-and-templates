@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.infra.entity;
 
-import io.codyn.app.template.project.domain.Project;
+import io.codyn.app.template.project.domain.model.Project;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Table;

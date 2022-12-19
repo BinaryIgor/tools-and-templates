@@ -4,6 +4,8 @@ import io.codyn.app.template._shared.domain.exception.AppResourceForbiddenExcept
 import io.codyn.app.template._shared.domain.exception.AppResourceNotFoundException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.project.domain.model.AddUsersToProjectCommand;
+import io.codyn.app.template.project.domain.model.Project;
+import io.codyn.app.template.project.domain.model.ProjectWithUsers;
 import io.codyn.app.template.project.domain.model.RemoveUsersFromProjectCommand;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +15,12 @@ import java.util.UUID;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ProjectUsersRepository projectUsersRepository;
 
-    public ProjectService(ProjectRepository projectRepository) {
+    public ProjectService(ProjectRepository projectRepository,
+                          ProjectUsersRepository projectUsersRepository) {
         this.projectRepository = projectRepository;
+        this.projectUsersRepository = projectUsersRepository;
     }
 
     public void save(Project project) {
@@ -24,7 +29,7 @@ public class ProjectService {
         if (project.version() == 0) {
             projectRepository.save(project);
         } else {
-            validateAccessToProject(project.id(), project.ownerId());
+            getOwnerAndValidateAccessToProject(project.id(), project.ownerId());
             projectRepository.save(project);
         }
     }
@@ -33,11 +38,15 @@ public class ProjectService {
         FieldValidator.validateName(project.name());
     }
 
-    private void validateAccessToProject(UUID projectId, UUID userId) {
+    private void getOwnerAndValidateAccessToProject(UUID projectId, UUID userId) {
         var currentProjectOwnerId = projectRepository.findOwnerById(projectId)
                 .orElseThrow(() -> new AppResourceNotFoundException(
                         "There is no project of %s id".formatted(projectId)));
 
+        validateAccessToProject(projectId, userId, currentProjectOwnerId);
+    }
+
+    private void validateAccessToProject(UUID projectId, UUID userId, UUID currentProjectOwnerId) {
         if (!userId.equals(currentProjectOwnerId)) {
             throw new AppResourceForbiddenException("%s user doesn't have access to %s project"
                     .formatted(userId, projectId));
@@ -45,17 +54,29 @@ public class ProjectService {
     }
 
     public void delete(UUID projectId, UUID userId) {
-        validateAccessToProject(projectId, userId);
+        getOwnerAndValidateAccessToProject(projectId, userId);
         projectRepository.delete(projectId);
     }
 
+    public ProjectWithUsers get(UUID projectId, UUID userId) {
+        var project = projectRepository.findById(projectId)
+                .orElseThrow(() -> new AppResourceNotFoundException(
+                        "There is no project of %s id".formatted(projectId)));
+
+        validateAccessToProject(projectId, userId, project.ownerId());
+
+        var projectUsers = projectUsersRepository.usersOfProject(projectId);
+
+        return new ProjectWithUsers(project, projectUsers);
+    }
+
     public void addUsers(AddUsersToProjectCommand command) {
-        validateAccessToProject(command.projectId(), command.userId());
-        projectRepository.addUsers(command.userId(), command.toAddUserIds());
+        getOwnerAndValidateAccessToProject(command.projectId(), command.userId());
+        projectUsersRepository.addUsers(command.projectId(), command.toAddUserIds());
     }
 
     public void removeUsers(RemoveUsersFromProjectCommand command) {
-        validateAccessToProject(command.projectId(), command.userId());
-        projectRepository.removeUsers(command.projectId(), command.toDeleteUserIds());
+        getOwnerAndValidateAccessToProject(command.projectId(), command.userId());
+        projectUsersRepository.removeUsers(command.projectId(), command.toDeleteUserIds());
     }
 }

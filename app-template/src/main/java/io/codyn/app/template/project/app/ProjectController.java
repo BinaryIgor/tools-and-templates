@@ -5,6 +5,7 @@ import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
 import io.codyn.app.template.project.domain.ProjectService;
 import io.codyn.app.template.project.domain.model.AddUsersToProjectCommand;
+import io.codyn.app.template.project.domain.model.ProjectWithUsers;
 import io.codyn.app.template.project.domain.model.RemoveUsersFromProjectCommand;
 import io.codyn.app.template.user.api.UserClient;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,12 @@ public class ProjectController {
     public void delete(@PathVariable UUID id) {
         var userId = userClient.currentUserId();
         projectService.delete(id, userId);
+    }
+
+    @GetMapping("/{id}")
+    public ProjectWithUsers get(@PathVariable UUID id) {
+        var userId = userClient.currentUserId();
+        return projectService.get(id, userId);
     }
 
     @PostMapping("/{id}/users")

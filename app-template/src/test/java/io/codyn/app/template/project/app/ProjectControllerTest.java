@@ -8,8 +8,10 @@ import io.codyn.app.template._shared.domain.exception.AppResourceForbiddenExcept
 import io.codyn.app.template._shared.domain.exception.AppResourceNotFoundException;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
-import io.codyn.app.template.project.domain.Project;
 import io.codyn.app.template.project.domain.ProjectRepository;
+import io.codyn.app.template.project.domain.ProjectUsersRepository;
+import io.codyn.app.template.project.domain.model.Project;
+import io.codyn.app.template.project.domain.model.ProjectWithUsers;
 import io.codyn.app.template.test.TestHttp;
 import io.codyn.app.template.user.TestUserClient;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
@@ -25,6 +27,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Import(ProjectControllerTest.TestConfig.class)
@@ -34,6 +38,7 @@ public class ProjectControllerTest extends IntegrationTest {
     private TestHttp testHttp;
     @Autowired
     private ProjectRepository projectRepository;
+    private ProjectUsersRepository projectUsersRepository;
     @Autowired
     private NewUserRepository newUserRepository;
     @Autowired
@@ -50,7 +55,6 @@ public class ProjectControllerTest extends IntegrationTest {
     @Test
     void shouldCreateNewProject() {
         var userId = UUID.randomUUID();
-        userClient.setCurrentUser(userId);
 
         var expectedProject = createNewProject(userId);
 
@@ -61,25 +65,46 @@ public class ProjectControllerTest extends IntegrationTest {
     @Test
     void shouldUpdateExistingProject() {
         var userId = UUID.randomUUID();
+
+        var firstProject = createNewProject(userId);
+        var secondProject = createNewProject(UUID.randomUUID(), new ApiNewProject("another-project"));
+
+        var projectUpdate = new ApiUpdateProject(firstProject.name() + "-new-name", firstProject.version());
+
         userClient.setCurrentUser(userId);
+        updateRequest(firstProject.id(), projectUpdate)
+                .execute(HttpStatus.OK);
+
+        var expectedProject = new Project(firstProject.id(), firstProject.ownerId(), projectUpdate.name(),
+                firstProject.version() + 1);
+
+        Assertions.assertThat(projectRepository.findById(firstProject.id()).orElseThrow())
+                .isEqualTo(expectedProject);
+
+        Assertions.assertThat(projectRepository.findById(secondProject.id()).orElseThrow())
+                .isEqualTo(secondProject);
+    }
+
+    @Test
+    void shouldNotAllowToUpdateNotUserProject() {
+        var userId = UUID.randomUUID();
 
         var project = createNewProject(userId);
 
-        var projectUpdate = new ApiUpdateProject(project.name() + "-new-name", project.version());
+        var anotherUserId = userClient.setRandomCurrentUser();
+        var expectedResponse = new AppErrorResponse(
+                new AppResourceForbiddenException("%s user doesn't have access to %s project"
+                        .formatted(anotherUserId, project.id())));
 
-        updateRequest(project.id(), projectUpdate)
-                .execute(HttpStatus.OK);
+        var actualResponse = updateRequest(project.id(), new ApiUpdateProject("some-name", 1))
+                .execute(HttpStatus.FORBIDDEN, AppErrorResponse.class);
 
-        var expectedProject = new Project(project.id(), project.ownerId(), projectUpdate.name(),
-                project.version() + 1);
-
-        Assertions.assertThat(projectRepository.findById(project.id()).orElseThrow())
-                .isEqualTo(expectedProject);
+        Assertions.assertThat(actualResponse).isEqualTo(expectedResponse);
     }
 
     @Test
     void shouldReturn409WhileUpdatingOutdatedProject() {
-        var userId = userClient.setRandomCurrentUser();
+        var userId = UUID.randomUUID();
 
         var project = createNewProject(userId);
 
@@ -116,12 +141,10 @@ public class ProjectControllerTest extends IntegrationTest {
     @Test
     void shouldReturn403WhileUpdatingNotUserProject() {
         var userId = UUID.randomUUID();
-        userClient.setCurrentUser(userId);
 
         var project = createNewProject(userId);
 
-        var anotherUserId = userClient.createRandomUser(UUID.randomUUID());
-        userClient.setCurrentUser(anotherUserId);
+        var anotherUserId = userClient.setRandomCurrentUser();
 
         var projectUpdate = new ApiUpdateProject("new-project-name", 1);
 
@@ -137,9 +160,57 @@ public class ProjectControllerTest extends IntegrationTest {
                 .isEqualTo(project);
     }
 
-    private Project createNewProject(UUID ownerId) {
+    @Test
+    void shouldModifyProjectUsersAndReturnIt() {
+        var userId = UUID.randomUUID();
+
+        var firstProject = createNewProject(userId);
+        var secondProject = createNewProject(UUID.randomUUID(), new ApiNewProject("another-project"));
+
+        userClient.setCurrentUser(userId);
+
+        var toAddUsers = List.of(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+        var toRemoveUsers = toAddUsers.subList(0, 2);
+
+        toAddUsers.forEach(uid -> userClient.createRandomUser(uid));
+
+        var toAddNextUser = UUID.randomUUID();
+        userClient.createRandomUser(toAddNextUser);
+
+        testHttp.builder()
+                .path("/projects/%s/users".formatted(firstProject.id()))
+                .method(HttpMethod.POST)
+                .body(toAddUsers)
+                .execute(HttpStatus.OK);
+
+        testHttp.builder()
+                .path("/projects/%s/users".formatted(firstProject.id()))
+                .method(HttpMethod.DELETE)
+                .body(toRemoveUsers)
+                .execute(HttpStatus.OK);
+
+        testHttp.builder()
+                .path("/projects/%s/users".formatted(firstProject.id()))
+                .method(HttpMethod.POST)
+                .body(List.of(toAddNextUser))
+                .execute(HttpStatus.OK);
+
+        var expectedFirstUsers = new ArrayList<>(toAddUsers.subList(2, toAddUsers.size()));
+        expectedFirstUsers.add(toAddNextUser);
+        var firstProjectWithUsers = new ProjectWithUsers(firstProject, expectedFirstUsers);
+        var secondProjectWithUsers = new ProjectWithUsers(secondProject, List.of());
+
+        //TODO call api!
+//        Assertions.assertThat(projectUsersRepository.findByIdWithUsers(firstProject.id()).orElseThrow())
+//                .isEqualTo(firstProjectWithUsers);
+//
+//        Assertions.assertThat(projectRepository.findByIdWithUsers(secondProject.id()).orElseThrow())
+//                .isEqualTo(secondProjectWithUsers);
+    }
+
+    private Project createNewProject(UUID ownerId, ApiNewProject project) {
+        userClient.setCurrentUser(ownerId);
         userClient.createRandomUser(ownerId);
-        var project = new ApiNewProject("some-project");
 
         var projectId = testHttp.builder()
                 .path("/projects")
@@ -149,6 +220,10 @@ public class ProjectControllerTest extends IntegrationTest {
                 .id();
 
         return new Project(projectId, ownerId, project.name(), 1);
+    }
+
+    private Project createNewProject(UUID ownerId) {
+        return createNewProject(ownerId, new ApiNewProject("some-project"));
     }
 
     private TestHttp.RequestBuilder updateRequest(UUID projectId, ApiUpdateProject projectUpdate) {
