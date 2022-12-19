@@ -1,5 +1,6 @@
 package io.codyn.app.template.user;
 
+import io.codyn.app.template.test.Tests;
 import io.codyn.app.template.user.api.CurrentUser;
 import io.codyn.app.template.user.api.UserClient;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,25 +9,43 @@ import java.util.UUID;
 
 public class TestUserClient implements UserClient {
 
-    private final CurrentUser currentUser;
+    private final JdbcTemplate jdbcTemplate;
+    private CurrentUser currentUser;
 
-    public TestUserClient(CurrentUser currentUser) {
+    public TestUserClient(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void setCurrentUser(CurrentUser currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public void setCurrentUser(UUID id) {
+        setCurrentUser(new CurrentUser(id));
+    }
+
+    public UUID setRandomCurrentUser() {
+        var id = UUID.randomUUID();
+        setCurrentUser(id);
+        return id;
     }
 
 
     @Override
     public CurrentUser currentUser() {
+        if (currentUser == null) {
+            throw new RuntimeException("Current user not set!");
+        }
         return currentUser;
     }
 
     @Override
     public UUID currentUserId() {
-        return currentUser.id();
+        return currentUser().id();
     }
 
-    public static UUID createUser(JdbcTemplate template, NewUser user) {
-        template.update("""
+    public UUID createUser(NewUser user) {
+        jdbcTemplate.update("""
                 INSERT INTO "user".user (id, name, email, password)
                 VALUES (?, ?, ?, ?)
                 """, user.id, user.name, user.email, user.password);
@@ -34,8 +53,15 @@ public class TestUserClient implements UserClient {
         return user.id;
     }
 
-    public static UUID createUser(JdbcTemplate template, UUID userId) {
-        return createUser(template, new NewUser(userId, "some-name", "some-email@email.com"));
+    public UUID createRandomUser(UUID userId) {
+        var name = Tests.randomString(5, 30);
+        return createUser(new NewUser(userId, name, name + "@email.com"));
+    }
+
+    public void clearDb() {
+        jdbcTemplate.execute("""
+                TRUNCATE TABLE "user".user CASCADE
+                """);
     }
 
     public record NewUser(UUID id,

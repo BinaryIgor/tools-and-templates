@@ -2,9 +2,10 @@ package io.codyn.app.template.test;
 
 import org.assertj.core.api.Assertions;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
-import java.util.function.Consumer;
 
 public class TestHttp {
 
@@ -14,25 +15,50 @@ public class TestHttp {
         this.template = template;
     }
 
-    public void postAndExpectStatus(String path, Object body, HttpStatus status) {
-        Assertions.assertThat(template.postForEntity(path, body, null).getStatusCode())
-                .isEqualTo(status);
+    public RequestBuilder builder() {
+        return new RequestBuilder(template);
     }
 
-    public <T> T postAndExpectStatusReturningBody(String path, Object body,
-                                                  HttpStatus status,
-                                                  Class<T> bodyClazz) {
-        var entity = template.postForEntity(path, body, bodyClazz);
+    public static class RequestBuilder {
 
-        Assertions.assertThat(entity.getStatusCode())
-                .isEqualTo(status);
+        private final TestRestTemplate template;
+        private String path;
+        private Object body;
+        private HttpMethod method;
 
-        return entity.getBody();
+        public RequestBuilder(TestRestTemplate restTemplate) {
+            template = restTemplate;
+        }
+
+        public RequestBuilder path(String path) {
+            this.path = path;
+            return this;
+        }
+
+        public RequestBuilder method(HttpMethod method) {
+            this.method = method;
+            return this;
+        }
+
+        public RequestBuilder body(Object body) {
+            this.body = body;
+            return this;
+        }
+
+        public <T> T execute(HttpStatus expectedStatus, Class<T> responseType) {
+            var entity = template.exchange(path, method, body == null ? null : new HttpEntity<>(body), responseType);
+
+            Assertions.assertThat(entity.getStatusCode()).isEqualTo(expectedStatus);
+
+            return entity.getBody();
+        }
+
+        public void execute(HttpStatus expectedStatus) {
+            var entity = template.exchange(path, method,
+                    body == null ? null : new HttpEntity<>(body), Void.class);
+
+            Assertions.assertThat(entity.getStatusCode()).isEqualTo(expectedStatus);
+        }
     }
 
-    public <T> void getAndExpectOkStatusAndBody(String path, Class<T> clazz, Consumer<T> expectation) {
-        var result = template.getForEntity(path, clazz);
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        expectation.accept(result.getBody());
-    }
 }
