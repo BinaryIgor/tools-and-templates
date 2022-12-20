@@ -2,13 +2,11 @@ package io.codyn.app.template.project.infra;
 
 import io.codyn.app.template.SpringIntegrationTest;
 import io.codyn.app.template.project.domain.model.Project;
-import io.codyn.app.template.test.Tests;
+import io.codyn.app.template.project.test.TestProjectObjects;
 import io.codyn.app.template.user.TestUserClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.UUID;
 
 public class SqlProjectRepositoryTest extends SpringIntegrationTest {
 
@@ -48,11 +46,9 @@ public class SqlProjectRepositoryTest extends SpringIntegrationTest {
     }
 
     private Project prepareNewProject() {
-        var ownerId = UUID.randomUUID();
-
-        userClient.createRandomUser(ownerId);
-
-        return new Project(UUID.randomUUID(), ownerId, Tests.randomString(), 0L);
+        var project = TestProjectObjects.newProject(0);
+        userClient.createRandomUser(project.ownerId());
+        return project;
     }
 
 }
