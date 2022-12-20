@@ -58,12 +58,6 @@ public class TestUserClient implements UserClient {
         return createUser(new NewUser(userId, name, name + "@email.com"));
     }
 
-    public void clearDb() {
-        jdbcTemplate.execute("""
-                TRUNCATE TABLE "user".user CASCADE
-                """);
-    }
-
     public record NewUser(UUID id,
                           String name,
                           String email,

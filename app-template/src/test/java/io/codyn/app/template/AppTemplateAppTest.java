@@ -2,7 +2,7 @@ package io.codyn.app.template;
 
 import org.junit.jupiter.api.Test;
 
-public class AppTemplateAppTest extends IntegrationTest {
+public class AppTemplateAppTest extends SpringIntegrationTest {
 
     @Test
     void shouldLoadContext() {

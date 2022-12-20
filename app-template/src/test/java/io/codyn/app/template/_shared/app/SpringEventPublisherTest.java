@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.app;
 
-import io.codyn.app.template.IntegrationTest;
+import io.codyn.app.template.SpringIntegrationTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 
 @Import(SpringEventPublisherTest.TestConfig.class)
-public class SpringEventPublisherTest extends IntegrationTest {
+public class SpringEventPublisherTest extends SpringIntegrationTest {
 
     @Autowired
     private SpringEventPublisher publisher;

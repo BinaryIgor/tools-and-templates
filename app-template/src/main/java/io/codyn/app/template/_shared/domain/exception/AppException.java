@@ -18,4 +18,18 @@ public class AppException extends RuntimeException {
     public List<String> reasons() {
         return reasons;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof AppException e) {
+            return getClass().equals(e.getClass())
+                    && getMessage().equals(e.getMessage())
+                    && reasons.equals(e.reasons);
+        }
+
+        return false;
+    }
 }
