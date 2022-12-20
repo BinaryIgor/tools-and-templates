@@ -2,12 +2,15 @@ package io.codyn.app.template;
 
 import io.codyn.app.template.test.CustomPostgreSQLContainer;
 import io.codyn.app.template.test.TestHttp;
+import io.codyn.app.template.user.TestUserClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
 @Tag("integration")
@@ -37,6 +40,12 @@ public abstract class SpringIntegrationTest {
         @Bean
         public TestHttp testHttp(TestRestTemplate restTemplate) {
             return new TestHttp(restTemplate);
+        }
+
+        @Bean
+        @Primary
+        TestUserClient userClient(JdbcTemplate jdbcTemplate) {
+            return new TestUserClient(jdbcTemplate);
         }
     }
 }

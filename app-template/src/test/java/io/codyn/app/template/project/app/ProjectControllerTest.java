@@ -14,10 +14,6 @@ import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Import(ProjectControllerTest.TestConfig.class)
 public class ProjectControllerTest extends SpringIntegrationTest {
 
     @Autowired
@@ -143,15 +138,5 @@ public class ProjectControllerTest extends SpringIntegrationTest {
                 .path("/projects/" + projectId)
                 .method(HttpMethod.PUT)
                 .body(projectUpdate);
-    }
-
-    @TestConfiguration
-    static class TestConfig {
-
-        @Bean
-        @Primary
-        TestUserClient userClient(JdbcTemplate jdbcTemplate) {
-            return new TestUserClient(jdbcTemplate);
-        }
     }
 }
