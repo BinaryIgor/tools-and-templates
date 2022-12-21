@@ -1,2 +1,0 @@
-TRUNCATE TABLE "project".project CASCADE;
-TRUNCATE TABLE "user".user CASCADE;

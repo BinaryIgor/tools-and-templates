@@ -1,0 +1,2 @@
+TRUNCATE TABLE "user".user CASCADE;
+TRUNCATE TABLE project.project CASCADE;
