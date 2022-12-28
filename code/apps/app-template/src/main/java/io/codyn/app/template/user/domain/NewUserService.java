@@ -6,6 +6,7 @@ import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
+import io.codyn.commons.tools.Transactions;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,19 +15,22 @@ public class NewUserService {
     private final NewUserRepository newUserRepository;
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
+    private final Transactions transactions;
     private final EventPublisher eventPublisher;
 
     public NewUserService(NewUserRepository newUserRepository,
                           UserRepository userRepository,
                           PasswordHasher passwordHasher,
+                          Transactions transactions,
                           EventPublisher eventPublisher) {
         this.newUserRepository = newUserRepository;
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
+        this.transactions = transactions;
         this.eventPublisher = eventPublisher;
     }
 
-   // @Transactional
+    // @Transactional
     //TODO: transactions!
     public void create(NewUser user) {
         validateUser(user);
@@ -36,9 +40,12 @@ public class NewUserService {
         }
 
         var hashedUser = user.withPassword(passwordHasher.hash(user.password()));
-        var userId = newUserRepository.create(hashedUser);
 
-        eventPublisher.publish(new UserCreatedEvent(userId, user.name(), user.email()));
+        transactions.execute(() -> {
+            var userId = newUserRepository.create(hashedUser);
+            //Or maybe just user created handler?
+            eventPublisher.publish(new UserCreatedEvent(userId, user.name(), user.email()));
+        });
     }
 
     private void validateUser(NewUser user) {

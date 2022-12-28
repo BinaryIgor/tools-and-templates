@@ -4,6 +4,8 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
 import io.codyn.app.template._shared.domain.event.EventPublisher;
+import io.codyn.commons.sqldb.core.SqlTransactions;
+import io.codyn.commons.tools.Transactions;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -21,7 +23,6 @@ public class AppConfig {
         return new SpringEventPublisher(applicationEventPublisher);
     }
 
-    //TODO: transactions...
     @Bean
     public DSLContext dslContext(@Value("${spring.datasource.url}") String jdbcUrl,
                                  @Value("${spring.datasource.username}") String username,
@@ -34,5 +35,10 @@ public class AppConfig {
         return DSL.using(new DefaultConfiguration()
                 .set(new HikariDataSource(config))
                 .set(SQLDialect.POSTGRES));
+    }
+
+    @Bean
+    public Transactions transactions(DSLContext context) {
+        return new SqlTransactions(context);
     }
 }
