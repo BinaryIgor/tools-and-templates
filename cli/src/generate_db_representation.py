@@ -9,7 +9,7 @@ args = meta.cmd_args({
     "schemas": {
         "help": "Comma separated schemas to migrate. Default are empty, which means all"
     }
-}, script_description="Script to generate jooq code representation for given db/schema(s)")
+}, script_description="Script to generate jooq code representation for given db/schema(s)", env_arg=False)
 
 schemas_arg = args["schemas"]
 

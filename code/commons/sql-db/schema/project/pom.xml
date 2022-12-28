@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.codyn</groupId>
+        <artifactId>commons-sql-db-schema</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>commons-sql-db-schema-project</artifactId>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen-maven</artifactId>
+                <version>${jooq.version}</version>
+                <configuration>
+                    <jdbc>
+                        <driver>org.postgresql.Driver</driver>
+                    </jdbc>
+                    <generator>
+                        <generate>
+                            <javaTimeTypes>true</javaTimeTypes>
+                            <fluentSetters>true</fluentSetters>
+                        </generate>
+                        <database>
+                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                            <includes>.*</includes>
+                            <excludes>.*flyway.*</excludes>
+                            <inputSchema>project</inputSchema>
+                        </database>
+                        <target>
+                            <packageName>io.codyn.commons.sqldb.schema.project</packageName>
+                            <directory>src/main/java</directory>
+                        </target>
+                    </generator>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

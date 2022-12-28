@@ -29,7 +29,7 @@
                         <database>
                             <name>org.jooq.meta.postgres.PostgresDatabase</name>
                             <includes>.*</includes>
-                            <excludes>flyway</excludes>
+                            <excludes>.*flyway.*</excludes>
                             <inputSchema>user</inputSchema>
 <!--                            <forcedTypes>-->
 <!--                                <forcedType>-->
@@ -84,7 +84,7 @@
 <!--                            </forcedTypes>-->
                         </database>
                         <target>
-                            <packageName>io.codyn.commons.sql.schema.user</packageName>
+                            <packageName>io.codyn.commons.sqldb.schema.user</packageName>
                             <directory>src/main/java</directory>
                         </target>
                     </generator>
