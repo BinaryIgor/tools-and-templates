@@ -1,5 +1,9 @@
-CREATE database "system-template-db";
+CREATE DATABASE "system-template";
 --specify different password in runtime, when deploying or whatever!
-CREATE USER "system-template-db-user" WITH PASSWORD 'system-template-db-password';
-GRANT CONNECT ON DATABASE "system-template-db" TO "system-template-db-user";
-GRANT ALL ON DATABASE "system-template-db" TO "system-template-db-user";
+CREATE USER "system-template-user" WITH PASSWORD 'system-template-password';
+GRANT CONNECT ON DATABASE "system-template" TO "system-template-user";
+GRANT ALL ON DATABASE "system-template" TO "system-template-user";
+
+--read-only user
+CREATE USER "system-template-user-reader" WITH PASSWORD 'system-template-password-reader';
+GRANT CONNECT ON DATABASE "system-template" TO "system-template-user-reader";

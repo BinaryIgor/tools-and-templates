@@ -3,5 +3,11 @@
   "current-app-url-file-path": "$PWD/../nginx-api/app_url.txt",
   "upstream-nginx-dir": "$PWD/../nginx-reverse-proxy",
   "static-path": "/home/monitor/static",
-  "files-path": "/home/monitor/system-logs"
+  "files-path": "/home/monitor/system-logs",
+  "monitor-port": "10101",
+  "db-url": "jdbc:postgresql://localhost:5678/system-template",
+  "db-host": "localhost",
+  "db-port": "5678",
+  "db-user": "system-template",
+  "db-name": "system-template"
 }
