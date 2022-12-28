@@ -27,7 +27,7 @@ public class DefaultCatalog extends CatalogImpl {
     /**
      * The schema <code>project</code>.
      */
-    public final Project PROJECT = Project.PROJECT;
+    public final Project PROJECT_SCHEMA = Project.PROJECT_SCHEMA;
 
     /**
      * No further instances allowed
@@ -39,6 +39,6 @@ public class DefaultCatalog extends CatalogImpl {
     @Override
     public final List<Schema> getSchemas() {
         return Arrays.<Schema>asList(
-            Project.PROJECT);
+            Project.PROJECT_SCHEMA);
     }
 }

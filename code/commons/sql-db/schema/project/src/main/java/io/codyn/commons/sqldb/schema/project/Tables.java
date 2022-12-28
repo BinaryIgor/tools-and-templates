@@ -18,7 +18,7 @@ public class Tables {
     /**
      * The table <code>project.project</code>.
      */
-    public static final Project PROJECT_ = Project.PROJECT_;
+    public static final Project PROJECT = Project.PROJECT;
 
     /**
      * The table <code>project.project_user</code>.

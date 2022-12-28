@@ -27,7 +27,7 @@ public class DefaultCatalog extends CatalogImpl {
     /**
      * The schema <code>user</code>.
      */
-    public final User USER = User.USER;
+    public final User USER_SCHEMA = User.USER_SCHEMA;
 
     /**
      * No further instances allowed
@@ -39,6 +39,6 @@ public class DefaultCatalog extends CatalogImpl {
     @Override
     public final List<Schema> getSchemas() {
         return Arrays.<Schema>asList(
-            User.USER);
+            User.USER_SCHEMA);
     }
 }

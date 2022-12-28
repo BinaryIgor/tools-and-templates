@@ -6,4 +6,8 @@ public record Project(UUID id,
                       UUID ownerId,
                       String name,
                       long version) {
+
+    public Project withVersion(long version) {
+        return new Project(id, ownerId, name, version);
+    }
 }

@@ -139,32 +139,32 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
 
     @Override
     public Field<UUID> field1() {
-        return User.USER_.ID;
+        return User.USER.ID;
     }
 
     @Override
     public Field<String> field2() {
-        return User.USER_.NAME;
+        return User.USER.NAME;
     }
 
     @Override
     public Field<String> field3() {
-        return User.USER_.EMAIL;
+        return User.USER.EMAIL;
     }
 
     @Override
     public Field<String> field4() {
-        return User.USER_.PASSWORD;
+        return User.USER.PASSWORD;
     }
 
     @Override
     public Field<String> field5() {
-        return User.USER_.STATE;
+        return User.USER.STATE;
     }
 
     @Override
     public Field<LocalDateTime> field6() {
-        return User.USER_.CREATED_AT;
+        return User.USER.CREATED_AT;
     }
 
     @Override
@@ -282,14 +282,14 @@ public class UserRecord extends UpdatableRecordImpl<UserRecord> implements Recor
      * Create a detached UserRecord
      */
     public UserRecord() {
-        super(User.USER_);
+        super(User.USER);
     }
 
     /**
      * Create a detached, initialised UserRecord
      */
     public UserRecord(UUID id, String name, String email, String password, String state, LocalDateTime createdAt) {
-        super(User.USER_);
+        super(User.USER);
 
         setId(id);
         setName(name);

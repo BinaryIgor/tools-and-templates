@@ -1,47 +1,46 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template._shared.app.JdbcTemplates;
 import io.codyn.app.template.project.domain.ProjectUsersRepository;
-import io.codyn.app.template.project.infra.entity.ProjectEntityRepository;
+import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+
+import static io.codyn.commons.sqldb.schema.project.Tables.PROJECT_USER;
 
 @Repository
 public class SqlProjectUsersRepository implements ProjectUsersRepository {
 
-    private final ProjectEntityRepository entityRepository;
-    private final JdbcTemplates jdbcTemplates;
+    private final DSLContext context;
 
-    public SqlProjectUsersRepository(ProjectEntityRepository entityRepository,
-                                JdbcTemplates jdbcTemplates) {
-        this.entityRepository = entityRepository;
-        this.jdbcTemplates = jdbcTemplates;
+    public SqlProjectUsersRepository(DSLContext context) {
+        this.context = context;
     }
 
     @Override
     public List<UUID> usersOfProject(UUID id) {
-        return entityRepository.findProjectUsersById(id);
+        return context.select(PROJECT_USER.USER_ID)
+                .from(PROJECT_USER)
+                .where(PROJECT_USER.PROJECT_ID.eq(id))
+                .fetch(PROJECT_USER.USER_ID);
     }
 
     @Override
     public void addUsers(UUID id, List<UUID> userIds) {
-        jdbcTemplates.template()
-                .batchUpdate("INSERT INTO project.project_user VALUES (?, ?)", userIds, 100,
-                        (stmt, uid) -> {
-                            stmt.setObject(1, id);
-                            stmt.setObject(2, uid);
-                        });
+        var insert = context.insertInto(PROJECT_USER)
+                .columns(PROJECT_USER.PROJECT_ID, PROJECT_USER.USER_ID);
+
+        userIds.forEach(uid -> insert.values(id, uid));
+
+        insert.execute();
     }
 
     @Override
     public void removeUsers(UUID id, List<UUID> userIds) {
-        jdbcTemplates.namedTemplate()
-                .update("""
-                        DELETE FROM project.project_user
-                        WHERE project_id = :projectId AND user_id IN (:userIds)
-                        """, Map.of("projectId", id, "userIds", userIds));
+        context.deleteFrom(PROJECT_USER)
+                .where(PROJECT_USER.PROJECT_ID.eq(id)
+                        .and(PROJECT_USER.USER_ID.in(userIds)))
+                .execute();
     }
 }

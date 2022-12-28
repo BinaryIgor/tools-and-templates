@@ -3,17 +3,19 @@ package io.codyn.app.template.user;
 import io.codyn.app.template.test.Tests;
 import io.codyn.app.template.user.api.CurrentUser;
 import io.codyn.app.template.user.api.UserClient;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.jooq.DSLContext;
 
 import java.util.UUID;
 
+import static io.codyn.commons.sqldb.schema.user.Tables.USER;
+
 public class TestUserClient implements UserClient {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final DSLContext context;
     private CurrentUser currentUser;
 
-    public TestUserClient(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public TestUserClient(DSLContext context) {
+        this.context = context;
     }
 
     public void setCurrentUser(CurrentUser currentUser) {
@@ -45,10 +47,12 @@ public class TestUserClient implements UserClient {
     }
 
     public UUID createUser(NewUser user) {
-        jdbcTemplate.update("""
-                INSERT INTO "user".user (id, name, email, password)
-                VALUES (?, ?, ?, ?)
-                """, user.id, user.name, user.email, user.password);
+        context.newRecord(USER)
+                .setId(user.id)
+                .setName(user.name)
+                .setEmail(user.email)
+                .setPassword(user.password)
+                .insert();
 
         return user.id;
     }

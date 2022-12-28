@@ -38,7 +38,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The reference instance of <code>user.user</code>
      */
-    public static final User USER_ = new User();
+    public static final User USER = new User();
 
     /**
      * The class holding records for this type
@@ -90,14 +90,14 @@ public class User extends TableImpl<UserRecord> {
      * Create an aliased <code>user.user</code> table reference
      */
     public User(String alias) {
-        this(DSL.name(alias), USER_);
+        this(DSL.name(alias), USER);
     }
 
     /**
      * Create an aliased <code>user.user</code> table reference
      */
     public User(Name alias) {
-        this(alias, USER_);
+        this(alias, USER);
     }
 
     /**
@@ -108,12 +108,12 @@ public class User extends TableImpl<UserRecord> {
     }
 
     public <O extends Record> User(Table<O> child, ForeignKey<O, UserRecord> key) {
-        super(child, key, USER_);
+        super(child, key, USER);
     }
 
     @Override
     public Schema getSchema() {
-        return io.codyn.commons.sqldb.schema.user.User.USER;
+        return io.codyn.commons.sqldb.schema.user.User.USER_SCHEMA;
     }
 
     @Override

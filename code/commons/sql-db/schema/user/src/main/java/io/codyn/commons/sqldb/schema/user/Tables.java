@@ -22,5 +22,5 @@ public class Tables {
     /**
      * The table <code>user.user</code>.
      */
-    public static final User USER_ = User.USER_;
+    public static final User USER = User.USER;
 }

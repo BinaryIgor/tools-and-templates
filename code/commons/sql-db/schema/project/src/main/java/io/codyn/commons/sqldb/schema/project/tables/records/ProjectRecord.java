@@ -108,22 +108,22 @@ public class ProjectRecord extends UpdatableRecordImpl<ProjectRecord> implements
 
     @Override
     public Field<UUID> field1() {
-        return Project.PROJECT_.ID;
+        return Project.PROJECT.ID;
     }
 
     @Override
     public Field<UUID> field2() {
-        return Project.PROJECT_.OWNER_ID;
+        return Project.PROJECT.OWNER_ID;
     }
 
     @Override
     public Field<String> field3() {
-        return Project.PROJECT_.NAME;
+        return Project.PROJECT.NAME;
     }
 
     @Override
     public Field<Long> field4() {
-        return Project.PROJECT_.VERSION;
+        return Project.PROJECT.VERSION;
     }
 
     @Override
@@ -207,14 +207,14 @@ public class ProjectRecord extends UpdatableRecordImpl<ProjectRecord> implements
      * Create a detached ProjectRecord
      */
     public ProjectRecord() {
-        super(Project.PROJECT_);
+        super(Project.PROJECT);
     }
 
     /**
      * Create a detached, initialised ProjectRecord
      */
     public ProjectRecord(UUID id, UUID ownerId, String name, Long version) {
-        super(Project.PROJECT_);
+        super(Project.PROJECT);
 
         setId(id);
         setOwnerId(ownerId);

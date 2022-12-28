@@ -27,12 +27,12 @@ public class Project extends SchemaImpl {
     /**
      * The reference instance of <code>project</code>
      */
-    public static final Project PROJECT = new Project();
+    public static final Project PROJECT_SCHEMA = new Project();
 
     /**
      * The table <code>project.project</code>.
      */
-    public final io.codyn.commons.sqldb.schema.project.tables.Project PROJECT_ = io.codyn.commons.sqldb.schema.project.tables.Project.PROJECT_;
+    public final io.codyn.commons.sqldb.schema.project.tables.Project PROJECT = io.codyn.commons.sqldb.schema.project.tables.Project.PROJECT;
 
     /**
      * The table <code>project.project_user</code>.
@@ -67,7 +67,7 @@ public class Project extends SchemaImpl {
     @Override
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
-            io.codyn.commons.sqldb.schema.project.tables.Project.PROJECT_,
+            io.codyn.commons.sqldb.schema.project.tables.Project.PROJECT,
             ProjectUser.PROJECT_USER,
             Task.TASK);
     }

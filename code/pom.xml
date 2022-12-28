@@ -30,6 +30,7 @@
         <testcontainers.version>1.17.6</testcontainers.version>
 
         <postresql.driver.version>42.5.1</postresql.driver.version>
+        <hikari.version>3.4.2</hikari.version>
         <jooq.version>3.14.7</jooq.version>
     </properties>
 
@@ -47,6 +48,11 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postresql.driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zaxxer</groupId>
+                <artifactId>HikariCP</artifactId>
+                <version>${hikari.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jooq</groupId>

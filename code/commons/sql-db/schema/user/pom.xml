@@ -83,6 +83,19 @@
 <!--                                </forcedType>-->
 <!--                            </forcedTypes>-->
                         </database>
+                        <strategy>
+                            <matchers>
+                                <schemas>
+                                    <schema>
+                                        <expression>USER</expression>
+                                        <schemaIdentifier>
+                                            <transform>AS_IS</transform>
+                                            <expression>USER_SCHEMA</expression>
+                                        </schemaIdentifier>
+                                    </schema>
+                                </schemas>
+                            </matchers>
+                        </strategy>
                         <target>
                             <packageName>io.codyn.commons.sqldb.schema.user</packageName>
                             <directory>src/main/java</directory>

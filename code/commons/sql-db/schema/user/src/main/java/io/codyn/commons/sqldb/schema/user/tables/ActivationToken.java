@@ -106,7 +106,7 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
 
     @Override
     public Schema getSchema() {
-        return User.USER;
+        return User.USER_SCHEMA;
     }
 
     @Override

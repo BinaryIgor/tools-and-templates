@@ -119,7 +119,7 @@ public class Task extends TableImpl<TaskRecord> {
 
     @Override
     public Schema getSchema() {
-        return Project.PROJECT;
+        return Project.PROJECT_SCHEMA;
     }
 
     @Override

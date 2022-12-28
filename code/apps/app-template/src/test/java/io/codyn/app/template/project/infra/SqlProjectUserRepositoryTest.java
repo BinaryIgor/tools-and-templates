@@ -1,24 +1,27 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template.SpringIntegrationTest;
+import io.codyn.app.template.DbIntegrationTest;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.test.TestProjectObjects;
 import io.codyn.app.template.user.TestUserClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.UUID;
 
-public class SqlProjectUserRepositoryTest extends SpringIntegrationTest {
+public class SqlProjectUserRepositoryTest extends DbIntegrationTest {
 
-    @Autowired
     private SqlProjectUsersRepository repository;
-    @Autowired
     private SqlProjectRepository projectRepository;
-    @Autowired
     private TestUserClient userClient;
+
+    @Override
+    protected void setup() {
+        repository = new SqlProjectUsersRepository(context);
+        projectRepository = new SqlProjectRepository(context);
+        userClient = new TestUserClient(context);
+    }
 
     @Test
     void shouldModifyAndReturnUsersOfProject() {

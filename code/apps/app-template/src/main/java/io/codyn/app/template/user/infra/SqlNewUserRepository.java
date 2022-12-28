@@ -1,28 +1,31 @@
 package io.codyn.app.template.user.infra;
 
 import io.codyn.app.template.user.domain.model.NewUser;
-import io.codyn.app.template.user.domain.model.UserState;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
-import io.codyn.app.template.user.infra.entity.UserEntity;
-import org.springframework.data.jdbc.core.JdbcAggregateTemplate;
+import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+import static io.codyn.commons.sqldb.schema.user.tables.User.USER;
+
 @Repository
 public class SqlNewUserRepository implements NewUserRepository {
 
-    private final JdbcAggregateTemplate aggregateTemplate;
+    private final DSLContext context;
 
-    public SqlNewUserRepository(JdbcAggregateTemplate aggregateTemplate) {
-        this.aggregateTemplate = aggregateTemplate;
+    public SqlNewUserRepository(DSLContext context) {
+        this.context = context;
     }
 
     @Override
     public UUID create(NewUser user) {
-        var entity = new UserEntity(UUID.randomUUID(),
-                user.name(), user.email(), user.password(),
-                UserState.CREATED.name());
-        return aggregateTemplate.insert(entity).id();
+        var newId = UUID.randomUUID();
+
+        UserRecordsMapper.setFromNewUser(context.newRecord(USER), user)
+                .setId(newId)
+                .insert();
+
+        return newId;
     }
 }

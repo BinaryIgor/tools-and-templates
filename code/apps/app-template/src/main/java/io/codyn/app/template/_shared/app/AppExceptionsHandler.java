@@ -1,7 +1,6 @@
 package io.codyn.app.template._shared.app;
 
 import io.codyn.app.template._shared.domain.exception.*;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -35,9 +34,9 @@ public class AppExceptionsHandler {
                 .body(new AppErrorResponse(exception));
     }
 
-    @ExceptionHandler(OptimisticLockingFailureException.class)
-    public ResponseEntity<AppErrorResponse> handleException(OptimisticLockingFailureException exception) {
+    @ExceptionHandler(AppOptimisticLockException.class)
+    public ResponseEntity<AppErrorResponse> handleException(AppOptimisticLockException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new AppErrorResponse(new AppOptimisticLockException()));
+                .body(new AppErrorResponse(exception));
     }
 }

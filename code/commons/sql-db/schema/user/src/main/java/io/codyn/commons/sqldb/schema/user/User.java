@@ -25,7 +25,7 @@ public class User extends SchemaImpl {
     /**
      * The reference instance of <code>user</code>
      */
-    public static final User USER = new User();
+    public static final User USER_SCHEMA = new User();
 
     /**
      * The table <code>user.activation_token</code>.
@@ -35,7 +35,7 @@ public class User extends SchemaImpl {
     /**
      * The table <code>user.user</code>.
      */
-    public final io.codyn.commons.sqldb.schema.user.tables.User USER_ = io.codyn.commons.sqldb.schema.user.tables.User.USER_;
+    public final io.codyn.commons.sqldb.schema.user.tables.User USER = io.codyn.commons.sqldb.schema.user.tables.User.USER;
 
     /**
      * No further instances allowed
@@ -54,6 +54,6 @@ public class User extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             ActivationToken.ACTIVATION_TOKEN,
-            io.codyn.commons.sqldb.schema.user.tables.User.USER_);
+            io.codyn.commons.sqldb.schema.user.tables.User.USER);
     }
 }

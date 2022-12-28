@@ -32,6 +32,19 @@
                             <excludes>.*flyway.*</excludes>
                             <inputSchema>project</inputSchema>
                         </database>
+                        <strategy>
+                            <matchers>
+                                <schemas>
+                                    <schema>
+                                        <expression>PROJECT</expression>
+                                        <schemaIdentifier>
+                                            <transform>AS_IS</transform>
+                                            <expression>PROJECT_SCHEMA</expression>
+                                        </schemaIdentifier>
+                                    </schema>
+                                </schemas>
+                            </matchers>
+                        </strategy>
                         <target>
                             <packageName>io.codyn.commons.sqldb.schema.project</packageName>
                             <directory>src/main/java</directory>

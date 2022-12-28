@@ -18,10 +18,10 @@ public class Sequences {
     /**
      * The sequence <code>project.project_version_seq</code>
      */
-    public static final Sequence<Long> PROJECT_VERSION_SEQ = Internal.createSequence("project_version_seq", Project.PROJECT, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
+    public static final Sequence<Long> PROJECT_VERSION_SEQ = Internal.createSequence("project_version_seq", Project.PROJECT_SCHEMA, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 
     /**
      * The sequence <code>project.task_version_seq</code>
      */
-    public static final Sequence<Long> TASK_VERSION_SEQ = Internal.createSequence("task_version_seq", Project.PROJECT, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
+    public static final Sequence<Long> TASK_VERSION_SEQ = Internal.createSequence("task_version_seq", Project.PROJECT_SCHEMA, SQLDataType.BIGINT.nullable(false), null, null, null, null, false, null);
 }

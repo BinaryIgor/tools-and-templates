@@ -93,7 +93,7 @@ public class ProjectUser extends TableImpl<ProjectUserRecord> {
 
     @Override
     public Schema getSchema() {
-        return Project.PROJECT;
+        return Project.PROJECT_SCHEMA;
     }
 
     @Override

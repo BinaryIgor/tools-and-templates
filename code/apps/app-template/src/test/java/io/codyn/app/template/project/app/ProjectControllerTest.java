@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +27,8 @@ public class ProjectControllerTest extends SpringIntegrationTest {
     private TestHttp testHttp;
     @Autowired
     private ProjectRepository projectRepository;
-    private ProjectUsersRepository projectUsersRepository;
     @Autowired
     private NewUserRepository newUserRepository;
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
     @Autowired
     private TestUserClient userClient;
 

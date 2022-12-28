@@ -7,7 +7,6 @@ import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class NewUserService {
@@ -27,7 +26,8 @@ public class NewUserService {
         this.eventPublisher = eventPublisher;
     }
 
-    @Transactional
+   // @Transactional
+    //TODO: transactions!
     public void create(NewUser user) {
         validateUser(user);
 

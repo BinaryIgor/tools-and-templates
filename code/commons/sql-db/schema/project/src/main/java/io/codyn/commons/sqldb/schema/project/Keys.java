@@ -29,8 +29,8 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<ProjectRecord> PROJECT_NAME_KEY = Internal.createUniqueKey(Project.PROJECT_, DSL.name("project_name_key"), new TableField[] { Project.PROJECT_.NAME }, true);
-    public static final UniqueKey<ProjectRecord> PROJECT_PKEY = Internal.createUniqueKey(Project.PROJECT_, DSL.name("project_pkey"), new TableField[] { Project.PROJECT_.ID }, true);
+    public static final UniqueKey<ProjectRecord> PROJECT_NAME_KEY = Internal.createUniqueKey(Project.PROJECT, DSL.name("project_name_key"), new TableField[] { Project.PROJECT.NAME }, true);
+    public static final UniqueKey<ProjectRecord> PROJECT_PKEY = Internal.createUniqueKey(Project.PROJECT, DSL.name("project_pkey"), new TableField[] { Project.PROJECT.ID }, true);
     public static final UniqueKey<ProjectUserRecord> PROJECT_USER_PKEY = Internal.createUniqueKey(ProjectUser.PROJECT_USER, DSL.name("project_user_pkey"), new TableField[] { ProjectUser.PROJECT_USER.PROJECT_ID, ProjectUser.PROJECT_USER.USER_ID }, true);
     public static final UniqueKey<TaskRecord> TASK_NAME_KEY = Internal.createUniqueKey(Task.TASK, DSL.name("task_name_key"), new TableField[] { Task.TASK.NAME }, true);
     public static final UniqueKey<TaskRecord> TASK_PKEY = Internal.createUniqueKey(Task.TASK, DSL.name("task_pkey"), new TableField[] { Task.TASK.ID }, true);
@@ -39,6 +39,6 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<ProjectUserRecord, ProjectRecord> PROJECT_USER__PROJECT_USER_PROJECT_ID_FKEY = Internal.createForeignKey(ProjectUser.PROJECT_USER, DSL.name("project_user_project_id_fkey"), new TableField[] { ProjectUser.PROJECT_USER.PROJECT_ID }, Keys.PROJECT_PKEY, new TableField[] { Project.PROJECT_.ID }, true);
-    public static final ForeignKey<TaskRecord, ProjectRecord> TASK__TASK_PROJECT_ID_FKEY = Internal.createForeignKey(Task.TASK, DSL.name("task_project_id_fkey"), new TableField[] { Task.TASK.PROJECT_ID }, Keys.PROJECT_PKEY, new TableField[] { Project.PROJECT_.ID }, true);
+    public static final ForeignKey<ProjectUserRecord, ProjectRecord> PROJECT_USER__PROJECT_USER_PROJECT_ID_FKEY = Internal.createForeignKey(ProjectUser.PROJECT_USER, DSL.name("project_user_project_id_fkey"), new TableField[] { ProjectUser.PROJECT_USER.PROJECT_ID }, Keys.PROJECT_PKEY, new TableField[] { Project.PROJECT.ID }, true);
+    public static final ForeignKey<TaskRecord, ProjectRecord> TASK__TASK_PROJECT_ID_FKEY = Internal.createForeignKey(Task.TASK, DSL.name("task_project_id_fkey"), new TableField[] { Task.TASK.PROJECT_ID }, Keys.PROJECT_PKEY, new TableField[] { Project.PROJECT.ID }, true);
 }

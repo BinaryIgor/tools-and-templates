@@ -38,7 +38,7 @@ public class Project extends TableImpl<ProjectRecord> {
     /**
      * The reference instance of <code>project.project</code>
      */
-    public static final Project PROJECT_ = new Project();
+    public static final Project PROJECT = new Project();
 
     /**
      * The class holding records for this type
@@ -80,14 +80,14 @@ public class Project extends TableImpl<ProjectRecord> {
      * Create an aliased <code>project.project</code> table reference
      */
     public Project(String alias) {
-        this(DSL.name(alias), PROJECT_);
+        this(DSL.name(alias), PROJECT);
     }
 
     /**
      * Create an aliased <code>project.project</code> table reference
      */
     public Project(Name alias) {
-        this(alias, PROJECT_);
+        this(alias, PROJECT);
     }
 
     /**
@@ -98,12 +98,12 @@ public class Project extends TableImpl<ProjectRecord> {
     }
 
     public <O extends Record> Project(Table<O> child, ForeignKey<O, ProjectRecord> key) {
-        super(child, key, PROJECT_);
+        super(child, key, PROJECT);
     }
 
     @Override
     public Schema getSchema() {
-        return io.codyn.commons.sqldb.schema.project.Project.PROJECT;
+        return io.codyn.commons.sqldb.schema.project.Project.PROJECT_SCHEMA;
     }
 
     @Override

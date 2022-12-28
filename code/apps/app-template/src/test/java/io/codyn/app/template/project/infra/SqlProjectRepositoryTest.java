@@ -1,32 +1,35 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template.SpringIntegrationTest;
+import io.codyn.app.template.DbIntegrationTest;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.test.TestProjectObjects;
 import io.codyn.app.template.user.TestUserClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class SqlProjectRepositoryTest extends SpringIntegrationTest {
+public class SqlProjectRepositoryTest extends DbIntegrationTest {
 
-    @Autowired
-    private SqlProjectRepository projectRepository;
-    @Autowired
+    private SqlProjectRepository repository;
     private TestUserClient userClient;
+
+    @Override
+    protected void setup() {
+        repository = new SqlProjectRepository(context);
+        userClient = new TestUserClient(context);
+    }
 
     @Test
     void shouldFindOwnerById() {
         var firstProject = prepareNewProject();
         var secondProject = prepareNewProject();
 
-        projectRepository.save(firstProject);
-        projectRepository.save(secondProject);
+        repository.save(firstProject);
+        repository.save(secondProject);
 
-        Assertions.assertThat(projectRepository.findOwnerById(firstProject.id()).orElseThrow())
+        Assertions.assertThat(repository.findOwnerById(firstProject.id()).orElseThrow())
                 .isEqualTo(firstProject.ownerId());
 
-        Assertions.assertThat(projectRepository.findOwnerById(secondProject.id()).orElseThrow())
+        Assertions.assertThat(repository.findOwnerById(secondProject.id()).orElseThrow())
                 .isEqualTo(secondProject.ownerId());
     }
 
@@ -35,14 +38,14 @@ public class SqlProjectRepositoryTest extends SpringIntegrationTest {
         var firstProject = prepareNewProject();
         var secondProject = prepareNewProject();
 
-        projectRepository.save(firstProject);
-        projectRepository.save(secondProject);
+        repository.save(firstProject);
+        repository.save(secondProject);
 
-        projectRepository.delete(firstProject.id());
+        repository.delete(firstProject.id());
 
-        Assertions.assertThat(projectRepository.findById(firstProject.id())).isEmpty();
+        Assertions.assertThat(repository.findById(firstProject.id())).isEmpty();
 
-        Assertions.assertThat(projectRepository.findById(secondProject.id())).isNotEmpty();
+        Assertions.assertThat(repository.findById(secondProject.id())).isNotEmpty();
     }
 
     private Project prepareNewProject() {
