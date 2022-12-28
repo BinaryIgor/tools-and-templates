@@ -63,7 +63,7 @@ def grant_read_privileges(cursor, user, db, schemas=None):
         """)
         schemas = [r[0] for r in cursor.fetchall()]
 
-    cursor.execute(f"GRANT CONNECT ON DATABASE {db} to {user}")
+    cursor.execute(f'GRANT CONNECT ON DATABASE "{db}" to "{user}"')
 
     for s in schemas:
         log.info(f"Granting read privileges to {user} on schema {s}")
