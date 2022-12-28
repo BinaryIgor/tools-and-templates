@@ -1,42 +1,42 @@
 [
   {
     "name": "prometheus",
-    "dir": "prometheus"
+    "dir": "tools/prometheus"
   },
   {
     "name": "prometheus-alertmanager",
-    "dir": "prometheus/alertmanager"
+    "dir": "tools/prometheus/alertmanager"
   },
   {
     "name": "node-exporter",
-    "dir": "prometheus/exporters/node-exporter"
+    "dir": "tools/prometheus/exporters/node-exporter"
   },
   {
     "name": "fluentd",
-    "dir": "fluentd"
+    "dir": "tools/fluentd"
   },
   {
     "name": "system-monitor",
-    "dir": "system-monitor"
+    "dir": "code/apps/system-monitor"
   },
   {
     "name": "docker-metrics-collector",
-    "dir": "docker-metrics-collector"
+    "dir": "code/tools/docker-metrics-collector"
   },
   {
     "name": "test-app",
-    "dir": "test-app"
+    "dir": "code/tools/test-app"
   },
   {
     "name": "nginx-reverse-proxy",
-    "dir": "nginx/reverse-proxy"
+    "dir": "tools/nginx/reverse-proxy"
   },
   {
     "name": "nginx-api",
-    "dir": "nginx/api"
+    "dir": "tools/nginx/api"
   },
    {
     "name": "nginx-files-browser",
-    "dir": "nginx/files-browser"
+    "dir": "tools/nginx/files-browser"
   }
 ]
