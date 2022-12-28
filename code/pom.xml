@@ -30,6 +30,7 @@
         <testcontainers.version>1.17.6</testcontainers.version>
 
         <postresql.driver.version>42.5.1</postresql.driver.version>
+        <jooq.version>3.14.7</jooq.version>
     </properties>
 
     <dependencyManagement>
@@ -46,6 +47,16 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postresql.driver.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-meta</artifactId>
+                <version>${jooq.version}</version>
             </dependency>
 
             <dependency>
