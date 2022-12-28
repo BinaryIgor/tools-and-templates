@@ -7,7 +7,8 @@
   "monitor-port": "10101",
   "db-url": "jdbc:postgresql://localhost:5678/system-template",
   "db-host": "localhost",
-  "db-port": "5678",
+  "db-port": "5555",
+  "db-local-port": "5678",
   "db-user": "system-template",
   "db-name": "system-template"
 }

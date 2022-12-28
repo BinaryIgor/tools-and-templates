@@ -1,0 +1,15 @@
+{
+  "volumes": [
+    "${ADB_DATA_PATH}:/var/lib/postgresql/data"
+  ],
+  "ports": [
+    "5678:5432"
+  ],
+  "env": {},
+  "secrets": {},
+  "memory": "500M",
+  "cpus": "0.5",
+  "run_args": [
+    "-c 'config_file=/etc/postgresql/postgresql.conf'"
+  ]
+}
