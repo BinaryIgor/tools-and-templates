@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>sql</module>
+        <module>sql-db</module>
     </modules>
 
 </project>

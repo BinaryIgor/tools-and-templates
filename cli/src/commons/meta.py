@@ -141,8 +141,16 @@ def root_dir():
     return root
 
 
+def root_code_dir():
+    return path.join(root_dir(), "code")
+
+
 def config_dir():
     return path.join(root_cli_dir(), "config")
+
+
+def db_schemas_dir():
+    return path.join(root_dir(), "db", "schemas")
 
 
 def cli_target_dir():
