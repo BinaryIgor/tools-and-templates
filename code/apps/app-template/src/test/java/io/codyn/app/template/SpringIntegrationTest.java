@@ -1,6 +1,5 @@
 package io.codyn.app.template;
 
-import io.codyn.app.template.test.CustomPostgreSQLContainer;
 import io.codyn.app.template.test.TestHttp;
 import io.codyn.app.template.user.TestUserClient;
 import org.jooq.DSLContext;
@@ -12,6 +11,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
+import io.codyn.commons.sqldb.test.CustomPostgreSQLContainer;
 
 @Tag("integration")
 @ActiveProfiles("integration")

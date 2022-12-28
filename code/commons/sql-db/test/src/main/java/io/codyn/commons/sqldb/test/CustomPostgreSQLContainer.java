@@ -1,4 +1,4 @@
-package io.codyn.app.template.test;
+package io.codyn.commons.sqldb.test;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 

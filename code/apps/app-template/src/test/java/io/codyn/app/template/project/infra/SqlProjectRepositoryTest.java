@@ -1,9 +1,9 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template.DbIntegrationTest;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.test.TestProjectObjects;
 import io.codyn.app.template.user.TestUserClient;
+import io.codyn.commons.sqldb.test.DbIntegrationTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -1,6 +1,5 @@
-package io.codyn.app.template;
+package io.codyn.commons.sqldb.test;
 
-import io.codyn.app.template.test.CustomPostgreSQLContainer;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
@@ -22,6 +21,7 @@ public abstract class DbIntegrationTest {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
+    protected final TestTransactionListener transactionListener = new TestTransactionListener();
     protected DSLContext context;
 
     @BeforeEach
@@ -38,7 +38,8 @@ public abstract class DbIntegrationTest {
 
             return DSL.using(new DefaultConfiguration()
                     .set(connection)
-                    .set(SQLDialect.POSTGRES));
+                    .set(SQLDialect.POSTGRES)
+                    .set(transactionListener));
         } catch (Exception e) {
             throw new RuntimeException("Can't connect!", e);
         }

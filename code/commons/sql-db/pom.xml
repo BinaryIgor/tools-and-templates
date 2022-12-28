@@ -15,6 +15,7 @@
     <modules>
         <module>schema</module>
         <module>core</module>
+        <module>test</module>
     </modules>
 
 </project>
