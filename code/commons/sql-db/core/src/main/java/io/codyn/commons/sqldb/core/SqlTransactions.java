@@ -1,6 +1,6 @@
 package io.codyn.commons.sqldb.core;
 
-import io.codyn.commons.tools.Transactions;
+import io.codyn.commons.types.Transactions;
 
 import java.util.function.Supplier;
 

@@ -1,4 +1,4 @@
-package io.codyn.commons.tools;
+package io.codyn.commons.types;
 
 import java.util.function.Supplier;
 
