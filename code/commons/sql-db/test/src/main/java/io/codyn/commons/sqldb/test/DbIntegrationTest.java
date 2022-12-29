@@ -39,4 +39,8 @@ public abstract class DbIntegrationTest {
     protected void tearDown() {
         POSTGRES.clearDb();
     }
+
+    protected TestDbTransaction transactionTest() {
+        return new TestDbTransaction(transactionListener);
+    }
 }

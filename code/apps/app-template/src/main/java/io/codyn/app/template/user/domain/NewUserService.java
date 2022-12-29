@@ -30,8 +30,6 @@ public class NewUserService {
         this.eventPublisher = eventPublisher;
     }
 
-    // @Transactional
-    //TODO: transactions!
     public void create(NewUser user) {
         validateUser(user);
 

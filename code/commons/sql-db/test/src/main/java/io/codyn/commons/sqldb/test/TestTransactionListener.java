@@ -1,18 +1,24 @@
 package io.codyn.commons.sqldb.test;
 
-
 import org.jooq.TransactionContext;
 import org.jooq.TransactionListener;
 
-//TODO: use and test it!
 public class TestTransactionListener implements TransactionListener {
 
 
-    private Runnable after = () -> {
+    private Runnable afterCommit = () -> {
     };
 
-    public TestTransactionListener after(Runnable after) {
-        this.after = after;
+    private Runnable afterRollback = () -> {
+    };
+
+    public TestTransactionListener afterCommit(Runnable after) {
+        afterCommit = after;
+        return this;
+    }
+
+    public TestTransactionListener afterRollback(Runnable after) {
+        afterRollback = after;
         return this;
     }
 
@@ -32,7 +38,7 @@ public class TestTransactionListener implements TransactionListener {
 
     @Override
     public void commitEnd(TransactionContext ctx) {
-        after.run();
+        afterCommit.run();
     }
 
     @Override
@@ -42,6 +48,6 @@ public class TestTransactionListener implements TransactionListener {
 
     @Override
     public void rollbackEnd(TransactionContext ctx) {
-
+        afterRollback.run();
     }
 }
