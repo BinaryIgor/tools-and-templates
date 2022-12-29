@@ -38,6 +38,12 @@
             <artifactId>commons-types</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.codyn</groupId>
+            <artifactId>commons-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.zaxxer</groupId>

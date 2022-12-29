@@ -36,7 +36,7 @@ public class ProjectServiceTest {
     @MethodSource("invalidProjectCases")
     void shouldValidateProjectWhileSaving(Project project) {
         Assertions.assertThatThrownBy(() -> service.save(project))
-                .isEqualTo(new AppValidationException("%s is not a valid name".formatted(project.name())));
+                .isEqualTo(AppValidationException.ofField("name", project.name()));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package io.codyn.app.template.test;
 
 import java.security.SecureRandom;
+import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,6 +18,11 @@ public class Tests {
     public static <T> T randomElement(T[] elements) {
         var idx = randomInt(0, elements.length);
         return elements[idx];
+    }
+
+    public static <T> T randomElement(List<T> elements) {
+        var idx = randomInt(0, elements.size());
+        return elements.get(idx);
     }
 
     public static String randomString(int from, int to) {

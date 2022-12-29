@@ -8,9 +8,9 @@ public class FieldValidator {
 
     public static final int MIN_NAME_LENGTH = 2;
     public static final int MAX_NAME_LENGTH = 30;
-    private static final int MAX_EMAIL_LENGTH = 150;
-    private static final int MIN_PASSWORD_LENGTH = 8;
-    private static final int MAX_PASSWORD_LENGTH = 50;
+    public static final int MAX_EMAIL_LENGTH = 150;
+    public static final int MIN_PASSWORD_LENGTH = 8;
+    public static final int MAX_PASSWORD_LENGTH = 50;
     private static final Pattern HTML_CHARACTERS_REGEX = Pattern.compile("(?s)(.*)<(.+)>(?s)(.*)");
 
     public static boolean isEmailValid(String email) {
@@ -49,7 +49,7 @@ public class FieldValidator {
 
     public static void validateEmail(String email) {
         if (!isEmailValid(email)) {
-            throw new AppValidationException("%s is not a valid email".formatted(email));
+            throw AppValidationException.ofField("email", email);
         }
     }
 
@@ -66,7 +66,7 @@ public class FieldValidator {
 
     public static void validateName(String name) {
         if (!isNameValid(name)) {
-            throw new AppValidationException("%s is not a valid name".formatted(name));
+            throw AppValidationException.ofField("name", name);
         }
     }
 
@@ -109,7 +109,7 @@ public class FieldValidator {
 
     public static void validatePassword(String password) {
         if (!isPasswordValid(password)) {
-            throw new AppValidationException("%s is not a valid password".formatted(password));
+            throw AppValidationException.ofField("password", password);
         }
     }
 

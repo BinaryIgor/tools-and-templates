@@ -30,6 +30,7 @@ public class NewUserService {
         this.eventPublisher = eventPublisher;
     }
 
+    //TODO: is email reachable?
     public void create(NewUser user) {
         validateUser(user);
 
@@ -41,7 +42,6 @@ public class NewUserService {
 
         transactions.execute(() -> {
             var userId = newUserRepository.create(hashedUser);
-            //Or maybe just user created handler?
             eventPublisher.publish(new UserCreatedEvent(userId, user.name(), user.email()));
         });
     }
