@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.app;
 
-import io.codyn.app.template._shared.domain.event.EventPublisher;
+import io.codyn.commons.types.EventPublisher;
 import org.springframework.context.ApplicationEventPublisher;
 
 public class SpringEventPublisher implements EventPublisher {

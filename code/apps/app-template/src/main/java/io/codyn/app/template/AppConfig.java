@@ -1,10 +1,10 @@
 package io.codyn.app.template;
 
 import io.codyn.app.template._shared.app.SpringEventPublisher;
-import io.codyn.app.template._shared.domain.event.EventPublisher;
 import io.codyn.commons.sqldb.core.DSLContextFactory;
 import io.codyn.commons.sqldb.core.DSLContextProvider;
 import io.codyn.commons.sqldb.core.SqlTransactions;
+import io.codyn.commons.types.EventPublisher;
 import io.codyn.commons.types.Transactions;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Value;
