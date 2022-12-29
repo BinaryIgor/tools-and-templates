@@ -13,6 +13,12 @@
 
    <dependencies>
        <dependency>
+           <groupId>io.codyn</groupId>
+           <artifactId>commons-sql-db-core</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+
+       <dependency>
            <groupId>org.jooq</groupId>
            <artifactId>jooq</artifactId>
        </dependency>

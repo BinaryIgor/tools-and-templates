@@ -85,7 +85,6 @@ public class CustomPostgreSQLContainer extends PostgreSQLContainer<CustomPostgre
         Files.list(Path.of(schemasPath, schema))
                 .forEach(m -> {
                     try {
-                        System.out.println("Applying migration..." + m);
                         var migration = Files.readString(m);
 
                         var toExecuteMigration = """
@@ -94,8 +93,6 @@ public class CustomPostgreSQLContainer extends PostgreSQLContainer<CustomPostgre
                                 %s
                                 SET SEARCH_PATH=public;
                                 """.formatted(schema, schema, migration);
-
-                        System.out.println(toExecuteMigration);
 
                         connection.prepareStatement(toExecuteMigration).execute();
                     } catch (Exception e) {

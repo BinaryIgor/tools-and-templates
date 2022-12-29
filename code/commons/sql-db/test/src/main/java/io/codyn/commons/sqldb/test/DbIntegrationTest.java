@@ -1,14 +1,12 @@
 package io.codyn.commons.sqldb.test;
 
+import io.codyn.commons.sqldb.core.DSLContextFactory;
+import io.codyn.commons.sqldb.core.DSLContextProvider;
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 
-import java.sql.DriverManager;
 import java.util.TimeZone;
 
 @Tag("integration")
@@ -23,26 +21,14 @@ public abstract class DbIntegrationTest {
 
     protected final TestTransactionListener transactionListener = new TestTransactionListener();
     protected DSLContext context;
+    protected DSLContextProvider contextProvider;
 
     @BeforeEach
     void setupContext() {
-        context = dbContext();
+        context = DSLContextFactory.newContext(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword(),
+                transactionListener);
+        contextProvider = new DSLContextProvider(context);
         setup();
-    }
-
-    private DSLContext dbContext() {
-        try {
-            var connection = DriverManager.getConnection(POSTGRES.getJdbcUrl(),
-                    POSTGRES.getUsername(),
-                    POSTGRES.getPassword());
-
-            return DSL.using(new DefaultConfiguration()
-                    .set(connection)
-                    .set(SQLDialect.POSTGRES)
-                    .set(transactionListener));
-        } catch (Exception e) {
-            throw new RuntimeException("Can't connect!", e);
-        }
     }
 
     protected void setup() {

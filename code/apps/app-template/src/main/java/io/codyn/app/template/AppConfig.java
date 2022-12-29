@@ -1,15 +1,12 @@
 package io.codyn.app.template;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
 import io.codyn.app.template._shared.domain.event.EventPublisher;
+import io.codyn.commons.sqldb.core.DSLContextFactory;
+import io.codyn.commons.sqldb.core.DSLContextProvider;
 import io.codyn.commons.sqldb.core.SqlTransactions;
 import io.codyn.commons.tools.Transactions;
 import org.jooq.DSLContext;
-import org.jooq.SQLDialect;
-import org.jooq.impl.DSL;
-import org.jooq.impl.DefaultConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
@@ -27,18 +24,16 @@ public class AppConfig {
     public DSLContext dslContext(@Value("${spring.datasource.url}") String jdbcUrl,
                                  @Value("${spring.datasource.username}") String username,
                                  @Value("${spring.datasource.password}") String password) {
-        var config = new HikariConfig();
-        config.setJdbcUrl(jdbcUrl);
-        config.setUsername(username);
-        config.setPassword(password);
-
-        return DSL.using(new DefaultConfiguration()
-                .set(new HikariDataSource(config))
-                .set(SQLDialect.POSTGRES));
+        return DSLContextFactory.newContext(jdbcUrl, username, password);
     }
 
     @Bean
-    public Transactions transactions(DSLContext context) {
-        return new SqlTransactions(context);
+    public DSLContextProvider dslContextProvider(DSLContext context) {
+        return new DSLContextProvider(context);
+    }
+
+    @Bean
+    public Transactions transactions(DSLContextProvider contextProvider) {
+        return new SqlTransactions(contextProvider);
     }
 }
