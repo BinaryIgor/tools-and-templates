@@ -21,6 +21,12 @@ logs-mappings:
           - "[ALERT]"
           - "[emerg]"
           - "[EMERG]"
+    - supported-applications-keywords: [ monitor ]
+      mapping:
+        warning-keywords: [ "WARNING", "warning", "WARN", "warn" ]
+        error-keywords: [ "ERROR", "error" ]
+        messages-to-swallow:
+          - "New alert:"
 
   default-mapping:
     warning-keywords: [ "WARNING", "warning", "WARN", "warn" ]
