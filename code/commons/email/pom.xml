@@ -9,9 +9,24 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-tools</artifactId>
+    <artifactId>email</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>io.codyn</groupId>
+            <artifactId>commons-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.codyn</groupId>
+            <artifactId>commons-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-retry</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.codyn</groupId>
             <artifactId>commons-test</artifactId>
@@ -19,4 +34,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>

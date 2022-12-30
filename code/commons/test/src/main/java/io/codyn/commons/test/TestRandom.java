@@ -166,7 +166,7 @@ public class TestRandom {
         return min + bound;
     }
 
-    public static String hash(int minSize, int maxSize) {
+    public static String string(int minSize, int maxSize) {
         int size;
         if (minSize == maxSize) {
             size = maxSize;
@@ -184,21 +184,21 @@ public class TestRandom {
         return builder.toString();
     }
 
-    public static String hash() {
-        return hash(20, 50);
+    public static String string() {
+        return string(20, 50);
     }
 
     public static String name() {
         var firstLetter = ALPHABET_STRING.charAt(RANDOM.nextInt(ALPHABET_STRING.length()));
-        return firstLetter + hash(1, 25);
+        return firstLetter + string(1, 25);
     }
 
-    public static String hash(int size) {
-        return hash(size, size);
+    public static String string(int size) {
+        return string(size, size);
     }
 
     public static String id() {
-        return hash(12);
+        return string(12);
     }
 
     public static List<String> ids(int size) {

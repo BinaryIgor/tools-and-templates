@@ -17,13 +17,13 @@ public class Templates {
         if (components.isEmpty()) {
             fullTemplate = template;
         } else {
-            fullTemplate = replacedComponentsTemplate(template, components);
+            fullTemplate = merged(template, components);
         }
 
         return replacedVariablesTemplate(fullTemplate, variables);
     }
 
-    private static String replacedComponentsTemplate(String template, Map<String, String> components) {
+    public static String merged(String template, Map<String, String> components) {
         var replacedTemplate = template;
 
         var matcher = COMPONENTS_REGEX.matcher(template);
