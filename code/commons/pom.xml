@@ -17,6 +17,7 @@
         <module>types</module>
         <module>test</module>
         <module>tools</module>
+        <module>json</module>
     </modules>
 
     <dependencies>
