@@ -1,6 +1,5 @@
 package io.codyn.system.monitor.alerts.infra;
 
-import io.codyn.system.monitor.alerts.app.AlertsController;
 import io.codyn.system.monitor._shared.Metrics;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PrometheusHealthChecker {
 
     static final String PROMETHEUS_DOWN_TIMESTAMP = Metrics.fullName("prometheus_down_timestamp_seconds");
-    private static final Logger log = LoggerFactory.getLogger(AlertsController.class);
+    private static final Logger log = LoggerFactory.getLogger(PrometheusHealthChecker.class);
     private final AtomicReference<Double> prometheusDownTimestampGauge = new AtomicReference<>();
     private final HttpClient httpClient;
     private final MeterRegistry meterRegistry;

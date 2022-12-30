@@ -1,5 +1,5 @@
 {
-  "build_cmd": "mvn clean install",
+  "build_cmd": "mvn clean install -PallTests",
   "env": {
     "LOGS_STORAGE_FILE_PATH": "/home/monitor/system-logs",
     "JVM_OPTS": "-Xmx450m"

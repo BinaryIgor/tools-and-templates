@@ -1,5 +1,5 @@
 {
-  "build_cmd": "mvn clean install",
+  "build_cmd": "mvn clean install -PallTests",
   "env": {
     "JVM_OPTS": "-Xmx450m"
   },
