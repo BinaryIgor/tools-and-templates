@@ -16,6 +16,7 @@
         <module>sql-db</module>
         <module>types</module>
         <module>test</module>
+        <module>tools</module>
     </modules>
 
     <dependencies>
