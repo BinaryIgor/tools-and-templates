@@ -19,6 +19,7 @@
         <module>tools</module>
         <module>json</module>
         <module>email</module>
+        <module>test-http</module>
     </modules>
 
     <dependencies>

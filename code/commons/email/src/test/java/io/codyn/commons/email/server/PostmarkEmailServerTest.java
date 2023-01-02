@@ -1,24 +1,19 @@
 package io.codyn.commons.email.server;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.codyn.commons.email.model.Email;
 import io.codyn.commons.email.model.EmailAddress;
 import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.test.TestRandom;
+import io.codyn.commons.test.http.TestHttpServer;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @Tag("integration")
 public class PostmarkEmailServerTest {
 
-    private static final WireMockServer HTTP_SERVER = new WireMockServer(WireMockConfiguration.wireMockConfig()
-            .dynamicPort());
-    private static final Set<String> TO_CHECK_HEADERS = Set.of("content-type", "x-postmark-server-token");
+    private static final TestHttpServer HTTP_SERVER = new TestHttpServer();
     private PostmarkEmailServer emailServer;
     private String postmarkToken;
 
@@ -35,7 +30,7 @@ public class PostmarkEmailServerTest {
 
     @AfterEach
     void tearDown() {
-        HTTP_SERVER.resetAll();
+        HTTP_SERVER.reset();
     }
 
     @AfterAll
@@ -46,22 +41,16 @@ public class PostmarkEmailServerTest {
     @Test
     void shouldSendEmailThroughApi() {
         var testCase = sendEmailTestCase();
+        var request = testCase.request;
+        var email = testCase.email;
 
-        var expectations = WireMock.post(WireMock.urlPathEqualTo("/email"))
-                .withRequestBody(WireMock.equalToJson(JsonMapper.json(testCase.expectedRequest.body)));
+        HTTP_SERVER.expectations()
+                .request(request.method, request.url, request.headers,
+                        JsonMapper.json(request.body))
+                .response(200)
+                .prepare();
 
-
-
-        for (var h : testCase.expectedRequest.headers.entrySet()) {
-            expectations = expectations.withHeader(h.getKey(), WireMock.equalTo(h.getValue()));
-        }
-
-        expectations = expectations.willReturn(WireMock.aResponse()
-                .withStatus(200));
-
-        HTTP_SERVER.stubFor(expectations);
-
-        emailServer.send(testCase.email);
+        emailServer.send(email);
     }
 
 //    @Test
@@ -110,9 +99,10 @@ public class PostmarkEmailServerTest {
                 "some html message",
                 "some text message");
 
-        var expectedRequest = new EmailRequestData(Map.of(
-                "content-type", "application/json",
-                "x-postmark-server-token", postmarkToken),
+        var expectedRequest = new EmailRequestData("/email", "POST",
+                Map.of(
+                        "content-type", "application/json",
+                        "x-postmark-server-token", postmarkToken),
                 new PostmarkEmailServer.PostmarkEmail(
                         "Some App <app@app.io>",
                         "User <user@user.io>",
@@ -136,13 +126,15 @@ public class PostmarkEmailServerTest {
                 TestRandom.string(), TestRandom.string(), TestRandom.string());
     }
 
-    private record SendEmailTestCase(Email email, EmailRequestData expectedRequest) {
+    private record SendEmailTestCase(Email email, EmailRequestData request) {
     }
 
     private record SendEmailsTestCase(List<Email> emails, List<EmailsRequestData> expectedRequests) {
     }
 
-    private record EmailRequestData(Map<String, String> headers,
+    private record EmailRequestData(String url,
+                                    String method,
+                                    Map<String, String> headers,
                                     PostmarkEmailServer.PostmarkEmail body) {
     }
 
