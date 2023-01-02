@@ -17,6 +17,11 @@
             <artifactId>commons-types</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.codyn</groupId>
+            <artifactId>commons-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>

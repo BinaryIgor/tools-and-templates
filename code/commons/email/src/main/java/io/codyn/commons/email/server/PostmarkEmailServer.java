@@ -135,16 +135,16 @@ public class PostmarkEmailServer implements EmailServer {
     record PostmarkEmail(String from,
                          String to,
                          String subject,
-                         String textBody,
                          String htmlBody,
+                         String textBody,
                          String messageStream) {
 
         public static PostmarkEmail fromEmail(Email email, String messageStream) {
             return new PostmarkEmail(formattedEmailAddress(email.from()),
                     formattedEmailAddress(email.to()),
                     email.subject(),
-                    email.textMessage(),
                     email.htmlMessage(),
+                    email.textMessage(),
                     messageStream);
         }
 

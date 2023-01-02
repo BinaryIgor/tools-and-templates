@@ -29,6 +29,7 @@
         <assertj.version>3.23.1</assertj.version>
         <jacoco.version>0.8.7</jacoco.version>
         <testcontainers.version>1.17.6</testcontainers.version>
+        <wiremock.version>2.27.2</wiremock.version>
 
         <!--dependencies-->
         <spring-boot.version>3.0.0</spring-boot.version>
@@ -87,6 +88,12 @@
                 <groupId>org.testcontainers</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-standalone</artifactId>
+                <version>${wiremock.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

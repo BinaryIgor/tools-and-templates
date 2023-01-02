@@ -1,0 +1,31 @@
+{
+  "input": {
+    "from": {
+      "name": "admin",
+      "email": "admin@hairo.io"
+    },
+    "to": {
+      "name": "User1",
+      "email": "user1@gmail.com"
+    },
+    "language": "PL",
+    "name": "email_change",
+    "variables": {
+      "user": "User1",
+      "url": "https://url123.com/235adax"
+    }
+  },
+  "output": {
+    "from": {
+      "name": "admin",
+      "email": "admin@hairo.io"
+    },
+    "to": {
+      "name": "User1",
+      "email": "user1@gmail.com"
+    },
+    "subject": "User1: Zmiana maila idzie",
+    "htmlMessage": null,
+    "textMessage": null
+  }
+}

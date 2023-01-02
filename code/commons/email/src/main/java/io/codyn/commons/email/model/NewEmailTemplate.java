@@ -5,6 +5,6 @@ import java.util.Map;
 public record NewEmailTemplate(EmailAddress from,
                                EmailAddress to,
                                String language,
-                               String template,
+                               String name,
                                Map<String, String> variables) {
 }
