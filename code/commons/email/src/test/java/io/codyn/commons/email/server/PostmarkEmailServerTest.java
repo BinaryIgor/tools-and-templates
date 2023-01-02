@@ -5,15 +5,21 @@ import io.codyn.commons.email.model.EmailAddress;
 import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.test.TestRandom;
 import io.codyn.commons.test.http.TestHttpServer;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Tag("integration")
 public class PostmarkEmailServerTest {
 
     private static final TestHttpServer HTTP_SERVER = new TestHttpServer();
+    private static final int REQUEST_ATTEMPTS = 3;
+    private static final int BATCH_SIZE = 2;
+    private static final String MESSAGE_STREAM = "outbound";
     private PostmarkEmailServer emailServer;
     private String postmarkToken;
 
@@ -25,7 +31,7 @@ public class PostmarkEmailServerTest {
     @BeforeEach
     void setup() {
         postmarkToken = TestRandom.string();
-        emailServer = new PostmarkEmailServer(HTTP_SERVER.baseUrl(), postmarkToken, 3, "outbound");
+        emailServer = new PostmarkEmailServer(HTTP_SERVER.baseUrl(), postmarkToken, BATCH_SIZE, MESSAGE_STREAM);
     }
 
     @AfterEach
@@ -45,52 +51,71 @@ public class PostmarkEmailServerTest {
         var email = testCase.email;
 
         HTTP_SERVER.expectations()
-                .request(request.method, request.url, request.headers,
-                        JsonMapper.json(request.body))
-                .response(200)
+                .request(request.method, request.url, request.headers, request.body)
                 .prepare();
 
         emailServer.send(email);
     }
 
-//    @Test
-//    void send_withSendFailure_throwsSendEmailExceptionAfterRetrying() {
-//        var code = TestsRandom.inRange(300, 500);
-//        HTTP_SERVER.nextResponseCode(code);
-//
-//        Assertions.assertThatThrownBy(() -> emailServer.send(randomEmail()))
-//                .isInstanceOf(EmailServer.EmailException.class);
-//    }
-//
-//    @Test
-//    void sendBatch_sendsEmailsThroughApi() {
-//        var testCase = prepareSendEmailsTestCase();
-//
-//        emailServer.sendBatch(testCase.emails);
-//
-//        var actual = HTTP_SERVER.sentRequests(r -> {
-//            var toCheckHeaders = Streams.filteredMap(r.headers(),
-//                    h -> TO_CHECK_HEADERS.contains(h.getKey()));
-//
-//            return new EmailsRequestData(r.url(), r.method(), toCheckHeaders,
-//                    JsonMapper.objects(r.bodyAsString(), PostmarkEmailServer.PostmarkEmail.class));
-//        });
-//
-//        AssertThat.equals(actual, testCase.expectedRequests);
-//    }
-//
-//    @Test
-//    void sendBatch_withSendFailure_throwsSendEmailExceptionAfterRetrying() {
-//        var code = TestsRandom.inRange(300, 500);
-//        HTTP_SERVER.nextResponseCode(code);
-//
-//        var emails = Stream.generate(this::randomEmail)
-//                .limit(5)
-//                .toList();
-//
-//        Assertions.assertThatThrownBy(() -> emailServer.sendBatch(emails))
-//                .isInstanceOf(EmailServer.EmailException.class);
-//    }
+    @Test
+    void shouldThrowExceptionAfterRetrying() {
+        var statusCode = TestRandom.inRange(300, 500);
+        var body = """
+                {
+                    "error": "Some error encoded into JSON"
+                }
+                """.trim();
+
+        HTTP_SERVER.expectResponse(statusCode, body);
+
+        Assertions.assertThat(HTTP_SERVER.requestsCount()).isZero();
+
+        Assertions.assertThatThrownBy(() -> emailServer.send(randomEmail()))
+                .isInstanceOf(EmailServer.EmailException.class)
+                .hasMessageContaining(body);
+
+        Assertions.assertThat(HTTP_SERVER.requestsCount())
+                .isEqualTo(REQUEST_ATTEMPTS);
+    }
+
+    @Test
+    void shouldSendEmailBatchThroughApi() {
+        var testCase = sendEmailsTestCase();
+
+        Assertions.assertThat(testCase.requests).hasSizeGreaterThan(1);
+
+        testCase.requests.forEach(r ->
+                HTTP_SERVER.expectations()
+                        .request(r.method, r.url, r.headers, r.body)
+                        .prepare());
+
+        emailServer.sendBatch(testCase.emails);
+    }
+
+    @Test
+    void shouldThrowExceptionAfterRetryingBatch() {
+        var code = TestRandom.inRange(300, 500);
+        var body = """
+                {
+                    "error": "Some error encoded into JSON"
+                }
+                """.trim();
+
+        HTTP_SERVER.expectResponse(code, body);
+
+        var emails = Stream.generate(this::randomEmail)
+                .limit(5)
+                .toList();
+
+        Assertions.assertThat(HTTP_SERVER.requestsCount()).isZero();
+
+        Assertions.assertThatThrownBy(() -> emailServer.sendBatch(emails))
+                .isInstanceOf(EmailServer.EmailException.class)
+                .hasMessageContaining(body);
+
+        Assertions.assertThat(HTTP_SERVER.requestsCount())
+                .isEqualTo(REQUEST_ATTEMPTS);
+    }
 
     private SendEmailTestCase sendEmailTestCase() {
         var email = new Email(EmailAddress.ofNameEmail("Some App", "app@app.io"),
@@ -99,27 +124,91 @@ public class PostmarkEmailServerTest {
                 "some html message",
                 "some text message");
 
-        var expectedRequest = new EmailRequestData("/email", "POST",
-                Map.of(
-                        "content-type", "application/json",
-                        "x-postmark-server-token", postmarkToken),
-                new PostmarkEmailServer.PostmarkEmail(
-                        "Some App <app@app.io>",
-                        "User <user@user.io>",
-                        "Some email",
-                        "some html message",
-                        "some text message",
-                        "outbound"
-                ));
+        var body = JsonMapper.json(new PostmarkEmailServer.PostmarkEmail(
+                "Some App <app@app.io>",
+                "User <user@user.io>",
+                "Some email",
+                "some html message",
+                "some text message",
+                MESSAGE_STREAM
+        ));
 
-        return new SendEmailTestCase(email, expectedRequest);
+        var request = new EmailRequestData("/email", "POST",
+                Map.of("content-type", "application/json",
+                        "content-length", contentLength(body),
+                        "x-postmark-server-token", postmarkToken),
+                body);
+
+        return new SendEmailTestCase(email, request);
     }
 
-//    private SendEmailsTestCase prepareSendEmailsTestCase() {
-//        TestsDataExpressions.addVariable("postmarkUrl", HTTP_SERVER.baseUrl());
-//        TestsDataExpressions.addVariable("token", postmarkToken);
-//        return TestDataLoader.object("postmark_email_server/sendsBatchTestCase.json", SendEmailsTestCase.class);
-//    }
+    private String contentLength(String body) {
+        return String.valueOf(body.getBytes(StandardCharsets.UTF_8).length);
+    }
+
+    private SendEmailsTestCase sendEmailsTestCase() {
+        var fromEmail = EmailAddress.ofNameEmail("Hairo App", "app@hairo.io");
+        var fromEmailString = "Hairo App <app@hairo.io>";
+
+        var emails = List.of(
+                new Email(fromEmail,
+                        EmailAddress.ofNameEmail("User1", "user1@user.io"),
+                        "Some email1",
+                        "some html message1",
+                        "some text message1"),
+                new Email(fromEmail,
+                        EmailAddress.ofNameEmail("User2 < 3", "user2@user.io"),
+                        "Some email2",
+                        "some html message2",
+                        "some text message2"),
+                new Email(fromEmail,
+                        EmailAddress.ofNameEmail("User3", "user3@user.io"),
+                        "Some email3",
+                        "some html message3",
+                        "some text message3"));
+
+        var firstRequestBody = JsonMapper.json(List.of(
+                new PostmarkEmailServer.PostmarkEmail(
+                        fromEmailString,
+                        "User1 <user1@user.io>",
+                        "Some email1",
+                        "some html message1",
+                        "some text message1",
+                        MESSAGE_STREAM
+                ),
+                new PostmarkEmailServer.PostmarkEmail(
+                        fromEmailString,
+                        "\"User2 < 3\" <user2@user.io>",
+                        "Some email2",
+                        "some html message2",
+                        "some text message2",
+                        MESSAGE_STREAM
+                )));
+
+        var firstRequest = new EmailBatchRequestData("/email/batch", "POST",
+                emailBatchHeaders(firstRequestBody), firstRequestBody);
+
+        var secondRequestBody = JsonMapper.json(List.of(
+                new PostmarkEmailServer.PostmarkEmail(
+                        fromEmailString,
+                        "User3 <user3@user.io>",
+                        "Some email3",
+                        "some html message3",
+                        "some text message3",
+                        MESSAGE_STREAM
+                )));
+
+        var secondRequest = new EmailBatchRequestData("/email/batch", "POST",
+                emailBatchHeaders(secondRequestBody), secondRequestBody);
+
+        return new SendEmailsTestCase(emails, List.of(firstRequest, secondRequest));
+    }
+
+    private Map<String, String> emailBatchHeaders(String requestBody) {
+        return Map.of("content-type", "application/json",
+                "content-length", contentLength(requestBody),
+                "x-postmark-server-token", postmarkToken);
+    }
 
     private Email randomEmail() {
         return new Email(EmailAddress.ofEmptyName(TestRandom.name()), EmailAddress.ofEmptyName(TestRandom.name()),
@@ -129,19 +218,19 @@ public class PostmarkEmailServerTest {
     private record SendEmailTestCase(Email email, EmailRequestData request) {
     }
 
-    private record SendEmailsTestCase(List<Email> emails, List<EmailsRequestData> expectedRequests) {
+    private record SendEmailsTestCase(List<Email> emails, List<EmailBatchRequestData> requests) {
     }
 
     private record EmailRequestData(String url,
                                     String method,
                                     Map<String, String> headers,
-                                    PostmarkEmailServer.PostmarkEmail body) {
+                                    String body) {
     }
 
 
-    private record EmailsRequestData(String url,
-                                     String method,
-                                     Map<String, String> headers,
-                                     List<PostmarkEmailServer.PostmarkEmail> body) {
+    private record EmailBatchRequestData(String url,
+                                         String method,
+                                         Map<String, String> headers,
+                                         String body) {
     }
 }

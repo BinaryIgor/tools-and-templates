@@ -14,7 +14,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class PostmarkEmailServer implements EmailServer {
                 messageStream,
                 Retry.of("postmark-request", RetryConfig.custom()
                         .maxAttempts(3)
-                        .waitDuration(Duration.ofMillis(500))
+                        .waitDuration(Duration.ofSeconds(1))
                         .build()));
     }
 
@@ -102,33 +101,17 @@ public class PostmarkEmailServer implements EmailServer {
             return;
         }
 
-        var exceptions = new ArrayList<Exception>();
-
         var postmarkEmails = emails.stream().map(e -> PostmarkEmail.fromEmail(e, messageStream)).toList();
 
         for (var batch : CollectionTools.toBuckets(postmarkEmails, batchSize)) {
             try {
-                sendBatchToPostmark(batch);
+                var body = JsonMapper.json(batch);
+                sendRequest("email/batch", body);
             } catch (Exception e) {
                 var addresses = batch.stream().map(PostmarkEmail::to).toList();
                 log.error("Problem while sending emails to {}...", addresses, e);
-                exceptions.add(e);
+                throw new EmailException(e);
             }
-        }
-
-        if (!exceptions.isEmpty()) {
-            var exception = new EmailException("Problem while sending bulk emails...");
-            exceptions.forEach(exception::addSuppressed);
-            throw exception;
-        }
-    }
-
-    private void sendBatchToPostmark(Collection<PostmarkEmail> emails) {
-        try {
-            var body = JsonMapper.json(emails);
-            sendRequest("email/batch", body);
-        } catch (Exception e) {
-            throw new EmailException(e);
         }
     }
 
