@@ -1,7 +1,7 @@
 package io.codyn.system.monitor.logs.app;
 
+import io.codyn.commons.test.TestRandom;
 import io.codyn.system.monitor.IntegrationTest;
-import io.codyn.system.monitor.test.Tests;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -44,7 +44,7 @@ public class LogsCleanerTest extends IntegrationTest {
     private void createLogFile(String dir, String filename) throws Exception {
         var fileDir = Path.of(logsRoot.getAbsolutePath(), dir);
         Files.createDirectories(fileDir);
-        Files.writeString(Path.of(fileDir.toString(), filename), Tests.randomString());
+        Files.writeString(Path.of(fileDir.toString(), filename), TestRandom.string());
     }
 
     private void assertDirHasOnlyFiles(String dir, List<String> expectedFiles) throws Exception {

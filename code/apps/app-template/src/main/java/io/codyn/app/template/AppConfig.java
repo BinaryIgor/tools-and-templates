@@ -1,6 +1,8 @@
 package io.codyn.app.template;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
+import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.sqldb.core.DSLContextFactory;
 import io.codyn.commons.sqldb.core.DSLContextProvider;
 import io.codyn.commons.sqldb.core.SqlTransactions;
@@ -14,6 +16,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AppConfig {
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return JsonMapper.MAPPER;
+    }
 
     @Bean
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {

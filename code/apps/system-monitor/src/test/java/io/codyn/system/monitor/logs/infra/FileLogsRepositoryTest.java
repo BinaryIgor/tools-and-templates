@@ -1,8 +1,9 @@
 package io.codyn.system.monitor.logs.infra;
 
+import io.codyn.commons.test.TestRandom;
+import io.codyn.commons.test.http.TestHttpClient;
 import io.codyn.system.monitor.logs.domain.model.ApplicationLogLevel;
 import io.codyn.system.monitor.logs.domain.model.LogRecord;
-import io.codyn.system.monitor.test.Tests;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +38,7 @@ public class FileLogsRepositoryTest {
     @BeforeEach
     void setup() {
         logsRoot = new File(root, "logs");
-        maxFileSize = Tests.randomInt(100, 1000);
+        maxFileSize = TestRandom.inRange(100, 1000);
         repository = new FileLogsRepository(FIXED_CLOCK, logsRoot.getAbsolutePath(), maxFileSize, 10);
     }
 
@@ -96,7 +97,7 @@ public class FileLogsRepositoryTest {
                 "last-app", "last-app-instance-II",
                 ApplicationLogLevel.INFO, "Short");
         var secondToRotateGroupLogRecord = logRecordWithDifferentLog(firstToRotateGroupLogRecord,
-                Tests.randomString(maxFileSize - firstToRotateGroupLogRecord.log().length(),
+                TestRandom.string(maxFileSize - firstToRotateGroupLogRecord.log().length(),
                         maxFileSize));
 
         firstLogs.add(firstToRotateGroupLogRecord);

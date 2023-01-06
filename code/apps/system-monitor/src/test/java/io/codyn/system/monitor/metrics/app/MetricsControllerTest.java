@@ -2,18 +2,15 @@ package io.codyn.system.monitor.metrics.app;
 
 import io.codyn.system.monitor.IntegrationTest;
 import io.codyn.system.monitor._shared.Metrics;
-import io.codyn.system.monitor.test.TestHttp;
 import io.codyn.system.monitor.test.TestMetric;
 import io.codyn.system.monitor.test.TestMetrics;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 
 import java.time.*;
 import java.util.ArrayList;
@@ -25,21 +22,25 @@ import java.util.Map;
 public class MetricsControllerTest extends IntegrationTest {
 
     private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-24T22:11:22Z"), ZoneId.of("UTC"));
-    @Autowired
-    private TestHttp testHttp;
 
     @Test
     void shouldAddMetricsToPrometheus() {
         var testCase = prepareAddMetricsTestCase();
 
-        testHttp.postAndExpectStatus("/metrics", testCase.metricsToSend, HttpStatus.OK);
+        testHttpClient.test()
+                .path("/metrics")
+                .POST()
+                .body(testCase.metricsToSend)
+                .execute();
 
-        testHttp.getAndExpectOkStatusAndBody("/actuator/prometheus", String.class,
-                txtMetrics -> {
-                    var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
-                    Assertions.assertThat(actualMetrics)
-                            .containsAll(testCase.expectedMetrics);
-                });
+        var txtMetrics = testHttpClient.test()
+                .path("/actuator/prometheus")
+                .GET()
+                .execute();
+
+        var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
+        Assertions.assertThat(actualMetrics)
+                .containsAll(testCase.expectedMetrics);
     }
 
     private AddMetricsTestCase prepareAddMetricsTestCase() {

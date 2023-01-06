@@ -2,18 +2,15 @@ package io.codyn.system.monitor.logs.app;
 
 import io.codyn.system.monitor.IntegrationTest;
 import io.codyn.system.monitor.logs.infra.FileLogsRepository;
-import io.codyn.system.monitor.test.TestHttp;
 import io.codyn.system.monitor.test.TestMetric;
 import io.codyn.system.monitor.test.TestMetrics;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
-import org.springframework.http.HttpStatus;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,21 +27,24 @@ public class LogsControllerTest extends IntegrationTest {
 
     private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-22T19:11:22Z"), ZoneId.of("UTC"));
 
-    @Autowired
-    private TestHttp testHttp;
-
     @Test
     void shouldAddLogsAndUpdatePrometheusMetrics() {
         var testCase = prepareAddLogsTestCase();
 
-        testHttp.postAndExpectStatus("/logs", testCase.logsToSend, HttpStatus.OK);
+        testHttpClient.test()
+                .path("/logs")
+                .POST()
+                .body(testCase.logsToSend)
+                .execute();
 
-        testHttp.getAndExpectOkStatusAndBody("/actuator/prometheus", String.class,
-                txtMetrics -> {
-                    var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
-                    Assertions.assertThat(actualMetrics)
-                            .containsAll(testCase.expectedMetrics);
-                });
+        var txtMetrics = testHttpClient.test()
+                .path("/actuator/prometheus")
+                .GET()
+                .execute();
+
+        var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
+        Assertions.assertThat(actualMetrics)
+                .containsAll(testCase.expectedMetrics);
 
         testCase.expectedLogFiles()
                 .forEach(p -> Assertions.assertThat(Files.exists(p))

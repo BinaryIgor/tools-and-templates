@@ -109,8 +109,11 @@ public class TestHttpClient {
         public String execute() {
             try {
                 var response = httpClient.send(request(), HttpResponse.BodyHandlers.ofString());
-                Assertions.assertEquals(expectedStatus, response.statusCode());
-                return response.body();
+                var body = response.body();
+                Assertions.assertEquals(expectedStatus, response.statusCode(),
+                        "Expected status: %d, but was %d. Response body: %s"
+                                .formatted(expectedStatus, response.statusCode(), body));
+                return body;
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
