@@ -1,9 +1,9 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template.test.Tests;
 import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.model.User;
 import io.codyn.app.template.user.domain.model.UserState;
+import io.codyn.commons.test.TestRandom;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class TestUserObjects {
     }
 
     public static User user() {
-        return Tests.randomElement(USERS);
+        return TestRandom.oneOf(USERS);
     }
 
     public static NewUser newUser() {

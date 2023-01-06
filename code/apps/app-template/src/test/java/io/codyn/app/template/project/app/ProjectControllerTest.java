@@ -5,17 +5,14 @@ import io.codyn.app.template._shared.app.IdResponse;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
 import io.codyn.app.template.project.domain.ProjectRepository;
-import io.codyn.app.template.project.domain.ProjectUsersRepository;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.domain.model.ProjectWithUsers;
-import io.codyn.app.template.test.TestHttp;
 import io.codyn.app.template.user.TestUserClient;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
+import io.codyn.commons.test.http.TestHttpClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +21,7 @@ import java.util.UUID;
 public class ProjectControllerTest extends SpringIntegrationTest {
 
     @Autowired
-    private TestHttp testHttp;
+    private TestHttpClient testHttpClient;
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
@@ -50,7 +47,7 @@ public class ProjectControllerTest extends SpringIntegrationTest {
         var projectUpdate = new ApiUpdateProject(project.name() + "-new-name", project.version());
 
         updateRequest(project.id(), projectUpdate)
-                .execute(HttpStatus.OK);
+                .execute();
 
         var expectedProject = new Project(project.id(), project.ownerId(), projectUpdate.name(),
                 project.version() + 1);
@@ -69,17 +66,17 @@ public class ProjectControllerTest extends SpringIntegrationTest {
 
         toAddUsers.forEach(uid -> userClient.createRandomUser(uid));
 
-        testHttp.builder()
+        testHttpClient.test()
                 .path("/projects/%s/users".formatted(project.id()))
-                .method(HttpMethod.POST)
+                .POST()
                 .body(toAddUsers)
-                .execute(HttpStatus.OK);
+                .execute();
 
-        testHttp.builder()
+        testHttpClient.test()
                 .path("/projects/%s/users".formatted(project.id()))
-                .method(HttpMethod.DELETE)
+                .DELETE()
                 .body(toRemoveUsers)
-                .execute(HttpStatus.OK);
+                .execute();
 
         var expectedFirstUsers = new ArrayList<>(toAddUsers.subList(2, toAddUsers.size()));
         var expectedProjectWithUsers = new ProjectWithUsers(project, expectedFirstUsers);
@@ -96,10 +93,10 @@ public class ProjectControllerTest extends SpringIntegrationTest {
 
         Assertions.assertThat(projectRepository.findById(project.id())).isNotEmpty();
 
-        testHttp.builder()
+        testHttpClient.test()
                 .path("/projects/" + project.id())
-                .method(HttpMethod.DELETE)
-                .execute(HttpStatus.OK);
+                .DELETE()
+                .execute();
 
         Assertions.assertThat(projectRepository.findById(project.id())).isEmpty();
     }
@@ -108,31 +105,32 @@ public class ProjectControllerTest extends SpringIntegrationTest {
         userClient.setCurrentUser(ownerId);
         userClient.createRandomUser(ownerId);
 
-        var projectId = testHttp.builder()
+        var projectId = testHttpClient.test()
                 .path("/projects")
-                .method(HttpMethod.POST)
+                .POST()
                 .body(project)
-                .execute(HttpStatus.CREATED, IdResponse.class)
+                .expectedStatus(201)
+                .executeReturningObject(IdResponse.class)
                 .id();
 
         return new Project(projectId, ownerId, project.name(), 1);
     }
 
     private ProjectWithUsers fetchProjectWithUsers(UUID projectId) {
-        return testHttp.builder()
+        return testHttpClient.test()
                 .path("/projects/%s".formatted(projectId))
-                .method(HttpMethod.GET)
-                .execute(HttpStatus.OK, ProjectWithUsers.class);
+                .GET()
+                .executeReturningObject(ProjectWithUsers.class);
     }
 
     private Project createNewProject(UUID ownerId) {
         return createNewProject(ownerId, new ApiNewProject("some-project"));
     }
 
-    private TestHttp.RequestBuilder updateRequest(UUID projectId, ApiUpdateProject projectUpdate) {
-        return testHttp.builder()
+    private TestHttpClient.TestBuilder updateRequest(UUID projectId, ApiUpdateProject projectUpdate) {
+        return testHttpClient.test()
                 .path("/projects/" + projectId)
-                .method(HttpMethod.PUT)
+                .PUT()
                 .body(projectUpdate);
     }
 }

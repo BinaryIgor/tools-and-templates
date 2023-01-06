@@ -1,8 +1,8 @@
 package io.codyn.app.template.user;
 
-import io.codyn.app.template.test.Tests;
 import io.codyn.app.template.user.api.CurrentUser;
 import io.codyn.app.template.user.api.UserClient;
+import io.codyn.commons.test.TestRandom;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
@@ -32,7 +32,6 @@ public class TestUserClient implements UserClient {
         return id;
     }
 
-
     @Override
     public CurrentUser currentUser() {
         if (currentUser == null) {
@@ -58,7 +57,7 @@ public class TestUserClient implements UserClient {
     }
 
     public UUID createRandomUser(UUID userId) {
-        var name = Tests.randomString(5, 30);
+        var name = TestRandom.string(5, 30);
         return createUser(new NewUser(userId, name, name + "@email.com"));
     }
 

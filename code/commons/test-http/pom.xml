@@ -13,6 +13,11 @@
 
    <dependencies>
        <dependency>
+           <groupId>io.codyn</groupId>
+           <artifactId>commons-json</artifactId>
+           <version>${project.version}</version>
+       </dependency>
+       <dependency>
            <groupId>com.github.tomakehurst</groupId>
            <artifactId>wiremock-standalone</artifactId>
            <scope>compile</scope>

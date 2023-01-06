@@ -1,14 +1,14 @@
 package io.codyn.app.template.project.test;
 
 import io.codyn.app.template.project.domain.model.Project;
-import io.codyn.app.template.test.Tests;
+import io.codyn.commons.test.TestRandom;
 
 import java.util.UUID;
 
 public class TestProjectObjects {
 
     public static Project newProject(long version) {
-        return new Project(UUID.randomUUID(), UUID.randomUUID(), Tests.randomString(), version);
+        return new Project(UUID.randomUUID(), UUID.randomUUID(), TestRandom.string(), version);
     }
 
     public static Project newProject() {
