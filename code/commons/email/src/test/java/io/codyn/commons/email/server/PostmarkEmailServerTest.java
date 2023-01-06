@@ -4,44 +4,26 @@ import io.codyn.commons.email.model.Email;
 import io.codyn.commons.email.model.EmailAddress;
 import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.test.TestRandom;
-import io.codyn.commons.test.http.TestHttpServer;
+import io.codyn.commons.test.http.HttpServerIntegrationTest;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@Tag("integration")
-public class PostmarkEmailServerTest {
+public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
 
-    private static final TestHttpServer HTTP_SERVER = new TestHttpServer();
     private static final int REQUEST_ATTEMPTS = 3;
     private static final int BATCH_SIZE = 2;
     private static final String MESSAGE_STREAM = "outbound";
     private PostmarkEmailServer emailServer;
     private String postmarkToken;
 
-    @BeforeAll
-    static void startHttpServer() {
-        HTTP_SERVER.start();
-    }
-
-    @BeforeEach
-    void setup() {
+    protected void setup() {
         postmarkToken = TestRandom.string();
         emailServer = new PostmarkEmailServer(HTTP_SERVER.baseUrl(), postmarkToken, BATCH_SIZE, MESSAGE_STREAM);
-    }
-
-    @AfterEach
-    void tearDown() {
-        HTTP_SERVER.reset();
-    }
-
-    @AfterAll
-    static void stopHttpServer() {
-        HTTP_SERVER.stop();
     }
 
     @Test
