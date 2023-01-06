@@ -1,5 +1,6 @@
 package io.codyn.app.template.project.app;
 
+import io.codyn.app.template._shared.app.AppErrorResponse;
 import io.codyn.app.template._shared.app.IdResponse;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
@@ -8,6 +9,11 @@ import io.codyn.app.template.project.domain.model.AddUsersToProjectCommand;
 import io.codyn.app.template.project.domain.model.ProjectWithUsers;
 import io.codyn.app.template.project.domain.model.RemoveUsersFromProjectCommand;
 import io.codyn.app.template.user.api.UserClient;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/projects")
+@SecurityRequirement(name = "bearer-key")
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -29,6 +36,11 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Created"),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = @Content(schema = @Schema(implementation = AppErrorResponse.class)))
+    })
     public IdResponse create(@RequestBody ApiNewProject request) {
         var userId = userClient.currentUserId();
         var project = request.toProject(userId);
