@@ -32,7 +32,7 @@
         <wiremock.version>2.27.2</wiremock.version>
 
         <!--dependencies-->
-        <spring.boot.version>3.0.0</spring.boot.version>
+        <spring.boot.version>3.0.1</spring.boot.version>
         <postresql.driver.version>42.5.1</postresql.driver.version>
         <hikari.version>3.4.2</hikari.version>
         <jooq.version>3.14.7</jooq.version>
