@@ -33,6 +33,7 @@
 
         <!--dependencies-->
         <spring.boot.version>3.0.1</spring.boot.version>
+        <spring.openapi.version>2.0.2</spring.openapi.version>
         <postresql.driver.version>42.5.1</postresql.driver.version>
         <hikari.version>3.4.2</hikari.version>
         <jooq.version>3.14.7</jooq.version>
@@ -49,6 +50,12 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${spring.openapi.version}</version>
             </dependency>
 
             <dependency>

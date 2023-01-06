@@ -31,6 +31,7 @@ public class AppConfig {
     public DSLContext dslContext(@Value("${spring.datasource.url}") String jdbcUrl,
                                  @Value("${spring.datasource.username}") String username,
                                  @Value("${spring.datasource.password}") String password) {
+        //TODO: support reading password from file!
         return DSLContextFactory.newContext(jdbcUrl, username, password);
     }
 
