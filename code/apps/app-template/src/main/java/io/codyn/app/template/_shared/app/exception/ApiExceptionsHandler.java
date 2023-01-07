@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ApiResponses(
         value = {
                 @ApiResponse(responseCode = "400", description = "Something about the request is invalid"),
-                @ApiResponse(responseCode = "401", description = "We don't know who you are, or token has expired"),
+                @ApiResponse(responseCode = "401", description = "We don't know who you are, or token has expired/was invalid"),
                 @ApiResponse(responseCode = "403", description = "Given resource is not available for a user"),
                 @ApiResponse(responseCode = "404", description = "Given resource can't be found"),
                 @ApiResponse(responseCode = "409", description = "Given resource exist or there was an optimist lock exception")
@@ -22,6 +22,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 )
 public class ApiExceptionsHandler {
 
+
+    @ExceptionHandler(InvalidAuthTokenException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(InvalidAuthTokenException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiExceptionResponse(exception));
+    }
 
     @ExceptionHandler(ResourceExistsException.class)
     public ResponseEntity<ApiExceptionResponse> handleException(ResourceExistsException exception) {

@@ -40,6 +40,7 @@
         <slf4j.version>2.0.6</slf4j.version>
         <jackson.version>2.14.0</jackson.version>
         <resilience4j.version>2.0.2</resilience4j.version>
+        <java.jwt.version>4.0.0</java.jwt.version>
     </properties>
 
     <dependencyManagement>
@@ -89,6 +90,12 @@
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-retry</artifactId>
                 <version>${resilience4j.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java.jwt.version}</version>
             </dependency>
 
             <dependency>

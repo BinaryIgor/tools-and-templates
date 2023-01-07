@@ -2,7 +2,6 @@ package io.codyn.app.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
-import io.codyn.app.template._shared.app.exception.ApiExceptionResponse;
 import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.sqldb.core.DSLContextFactory;
 import io.codyn.commons.sqldb.core.DSLContextProvider;
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swagger.v3.oas.models.tags.Tag;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
@@ -21,8 +19,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.time.Clock;
+
 @Configuration
 public class AppConfig {
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
+    }
 
     @Bean
     public ObjectMapper objectMapper() {

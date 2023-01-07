@@ -7,6 +7,7 @@ public record ApiExceptionResponse(
                 On of the app exceptions. Some of the possible values to handle
                 (more are possible, but they should never occur during proper API usage!):
                 * EmailTakenException
+                * InvalidAuthTokenException
                 * OptimisticLockException
                 * ResourceExistsException
                 * ResourceForbidden
