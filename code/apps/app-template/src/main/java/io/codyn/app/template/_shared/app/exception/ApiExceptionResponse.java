@@ -12,6 +12,7 @@ public record ApiExceptionResponse(
                 * ResourceExistsException
                 * ResourceForbidden
                 * ValidationException
+                * UnauthenticatedException
                 """)
         String exception,
         @Schema(description = "Additional, contextualized info for debugging mostly")
