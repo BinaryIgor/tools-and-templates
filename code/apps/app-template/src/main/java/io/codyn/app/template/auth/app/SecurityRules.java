@@ -3,7 +3,7 @@ package io.codyn.app.template.auth.app;
 import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template._shared.domain.model.UserState;
-import io.codyn.app.template.auth.domain.AuthenticatedUser;
+import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
