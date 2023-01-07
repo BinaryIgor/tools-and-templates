@@ -1,5 +1,6 @@
 package io.codyn.app.template.user.app;
 
+import io.codyn.app.template.auth.app.SecurityEndpoints;
 import io.codyn.app.template.auth.domain.AuthTokens;
 import io.codyn.app.template.user.app.model.ActivationToken;
 import io.codyn.app.template.user.app.model.RefreshToken;
@@ -9,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user-auth")
+@RequestMapping(SecurityEndpoints.USER_AUTH)
 public class UserAuthController {
 
     private final NewUserService newUserService;

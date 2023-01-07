@@ -1,8 +1,8 @@
 package io.codyn.app.template.user.test;
 
+import io.codyn.app.template._shared.domain.model.UserState;
 import io.codyn.app.template.user.domain.model.NewUser;
 import io.codyn.app.template.user.domain.model.User;
-import io.codyn.app.template.user.domain.model.UserState;
 import io.codyn.commons.test.TestRandom;
 
 import java.util.List;

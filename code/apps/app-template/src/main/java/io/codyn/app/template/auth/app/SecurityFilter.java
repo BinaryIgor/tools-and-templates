@@ -1,19 +1,26 @@
 package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._shared.app.exception.ApiExceptionResponse;
+import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
+import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
 import io.codyn.app.template.auth.domain.AuthenticatedUser;
 import io.codyn.commons.json.JsonMapper;
-import jakarta.servlet.*;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Optional;
 
+//TODO: better tests idea
+@Profile("!integration")
 @Component
 public class SecurityFilter implements Filter {
 
@@ -32,19 +39,23 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-                         FilterChain filterChain) throws IOException, ServletException {
-        log.info("Doing some logging in Security filter, on a thread: " + Thread.currentThread());
-
+                         FilterChain filterChain) {
         var request = (HttpServletRequest) servletRequest;
+        var response = (HttpServletResponse) servletResponse;
 
         try {
             var user = userFromRequest(request);
+            user.ifPresent(AuthenticatedUserRequestHolder::set);
 
             securityRules.validateAccess(request.getRequestURI(), user);
 
             filterChain.doFilter(servletRequest, servletResponse);
+        } catch (UnauthenticatedException e) {
+            sendExceptionResponse(response, 401, e);
+        } catch (ResourceForbiddenException e) {
+            sendExceptionResponse(response, 403, e);
         } catch (Exception e) {
-            sendNotAuthenticatedResponse((HttpServletResponse) servletResponse, e);
+            sendExceptionResponse(response, 400, e);
         }
     }
 
@@ -59,8 +70,8 @@ public class SecurityFilter implements Filter {
                 });
     }
 
-    private void sendNotAuthenticatedResponse(HttpServletResponse response, Throwable exception) {
-        response.setStatus(401);
+    private void sendExceptionResponse(HttpServletResponse response, int status, Throwable exception) {
+        response.setStatus(status);
         try {
             response.setHeader("content-type", "application/json");
             response.getWriter()
