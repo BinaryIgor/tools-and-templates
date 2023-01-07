@@ -1,5 +1,6 @@
 package io.codyn.app.template.user.domain;
 
+import io.codyn.app.template._shared.domain.exception.EmailTakenException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.NewUser;
@@ -35,7 +36,7 @@ public class NewUserService {
         validateUser(user);
 
         if (userRepository.findByEmail(user.email()).isPresent()) {
-            throw UserExceptions.emailTaken();
+            throw new EmailTakenException(user.email());
         }
 
         var hashedUser = user.withPassword(passwordHasher.hash(user.password()));

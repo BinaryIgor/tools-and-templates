@@ -1,7 +1,7 @@
 package io.codyn.app.template.project.domain;
 
-import io.codyn.app.template._shared.domain.exception.AppResourceForbiddenException;
-import io.codyn.app.template._shared.domain.exception.AppValidationException;
+import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
+import io.codyn.app.template._shared.domain.exception.ValidationException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.domain.model.ProjectWithUsers;
@@ -36,7 +36,7 @@ public class ProjectServiceTest {
     @MethodSource("invalidProjectCases")
     void shouldValidateProjectWhileSaving(Project project) {
         Assertions.assertThatThrownBy(() -> service.save(project))
-                .isEqualTo(AppValidationException.ofField("name", project.name()));
+                .isEqualTo(ValidationException.ofField("name", project.name()));
     }
 
     @Test
@@ -139,8 +139,8 @@ public class ProjectServiceTest {
         return new Project(project.id(), ownerId, project.name(), project.version() + 1);
     }
 
-    private AppResourceForbiddenException projectForbiddenException(UUID userId, UUID projectId) {
-        return new AppResourceForbiddenException("%s user doesn't have access to %s project"
+    private ResourceForbiddenException projectForbiddenException(UUID userId, UUID projectId) {
+        return new ResourceForbiddenException("%s user doesn't have access to %s project"
                 .formatted(userId, projectId));
     }
 

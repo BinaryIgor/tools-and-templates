@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.domain.validator;
 
-import io.codyn.app.template._shared.domain.exception.AppValidationException;
+import io.codyn.app.template._shared.domain.exception.ValidationException;
 
 import java.util.regex.Pattern;
 
@@ -49,7 +49,7 @@ public class FieldValidator {
 
     public static void validateEmail(String email) {
         if (!isEmailValid(email)) {
-            throw AppValidationException.ofField("email", email);
+            throw ValidationException.ofField("email", email);
         }
     }
 
@@ -66,7 +66,7 @@ public class FieldValidator {
 
     public static void validateName(String name) {
         if (!isNameValid(name)) {
-            throw AppValidationException.ofField("name", name);
+            throw ValidationException.ofField("name", name);
         }
     }
 
@@ -109,7 +109,7 @@ public class FieldValidator {
 
     public static void validatePassword(String password) {
         if (!isPasswordValid(password)) {
-            throw AppValidationException.ofField("password", password);
+            throw ValidationException.ofField("password", password);
         }
     }
 

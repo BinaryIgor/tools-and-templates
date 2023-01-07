@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template._shared.domain.exception.AppOptimisticLockException;
+import io.codyn.app.template._shared.domain.exception.OptimisticLockException;
 import io.codyn.app.template.project.domain.ProjectRepository;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.commons.sqldb.schema.project.tables.records.ProjectRecord;
@@ -38,7 +38,7 @@ public class SqlProjectRepository implements ProjectRepository {
                     .execute();
 
             if (updated == 0) {
-                throw new AppOptimisticLockException();
+                throw new OptimisticLockException("project");
             }
         }
 

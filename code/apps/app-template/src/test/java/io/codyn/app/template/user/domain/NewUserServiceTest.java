@@ -1,6 +1,7 @@
 package io.codyn.app.template.user.domain;
 
-import io.codyn.app.template._shared.domain.exception.AppValidationException;
+import io.codyn.app.template._shared.domain.exception.EmailTakenException;
+import io.codyn.app.template._shared.domain.exception.ValidationException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template._shared.test.TestEventPublisher;
 import io.codyn.app.template._shared.test.TestPasswordHasher;
@@ -45,7 +46,7 @@ public class NewUserServiceTest {
     @ParameterizedTest
     @MethodSource("invalidUserCases")
     void shouldThrowExceptionGivenInvalidUser(NewUser user,
-                                              AppValidationException exception) {
+                                              ValidationException exception) {
         Assertions.assertThatThrownBy(() -> service.create(user))
                 .isEqualTo(exception);
     }
@@ -57,7 +58,7 @@ public class NewUserServiceTest {
         userRepository.addUser(user);
 
         Assertions.assertThatThrownBy(() -> service.create(TestUserMapper.toNewUser(user)))
-                .isEqualTo(UserExceptions.emailTaken());
+                .isEqualTo(new EmailTakenException(user.email()));
     }
 
     @Test
@@ -92,7 +93,7 @@ public class NewUserServiceTest {
         return Stream.of(" ", null, "", "a", "_*", tooLongName)
                 .map(n -> {
                     var u = new NewUser(n, "email@email.com", "complicated-password");
-                    return Arguments.of(u, AppValidationException.ofField("name", n));
+                    return Arguments.of(u, ValidationException.ofField("name", n));
                 });
     }
 
@@ -103,7 +104,7 @@ public class NewUserServiceTest {
         return Stream.of("", null, "_@gmail.com", "@gmail.com", "email@e.", "email@exx", tooLongEmail)
                 .map(e -> {
                     var u = new NewUser("some-name", e, "password");
-                    return Arguments.of(u, AppValidationException.ofField("email", e));
+                    return Arguments.of(u, ValidationException.ofField("email", e));
                 });
     }
 
@@ -113,7 +114,7 @@ public class NewUserServiceTest {
         return Stream.of("", null, " ", "onlycharacters", "123456789", "Short1", tooLongPassword)
                 .map(p -> {
                     var u = new NewUser("some-name", "some-email@gmail.com", p);
-                    return Arguments.of(u, AppValidationException.ofField("password", p));
+                    return Arguments.of(u, ValidationException.ofField("password", p));
                 });
     }
 }
