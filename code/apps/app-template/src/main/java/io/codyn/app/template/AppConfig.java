@@ -1,6 +1,7 @@
 package io.codyn.app.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.codyn.app.template._shared.app.BadRequestsInterceptor;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
 import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.sqldb.core.DSLContextFactory;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.Clock;
@@ -91,6 +93,12 @@ public class AppConfig implements WebMvcConfigurer {
 //            System.out.println(openApi.getComponents());
 //        };
 //    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new BadRequestsInterceptor());
+    }
+
 
     //TODO: revise!
     @Override

@@ -19,6 +19,7 @@ public class TestHttpClient {
 
     private final HttpClient httpClient;
     private final Supplier<String> baseUrl;
+    private final Map<String, String> globalHeaders = new HashMap<>();
 
     public TestHttpClient(HttpClient httpClient,
                           Supplier<String> baseUrl) {
@@ -32,6 +33,14 @@ public class TestHttpClient {
 
     public TestHttpClient(Supplier<Integer> port) {
         this(HttpClient.newBuilder().build(), () -> "http://localhost:" + port.get());
+    }
+
+    public void addHeader(String name, String value) {
+        globalHeaders.put(name, value);
+    }
+
+    public void addBearerAuthorizationHeader(String token) {
+        addHeader("Authorization", "Bearer " + token);
     }
 
     public TestBuilder test() {
@@ -133,6 +142,8 @@ public class TestHttpClient {
                     .uri(requestUri())
                     .method(method, requestBodyPublisher())
                     .timeout(Duration.ofSeconds(1));
+
+            globalHeaders.forEach(request::header);
 
             headers.forEach((k, vs) ->
                     vs.forEach(v -> request.header(k, v)));

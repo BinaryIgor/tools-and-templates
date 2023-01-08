@@ -23,8 +23,9 @@ public class SqlMapper {
                                                  Field<F> field,
                                                  Function<F, T> fieldMapper) {
         return result.stream()
-                .map(r -> fieldMapper.apply(r.get(field)))
+                .map(r -> r.get(field))
                 .filter(Objects::nonNull)
+                .map(fieldMapper)
                 .collect(Collectors.toSet());
     }
 

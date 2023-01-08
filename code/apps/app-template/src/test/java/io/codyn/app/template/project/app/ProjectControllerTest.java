@@ -7,7 +7,6 @@ import io.codyn.app.template.project.app.model.ApiUpdateProject;
 import io.codyn.app.template.project.domain.ProjectRepository;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.domain.model.ProjectWithUsers;
-import io.codyn.app.template.user.TestUserClient;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.commons.test.http.TestHttpClient;
 import org.assertj.core.api.Assertions;
@@ -21,13 +20,9 @@ import java.util.UUID;
 public class ProjectControllerTest extends SpringIntegrationTest {
 
     @Autowired
-    private TestHttpClient testHttpClient;
-    @Autowired
     private ProjectRepository projectRepository;
     @Autowired
     private NewUserRepository newUserRepository;
-    @Autowired
-    private TestUserClient userClient;
 
     @Test
     void shouldCreateNewProject() {
@@ -102,8 +97,8 @@ public class ProjectControllerTest extends SpringIntegrationTest {
     }
 
     private Project createNewProject(UUID ownerId, ApiNewProject project) {
-        userClient.setCurrentUser(ownerId);
         userClient.createRandomUser(ownerId);
+        setCurrentUser(ownerId);
 
         var projectId = testHttpClient.test()
                 .path("/projects")

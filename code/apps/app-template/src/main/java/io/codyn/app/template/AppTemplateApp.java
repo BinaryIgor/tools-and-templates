@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
         SecurityAutoConfiguration.class,
         ManagementWebSecurityAutoConfiguration.class
 })
-//TODO: packages as separate modules!
 public class AppTemplateApp {
     public static void main(String[] args) {
         SpringApplication.run(AppTemplateApp.class, args);

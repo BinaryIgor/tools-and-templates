@@ -4,8 +4,8 @@ import io.codyn.app.template._shared.app.exception.ApiExceptionResponse;
 import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
 import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
-import io.codyn.app.template.auth.domain.AuthTokenComponent;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
+import io.codyn.app.template.auth.domain.AuthTokenComponent;
 import io.codyn.commons.json.JsonMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -15,13 +15,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-//TODO: better tests idea
-@Profile("!integration")
 @Component
 public class SecurityFilter implements Filter {
 
@@ -52,11 +49,11 @@ public class SecurityFilter implements Filter {
 
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (UnauthenticatedException | InvalidAuthTokenException e) {
-            sendExceptionResponse(response, 401, e);
+            sendExceptionResponse(request, response, 401, e);
         } catch (ResourceForbiddenException e) {
-            sendExceptionResponse(response, 403, e);
+            sendExceptionResponse(request, response, 403, e);
         } catch (Exception e) {
-            sendExceptionResponse(response, 400, e);
+            sendExceptionResponse(request, response, 400, e);
         }
     }
 
@@ -71,7 +68,11 @@ public class SecurityFilter implements Filter {
                 });
     }
 
-    private void sendExceptionResponse(HttpServletResponse response, int status, Throwable exception) {
+    private void sendExceptionResponse(HttpServletRequest request,
+                                       HttpServletResponse response,
+                                       int status,
+                                       Throwable exception) {
+        log.info("Sending {} status to {}:{} request", status, request.getMethod(), request.getRequestURI());
         response.setStatus(status);
         try {
             response.setHeader("content-type", "application/json");
