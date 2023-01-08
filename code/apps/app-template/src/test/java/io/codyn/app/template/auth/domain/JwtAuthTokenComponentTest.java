@@ -1,5 +1,7 @@
 package io.codyn.app.template.auth.domain;
 
+import com.auth0.jwt.algorithms.Algorithm;
+import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
 import io.codyn.app.template._shared.domain.model.UserRole;
 import io.codyn.app.template._shared.domain.model.UserRoles;
 import io.codyn.app.template._shared.domain.model.UserState;
@@ -9,11 +11,17 @@ import io.codyn.app.template.auth.test.TestUserAuthDataRepository;
 import io.codyn.commons.test.TestClock;
 import io.codyn.commons.test.TestRandom;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Duration;
+import java.time.Instant;
+import java.util.Base64;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public class JwtAuthTokenComponentTest {
 
@@ -21,20 +29,23 @@ public class JwtAuthTokenComponentTest {
     private static final byte[] TOKEN_KEY = TestRandom.bytes();
     private static final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(15);
     private static final Duration REFRESH_TOKEN_DURATION = Duration.ofHours(1);
+    private static final TestClock CLOCK = new TestClock();
     private JwtAuthTokenComponent component;
     private TestUserAuthDataRepository authDataRepository;
-    private TestClock clock;
 
     @BeforeEach
     void setup() {
-        clock = new TestClock();
-
         authDataRepository = new TestUserAuthDataRepository();
 
         var componentConfig = new JwtAuthTokenComponent.Config(ISSUER, TOKEN_KEY, ACCESS_TOKEN_DURATION,
-                REFRESH_TOKEN_DURATION, clock);
+                REFRESH_TOKEN_DURATION, CLOCK);
 
         component = new JwtAuthTokenComponent(authDataRepository, componentConfig);
+    }
+
+    @AfterEach
+    void tearDown() {
+        CLOCK.setTime(Instant.now());
     }
 
     @Test
@@ -43,8 +54,8 @@ public class JwtAuthTokenComponentTest {
 
         var tokens = component.ofUser(userId);
 
-        var expectedAccessTokenExpiresAt = clock.instant().plus(ACCESS_TOKEN_DURATION);
-        var expectedRefreshTokenExpiresAt = clock.instant().plus(REFRESH_TOKEN_DURATION);
+        var expectedAccessTokenExpiresAt = CLOCK.instant().plus(ACCESS_TOKEN_DURATION);
+        var expectedRefreshTokenExpiresAt = CLOCK.instant().plus(REFRESH_TOKEN_DURATION);
 
         Assertions.assertThat(tokens.access().expiresAt())
                 .isEqualTo(expectedAccessTokenExpiresAt);
@@ -62,13 +73,72 @@ public class JwtAuthTokenComponentTest {
                 .isEqualTo(user);
     }
 
+    @ParameterizedTest
+    @MethodSource("invalidAccessTokens")
+    void shouldThrowExceptionGivenInvalidAccessToken(String accessToken) {
+        assertAuthenticateThrowsInvalidAuthTokenException(accessToken);
+    }
+
+    private void assertAuthenticateThrowsInvalidAuthTokenException(String token) {
+        Assertions.assertThatThrownBy(() -> component.authenticate(token))
+                .isInstanceOf(InvalidAuthTokenException.class)
+                .hasMessageContaining(AuthTokenType.ACCESS.name());
+    }
+
+    @Test
+    void shouldThrowExceptionGivenOutdatedAccessToken() {
+        var user = prepareRandomUser();
+
+        CLOCK.moveBack(ACCESS_TOKEN_DURATION.plusSeconds(1));
+
+        var accessToken = component.ofUser(user.id()).access().value();
+
+        CLOCK.setTime(Instant.now());
+
+        assertAuthenticateThrowsInvalidAuthTokenException(accessToken);
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidRefreshTokens")
+    void shouldThrowExceptionGivenInvalidRefreshToken(String refreshToken) {
+        assertRefreshThrowsInvalidAuthTokenException(refreshToken);
+    }
+
+    private void assertRefreshThrowsInvalidAuthTokenException(String token) {
+        Assertions.assertThatThrownBy(() -> component.refresh(token))
+                .isInstanceOf(InvalidAuthTokenException.class)
+                .hasMessageContaining(AuthTokenType.REFRESH.name());
+    }
+
+    @Test
+    void shouldThrowExceptionGivenOutdatedRefreshToken() {
+        var user = prepareRandomUser();
+
+        CLOCK.moveBack(REFRESH_TOKEN_DURATION.plusSeconds(1));
+
+        var refreshToken = component.ofUser(user.id()).refresh().value();
+
+        CLOCK.setTime(Instant.now());
+
+        assertRefreshThrowsInvalidAuthTokenException(refreshToken);
+    }
+
+    @Test
+    void shouldThrowExceptionWhileRefreshingWithAccessToken() {
+        var user = prepareRandomUser();
+
+        var accessToken = component.ofUser(user.id()).access().value();
+
+        assertRefreshThrowsInvalidAuthTokenException(accessToken);
+    }
+
     @Test
     void shouldGenerateNewTokensGivenValidRefreshToken() {
         var user = prepareRandomUser();
 
         var firstTokens = component.ofUser(user.id());
 
-        clock.moveBack(Duration.ofSeconds(1));
+        CLOCK.moveForward(Duration.ofSeconds(1));
 
         var secondTokens = component.refresh(firstTokens.refresh().value());
 
@@ -88,5 +158,34 @@ public class JwtAuthTokenComponentTest {
         authDataRepository.addUserData(new UserAuthData(id, state, roles.roles()));
 
         return new AuthenticatedUser(id, state, roles);
+    }
+
+    static Stream<String> invalidAccessTokens() {
+        return invalidTokens(AuthTokenType.ACCESS);
+    }
+
+    static Stream<String> invalidRefreshTokens() {
+        return invalidTokens(AuthTokenType.REFRESH);
+    }
+
+    private static Stream<String> invalidTokens(AuthTokenType type) {
+        var invalidIssuerToken = newJwtToken("another-issuer", type, TOKEN_KEY);
+        var invalidSecretToken = newJwtToken(ISSUER, type, TestRandom.bytes());
+        var invalidTypeToken = newJwtToken(ISSUER,
+                type == AuthTokenType.ACCESS ? AuthTokenType.REFRESH : AuthTokenType.ACCESS,
+                TOKEN_KEY);
+
+        return Stream.of(null, "",
+                TestRandom.string(), Base64.getEncoder().encodeToString(TestRandom.bytes()),
+                invalidIssuerToken, invalidSecretToken, invalidTypeToken);
+    }
+
+    private static String newJwtToken(String issuer, AuthTokenType type, byte[] key) {
+        return JwtAuthTokenComponent.newToken(issuer,
+                UUID.randomUUID(),
+                type,
+                CLOCK.instant(),
+                CLOCK.instant().plusSeconds(1000),
+                Algorithm.HMAC512(key));
     }
 }

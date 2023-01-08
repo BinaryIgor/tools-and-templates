@@ -1,6 +1,7 @@
 package io.codyn.app.template.auth.domain;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
 import io.codyn.app.template._shared.domain.exception.ResourceNotFoundException;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 public class JwtAuthTokenComponent implements AuthTokenComponent {
 
+    private static final String TOKEN_TYPE_CLAIM = "typ";
     private static final Logger log = LoggerFactory.getLogger(JwtAuthTokenComponent.class);
 
     private final UserAuthDataRepository authDataRepository;
@@ -50,16 +52,25 @@ public class JwtAuthTokenComponent implements AuthTokenComponent {
 
         var expiresAt = issuedAt.plus(tokenDuration);
 
-        var token = JWT.create()
-                .withIssuer(issuer)
-                .withSubject(id.toString())
-                .withIssuedAt(issuedAt)
-                .withExpiresAt(expiresAt)
-                .sign(algorithm);
+        var token = newToken(issuer, id, type, issuedAt, expiresAt, algorithm);
 
         return new AuthToken(token, expiresAt);
     }
 
+    static String newToken(String issuer,
+                           UUID subject,
+                           AuthTokenType type,
+                           Instant issuedAt,
+                           Instant expiresAt,
+                           Algorithm algorithm) {
+        return JWT.create()
+                .withIssuer(issuer)
+                .withSubject(subject.toString())
+                .withClaim(TOKEN_TYPE_CLAIM, type.name())
+                .withIssuedAt(issuedAt)
+                .withExpiresAt(expiresAt)
+                .sign(algorithm);
+    }
 
     @Override
     public AuthTokens refresh(String refreshToken) {
@@ -71,12 +82,7 @@ public class JwtAuthTokenComponent implements AuthTokenComponent {
         UUID userId;
 
         try {
-            var verifier = JWT.require(algorithm)
-                    .withIssuer(issuer)
-                    .build();
-
-            var decodedToken = verifier.verify(token);
-
+            var decodedToken = tokenVerifier(type).verify(token);
             userId = UUID.fromString(decodedToken.getSubject());
         } catch (Exception e) {
             log.warn("Invalid {} token", type, e);
@@ -86,6 +92,18 @@ public class JwtAuthTokenComponent implements AuthTokenComponent {
         return authDataRepository.ofId(userId)
                 .map(UserAuthData::toAuthenticatedUser)
                 .orElseThrow(() -> ResourceNotFoundException.ofId("user", userId));
+    }
+
+    private JWTVerifier tokenVerifier(AuthTokenType type) {
+        var builder = JWT.require(algorithm)
+                .withIssuer(issuer)
+                .withClaim(TOKEN_TYPE_CLAIM, type.name());
+
+        if (builder instanceof JWTVerifier.BaseVerification b) {
+            return b.build(clock);
+        }
+
+        return builder.build();
     }
 
     @Override
