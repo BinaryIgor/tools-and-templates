@@ -1,5 +1,9 @@
-package io.codyn.app.template._shared.domain.model;
+package io.codyn.app.template.auth.api;
 
+
+import io.codyn.app.template._shared.domain.model.UserRole;
+import io.codyn.app.template._shared.domain.model.UserRoles;
+import io.codyn.app.template._shared.domain.model.UserState;
 
 import java.util.Set;
 import java.util.UUID;

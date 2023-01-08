@@ -233,4 +233,14 @@ public class TestRandom {
     public static <T extends Enum<?>> T oneOf(Class<T> enumType) {
         return oneOf(enumType.getEnumConstants());
     }
+
+    public static byte[] bytes(int size) {
+        var bytes = new byte[size];
+        RANDOM.nextBytes(bytes);
+        return bytes;
+    }
+
+    public static byte[] bytes() {
+        return bytes(inRange(10, 50));
+    }
 }

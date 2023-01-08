@@ -9,4 +9,8 @@ import java.util.UUID;
 public record UserAuthData(UUID id,
                            UserState state,
                            Set<UserRole> roles) {
+
+    public AuthenticatedUser toAuthenticatedUser() {
+        return new AuthenticatedUser(id, state, roles);
+    }
 }

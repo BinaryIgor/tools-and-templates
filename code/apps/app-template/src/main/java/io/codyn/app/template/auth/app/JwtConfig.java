@@ -5,7 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.time.Duration;
 
 @ConfigurationProperties(prefix = "app.jwt")
-public record JwtConfig(String tokenKey,
+public record JwtConfig(String issuer,
+                        String tokenKey,
                         Duration accessTokenDuration,
                         Duration refreshTokenDuration) {
 }

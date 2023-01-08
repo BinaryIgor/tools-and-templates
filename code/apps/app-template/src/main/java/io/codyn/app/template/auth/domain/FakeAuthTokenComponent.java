@@ -2,10 +2,9 @@ package io.codyn.app.template.auth.domain;
 
 import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
 import io.codyn.app.template._shared.domain.exception.ResourceNotFoundException;
-import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
+import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template._shared.domain.model.UserRoles;
 import io.codyn.app.template._shared.domain.model.UserState;
-import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.util.*;

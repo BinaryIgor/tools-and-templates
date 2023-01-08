@@ -4,7 +4,7 @@ import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
 import io.codyn.app.template.auth.domain.AuthTokens;
-import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
+import io.codyn.app.template.auth.api.AuthenticatedUser;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

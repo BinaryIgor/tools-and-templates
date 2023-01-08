@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.domain;
 
-import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
+import io.codyn.app.template.auth.api.AuthenticatedUser;
 
 import java.util.UUID;
 

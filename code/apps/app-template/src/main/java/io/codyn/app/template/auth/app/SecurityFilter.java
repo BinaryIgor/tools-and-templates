@@ -1,10 +1,11 @@
 package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._shared.app.exception.ApiExceptionResponse;
+import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
 import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
-import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
+import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.commons.json.JsonMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -50,7 +51,7 @@ public class SecurityFilter implements Filter {
             securityRules.validateAccess(request.getRequestURI(), user);
 
             filterChain.doFilter(servletRequest, servletResponse);
-        } catch (UnauthenticatedException e) {
+        } catch (UnauthenticatedException | InvalidAuthTokenException e) {
             sendExceptionResponse(response, 401, e);
         } catch (ResourceForbiddenException e) {
             sendExceptionResponse(response, 403, e);

@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.Clock;
+
 @Configuration
 @EnableConfigurationProperties(JwtConfig.class)
 public class AuthModuleConfig {
@@ -25,10 +27,14 @@ public class AuthModuleConfig {
 
     @Bean
     public AuthTokenComponent authTokenComponent(UserAuthDataRepository authDataRepository,
-                                                 JwtConfig config) {
-        var componentConfig = new JwtAuthTokenComponent.Config(StringBytesMapper.bytesFromString(config.tokenKey()),
-                config.accessTokenDuration().getSeconds(),
-                config.refreshTokenDuration().getSeconds());
+                                                 JwtConfig config,
+                                                 Clock clock) {
+        var componentConfig = new JwtAuthTokenComponent.Config(
+                config.issuer(),
+                StringBytesMapper.bytesFromString(config.tokenKey()),
+                config.accessTokenDuration(),
+                config.refreshTokenDuration(),
+                clock);
 
         return new JwtAuthTokenComponent(authDataRepository, componentConfig);
     }
