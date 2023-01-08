@@ -5,6 +5,8 @@ package io.codyn.commons.sqldb.schema.user;
 
 
 import io.codyn.commons.sqldb.schema.user.tables.ActivationToken;
+import io.codyn.commons.sqldb.schema.user.tables.Role;
+import io.codyn.commons.sqldb.schema.user.tables.SecondFactorAuthentication;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +35,16 @@ public class User extends SchemaImpl {
     public final ActivationToken ACTIVATION_TOKEN = ActivationToken.ACTIVATION_TOKEN;
 
     /**
+     * The table <code>user.role</code>.
+     */
+    public final Role ROLE = Role.ROLE;
+
+    /**
+     * The table <code>user.second_factor_authentication</code>.
+     */
+    public final SecondFactorAuthentication SECOND_FACTOR_AUTHENTICATION = SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION;
+
+    /**
      * The table <code>user.user</code>.
      */
     public final io.codyn.commons.sqldb.schema.user.tables.User USER = io.codyn.commons.sqldb.schema.user.tables.User.USER;
@@ -54,6 +66,8 @@ public class User extends SchemaImpl {
     public final List<Table<?>> getTables() {
         return Arrays.<Table<?>>asList(
             ActivationToken.ACTIVATION_TOKEN,
+            Role.ROLE,
+            SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION,
             io.codyn.commons.sqldb.schema.user.tables.User.USER);
     }
 }

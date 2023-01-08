@@ -1,19 +1,19 @@
 package io.codyn.app.template.auth.domain;
 
 import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
-import io.codyn.app.template.user.api.UserAuthClient;
+import io.codyn.app.template.auth.api.UserAuthDataRepository;
 
 import java.util.UUID;
 
 public class JwtAuthTokenComponent implements AuthTokenComponent {
 
-    private final UserAuthClient authClient;
+    private final UserAuthDataRepository authDataRepository;
     private final byte[] tokenKey;
     private final long accessTokenDuration;
     private final long refreshTokenDuration;
 
-    public JwtAuthTokenComponent(UserAuthClient authClient, Config config) {
-        this.authClient = authClient;
+    public JwtAuthTokenComponent(UserAuthDataRepository authDataRepository, Config config) {
+        this.authDataRepository = authDataRepository;
         this.tokenKey = config.tokenKey;
         this.accessTokenDuration = config.accessTokenDuration;
         this.refreshTokenDuration = config.refreshTokenDuration;

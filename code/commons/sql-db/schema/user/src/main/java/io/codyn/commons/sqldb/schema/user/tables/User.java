@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row6;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -72,6 +72,16 @@ public class User extends TableImpl<UserRecord> {
      * The column <code>user.user.state</code>.
      */
     public final TableField<UserRecord, String> STATE = createField(DSL.name("state"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field("'CREATED'::text", SQLDataType.CLOB)), this, "");
+
+    /**
+     * The column <code>user.user.second_factor_authentication</code>.
+     */
+    public final TableField<UserRecord, Boolean> SECOND_FACTOR_AUTHENTICATION = createField(DSL.name("second_factor_authentication"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
+
+    /**
+     * The column <code>user.user.external_authentication</code>.
+     */
+    public final TableField<UserRecord, String> EXTERNAL_AUTHENTICATION = createField(DSL.name("external_authentication"), SQLDataType.CLOB, this, "");
 
     /**
      * The column <code>user.user.created_at</code>.
@@ -153,11 +163,11 @@ public class User extends TableImpl<UserRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<UUID, String, String, String, String, LocalDateTime> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row8<UUID, String, String, String, String, Boolean, String, LocalDateTime> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

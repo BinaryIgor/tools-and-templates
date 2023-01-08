@@ -6,3 +6,9 @@ management:
     web:
       exposure:
         include: [ "health", "info", "prometheus" ]
+
+app:
+  jwt:
+    token-key: "xCwZ4zydRbu8kbKre59Hi2224Xdz0PupADTWkErvIg4="
+    access-token-duration: "PT1H"
+    refresh-token-duration: "PT24H"

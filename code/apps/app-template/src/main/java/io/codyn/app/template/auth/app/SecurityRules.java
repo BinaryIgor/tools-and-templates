@@ -4,25 +4,17 @@ import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template._shared.domain.model.UserState;
 import io.codyn.app.template._shared.domain.model.AuthenticatedUser;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-@Component
 public class SecurityRules {
 
     private final Predicates predicates;
 
     public SecurityRules(Predicates predicates) {
         this.predicates = predicates;
-    }
-
-    public SecurityRules() {
-        this(new Predicates(SecurityEndpoints::isPublic,
-                SecurityEndpoints::isUserOfStateAllowed,
-                SecurityEndpoints::isAdmin));
     }
 
     public void validateAccess(String endpoint,

@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.api;
+package io.codyn.app.template.auth.api;
 
 import io.codyn.app.template._shared.domain.model.UserRole;
 import io.codyn.app.template._shared.domain.model.UserState;

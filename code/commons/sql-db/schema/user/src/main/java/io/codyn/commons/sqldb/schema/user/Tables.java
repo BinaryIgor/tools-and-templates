@@ -5,6 +5,8 @@ package io.codyn.commons.sqldb.schema.user;
 
 
 import io.codyn.commons.sqldb.schema.user.tables.ActivationToken;
+import io.codyn.commons.sqldb.schema.user.tables.Role;
+import io.codyn.commons.sqldb.schema.user.tables.SecondFactorAuthentication;
 import io.codyn.commons.sqldb.schema.user.tables.User;
 
 
@@ -18,6 +20,16 @@ public class Tables {
      * The table <code>user.activation_token</code>.
      */
     public static final ActivationToken ACTIVATION_TOKEN = ActivationToken.ACTIVATION_TOKEN;
+
+    /**
+     * The table <code>user.role</code>.
+     */
+    public static final Role ROLE = Role.ROLE;
+
+    /**
+     * The table <code>user.second_factor_authentication</code>.
+     */
+    public static final SecondFactorAuthentication SECOND_FACTOR_AUTHENTICATION = SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION;
 
     /**
      * The table <code>user.user</code>.

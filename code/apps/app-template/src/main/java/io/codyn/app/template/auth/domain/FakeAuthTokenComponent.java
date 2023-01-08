@@ -11,7 +11,8 @@ import java.time.Clock;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Component
+//@Component
+//TODO: use in tests
 public class FakeAuthTokenComponent implements AuthTokenComponent {
 
     private static final long ACCESS_TOKEN_EXPIRATION = TimeUnit.HOURS.toSeconds(1);
