@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.domain.model;
+package io.codyn.app.template.user.domain.model.auth;
 
 public record NewUser(String name,
                       String email,

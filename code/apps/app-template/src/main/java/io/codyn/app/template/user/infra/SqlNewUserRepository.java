@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.infra;
 
-import io.codyn.app.template.user.domain.model.NewUser;
+import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.commons.sqldb.core.DSLContextProvider;
 import org.springframework.stereotype.Repository;

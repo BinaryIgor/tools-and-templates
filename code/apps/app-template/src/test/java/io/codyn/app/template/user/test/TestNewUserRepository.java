@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template.user.domain.model.NewUser;
+import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 
 import java.util.UUID;

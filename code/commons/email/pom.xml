@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>email</artifactId>
+    <artifactId>commons-email</artifactId>
 
     <dependencies>
         <dependency>

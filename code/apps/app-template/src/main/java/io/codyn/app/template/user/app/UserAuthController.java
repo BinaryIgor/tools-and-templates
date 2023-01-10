@@ -5,7 +5,7 @@ import io.codyn.app.template.auth.domain.AuthTokens;
 import io.codyn.app.template.user.app.model.ActivationToken;
 import io.codyn.app.template.user.app.model.RefreshToken;
 import io.codyn.app.template.user.domain.NewUserService;
-import io.codyn.app.template.user.domain.model.*;
+import io.codyn.app.template.user.domain.model.auth.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

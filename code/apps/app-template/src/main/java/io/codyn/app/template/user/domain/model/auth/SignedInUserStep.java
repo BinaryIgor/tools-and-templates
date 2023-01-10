@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.domain.model;
+package io.codyn.app.template.user.domain.model.auth;
 
 public record SignedInUserStep(boolean secondFactor, SignedInUser user) {
 
