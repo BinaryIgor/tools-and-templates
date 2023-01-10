@@ -2,7 +2,7 @@ package io.codyn.commons.email;
 
 import io.codyn.commons.email.model.EmailTemplate;
 import io.codyn.commons.email.model.EmailTemplates;
-import io.codyn.commons.tools.Templates;
+import io.codyn.tools.Templates;
 
 import java.util.*;
 

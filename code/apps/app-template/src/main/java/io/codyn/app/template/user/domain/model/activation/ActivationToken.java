@@ -1,17 +1,18 @@
 package io.codyn.app.template.user.domain.model.activation;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
-public record ActivationToken(String userId,
+public record ActivationToken(UUID userId,
                               ActivationTokenType type,
                               String linkId,
                               String token,
-                              LocalDateTime expiresAt) {
+                              Instant expiresAt) {
 
-    public ActivationToken(String userId,
+    public ActivationToken(UUID userId,
                            ActivationTokenType type,
                            String token,
-                           LocalDateTime expiresAt) {
+                           Instant expiresAt) {
         this(userId, type, ActivationTokenId.CONSTANT_LINK_ID, token, expiresAt);
     }
 
@@ -19,7 +20,7 @@ public record ActivationToken(String userId,
         return new ActivationToken(userId, type, linkId, token, expiresAt);
     }
 
-    public ActivationToken withExpiresAt(LocalDateTime expiresAt) {
+    public ActivationToken withExpiresAt(Instant expiresAt) {
         return new ActivationToken(userId, type, linkId, token, expiresAt);
     }
 }

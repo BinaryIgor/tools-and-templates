@@ -3,7 +3,7 @@ package io.codyn.commons.email.server;
 import io.codyn.commons.email.model.Email;
 import io.codyn.commons.email.model.EmailAddress;
 import io.codyn.commons.json.JsonMapper;
-import io.codyn.commons.tools.CollectionTools;
+import io.codyn.tools.CollectionTools;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import org.slf4j.Logger;

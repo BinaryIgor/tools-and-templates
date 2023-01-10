@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-tools</artifactId>
+    <artifactId>tools</artifactId>
 
     <dependencies>
         <dependency>

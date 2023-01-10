@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-//TODO: test
+//TODO: test, config
 @Component
 public class UserEmailComponent {
 
@@ -48,7 +48,7 @@ public class UserEmailComponent {
     private void sendEmail(EmailUser user, String type, Map<String, String> variables) {
         var emailTemplate = new NewEmailTemplate(config.fromEmail(),
                 EmailAddress.ofNameEmail(user.name(), user.email()),
-                user.language(),
+                user.language().name(),
                 type,
                 variables);
 

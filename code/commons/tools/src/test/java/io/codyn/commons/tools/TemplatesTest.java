@@ -1,5 +1,6 @@
 package io.codyn.commons.tools;
 
+import io.codyn.tools.Templates;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

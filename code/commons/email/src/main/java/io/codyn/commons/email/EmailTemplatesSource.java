@@ -5,8 +5,8 @@ import io.codyn.commons.email.model.EmailTemplate;
 import io.codyn.commons.email.model.EmailTemplates;
 import io.codyn.commons.email.model.EmailTranslation;
 import io.codyn.commons.json.JsonMapper;
-import io.codyn.commons.tools.CustomFileInterpreter;
-import io.codyn.commons.tools.Templates;
+import io.codyn.tools.CustomFileInterpreter;
+import io.codyn.tools.Templates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

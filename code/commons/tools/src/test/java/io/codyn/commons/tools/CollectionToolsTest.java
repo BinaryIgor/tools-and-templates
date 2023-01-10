@@ -1,6 +1,7 @@
 package io.codyn.commons.tools;
 
 import io.codyn.commons.test.TestRandom;
+import io.codyn.tools.CollectionTools;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 

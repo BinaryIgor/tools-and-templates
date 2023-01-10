@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-tools</artifactId>
+            <artifactId>tools</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
