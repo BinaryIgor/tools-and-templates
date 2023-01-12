@@ -3,10 +3,10 @@ package io.codyn.app.template.user.domain;
 import io.codyn.app.template._shared.domain.email.Emails;
 import io.codyn.app.template.user.domain.model.EmailUser;
 import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
-import io.codyn.commons.email.factory.EmailFactory;
-import io.codyn.commons.email.model.EmailAddress;
-import io.codyn.commons.email.model.NewEmailTemplate;
-import io.codyn.commons.email.server.EmailServer;
+import io.codyn.email.factory.EmailFactory;
+import io.codyn.email.model.EmailAddress;
+import io.codyn.email.model.NewEmailTemplate;
+import io.codyn.email.server.EmailServer;
 
 import java.util.Map;
 

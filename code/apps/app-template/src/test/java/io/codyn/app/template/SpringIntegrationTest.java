@@ -2,8 +2,8 @@ package io.codyn.app.template;
 
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.user.TestUserClient;
-import io.codyn.commons.sqldb.test.CustomPostgreSQLContainer;
-import io.codyn.commons.test.http.TestHttpClient;
+import io.codyn.sqldb.test.CustomPostgreSQLContainer;
+import io.codyn.test.http.TestHttpClient;
 import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;

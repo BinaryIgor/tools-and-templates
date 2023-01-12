@@ -3,7 +3,7 @@ package io.codyn.app.template.user.infra;
 import io.codyn.app.template._shared.domain.model.UserState;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.model.User;
-import io.codyn.commons.sqldb.schema.user.tables.records.UserRecord;
+import io.codyn.sqldb.schema.user.tables.records.UserRecord;
 
 import java.util.UUID;
 

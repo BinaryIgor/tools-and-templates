@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.codyn</groupId>
-        <artifactId>commons-sql-db</artifactId>
+        <artifactId>sql-db</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-sql-db-core</artifactId>
+    <artifactId>sql-db-core</artifactId>
 
     <dependencies>
         <dependency>
@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-types</artifactId>
+            <artifactId>types</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

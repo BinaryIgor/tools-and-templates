@@ -6,8 +6,8 @@ import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
-import io.codyn.commons.types.EventHandler;
-import io.codyn.commons.types.Transactions;
+import io.codyn.types.EventHandler;
+import io.codyn.types.Transactions;
 import org.springframework.stereotype.Service;
 
 @Service

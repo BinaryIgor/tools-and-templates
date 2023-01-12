@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.test;
 
-import io.codyn.commons.types.EventPublisher;
+import io.codyn.types.EventPublisher;
 
 public class TestEventPublisher implements EventPublisher {
 

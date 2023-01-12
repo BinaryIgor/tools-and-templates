@@ -6,7 +6,7 @@ import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
-import io.codyn.commons.json.JsonMapper;
+import io.codyn.json.JsonMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletRequest;

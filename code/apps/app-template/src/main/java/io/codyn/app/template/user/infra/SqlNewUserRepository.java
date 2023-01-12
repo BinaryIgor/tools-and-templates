@@ -2,12 +2,12 @@ package io.codyn.app.template.user.infra;
 
 import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
-import io.codyn.commons.sqldb.core.DSLContextProvider;
+import io.codyn.sqldb.core.DSLContextProvider;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-import static io.codyn.commons.sqldb.schema.user.tables.User.USER;
+import static io.codyn.sqldb.schema.user.tables.User.USER;
 
 @Repository
 public class SqlNewUserRepository implements NewUserRepository {

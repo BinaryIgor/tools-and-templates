@@ -1,6 +1,6 @@
 package io.codyn.app.template;
 
-import io.codyn.commons.email.model.EmailAddress;
+import io.codyn.email.model.EmailAddress;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "app.email")

@@ -1,6 +1,6 @@
 package io.codyn.system.monitor;
 
-import io.codyn.commons.test.http.TestHttpClient;
+import io.codyn.test.http.TestHttpClient;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.beans.factory.annotation.Autowired;

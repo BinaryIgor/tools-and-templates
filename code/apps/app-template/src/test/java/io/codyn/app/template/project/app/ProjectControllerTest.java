@@ -8,7 +8,7 @@ import io.codyn.app.template.project.domain.ProjectRepository;
 import io.codyn.app.template.project.domain.model.Project;
 import io.codyn.app.template.project.domain.model.ProjectWithUsers;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
-import io.codyn.commons.test.http.TestHttpClient;
+import io.codyn.test.http.TestHttpClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

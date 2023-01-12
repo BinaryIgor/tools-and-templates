@@ -3,14 +3,14 @@ package io.codyn.app.template.project.infra;
 import io.codyn.app.template._shared.domain.exception.OptimisticLockException;
 import io.codyn.app.template.project.domain.ProjectRepository;
 import io.codyn.app.template.project.domain.model.Project;
-import io.codyn.commons.sqldb.schema.project.tables.records.ProjectRecord;
+import io.codyn.sqldb.schema.project.tables.records.ProjectRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static io.codyn.commons.sqldb.schema.project.Tables.PROJECT;
+import static io.codyn.sqldb.schema.project.Tables.PROJECT;
 
 @Repository
 public class SqlProjectRepository implements ProjectRepository {

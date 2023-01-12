@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static io.codyn.commons.sqldb.schema.user.Tables.USER;
+import static io.codyn.sqldb.schema.user.Tables.USER;
 
 @Repository
 public class SqlUserRepository implements UserRepository {

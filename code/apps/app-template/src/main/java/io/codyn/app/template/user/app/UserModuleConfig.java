@@ -2,8 +2,8 @@ package io.codyn.app.template.user.app;
 
 import io.codyn.app.template.EmailConfig;
 import io.codyn.app.template.user.domain.UserEmailComponent;
-import io.codyn.commons.email.factory.EmailFactory;
-import io.codyn.commons.email.server.EmailServer;
+import io.codyn.email.factory.EmailFactory;
+import io.codyn.email.server.EmailServer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

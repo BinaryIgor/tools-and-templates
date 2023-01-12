@@ -9,17 +9,17 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-test</artifactId>
+    <artifactId>test</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-types</artifactId>
+            <artifactId>types</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-json</artifactId>
+            <artifactId>json</artifactId>
             <version>${project.version}</version>
         </dependency>
 

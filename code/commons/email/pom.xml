@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-email</artifactId>
+    <artifactId>email</artifactId>
 
     <dependencies>
         <dependency>
@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-json</artifactId>
+            <artifactId>json</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -38,13 +38,13 @@
 
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-test</artifactId>
+            <artifactId>test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-test-http</artifactId>
+            <artifactId>test-http</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

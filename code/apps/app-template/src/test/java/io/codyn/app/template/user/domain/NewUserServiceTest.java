@@ -11,7 +11,7 @@ import io.codyn.app.template.user.test.TestNewUserRepository;
 import io.codyn.app.template.user.test.TestUserMapper;
 import io.codyn.app.template.user.test.TestUserObjects;
 import io.codyn.app.template.user.test.TestUserRepository;
-import io.codyn.commons.test.TestTransactions;
+import io.codyn.test.TestTransactions;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

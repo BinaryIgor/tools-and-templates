@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.codyn</groupId>
-        <artifactId>commons-sql-db-schema</artifactId>
+        <artifactId>sql-db-schema</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-sql-db-schema-project</artifactId>
+    <artifactId>sql-db-schema-project</artifactId>
 
     <build>
         <plugins>
@@ -46,7 +46,7 @@
                             </matchers>
                         </strategy>
                         <target>
-                            <packageName>io.codyn.commons.sqldb.schema.project</packageName>
+                            <packageName>io.codyn.sqldb.schema.project</packageName>
                             <directory>src/main/java</directory>
                         </target>
                     </generator>

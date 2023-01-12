@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
-import static io.codyn.commons.sqldb.schema.project.Tables.PROJECT_USER;
+import static io.codyn.sqldb.schema.project.Tables.PROJECT_USER;
 
 @Repository
 public class SqlProjectUsersRepository implements ProjectUsersRepository {

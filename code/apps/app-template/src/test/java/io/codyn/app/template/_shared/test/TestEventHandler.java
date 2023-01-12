@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.test;
 
-import io.codyn.commons.types.EventHandler;
+import io.codyn.types.EventHandler;
 
 public class TestEventHandler<T> implements EventHandler<T> {
 

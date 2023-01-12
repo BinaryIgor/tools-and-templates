@@ -5,7 +5,7 @@ import io.codyn.app.template.user.domain.ActivationTokenFactory;
 import io.codyn.app.template.user.domain.UserEmailComponent;
 import io.codyn.app.template.user.domain.model.EmailUser;
 import io.codyn.app.template.user.domain.repository.ActivationTokenRepository;
-import io.codyn.commons.types.EventHandler;
+import io.codyn.types.EventHandler;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;

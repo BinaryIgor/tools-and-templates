@@ -5,16 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.codyn</groupId>
-        <artifactId>commons-sql-db</artifactId>
+        <artifactId>sql-db</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-sql-db-test</artifactId>
+    <artifactId>sql-db-test</artifactId>
 
    <dependencies>
        <dependency>
            <groupId>io.codyn</groupId>
-           <artifactId>commons-sql-db-core</artifactId>
+           <artifactId>sql-db-core</artifactId>
            <version>${project.version}</version>
        </dependency>
 

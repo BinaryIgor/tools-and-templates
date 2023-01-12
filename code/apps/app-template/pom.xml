@@ -44,7 +44,7 @@
 
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-types</artifactId>
+            <artifactId>types</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -54,24 +54,24 @@
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-json</artifactId>
+            <artifactId>json</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-email</artifactId>
+            <artifactId>email</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-test</artifactId>
+            <artifactId>test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-test-http</artifactId>
+            <artifactId>test-http</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
@@ -82,17 +82,17 @@
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-sql-db-core</artifactId>
+            <artifactId>sql-db-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-sql-db-schema-user</artifactId>
+            <artifactId>sql-db-schema-user</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-sql-db-schema-project</artifactId>
+            <artifactId>sql-db-schema-project</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -103,7 +103,7 @@
         </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
-            <artifactId>commons-sql-db-test</artifactId>
+            <artifactId>sql-db-test</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

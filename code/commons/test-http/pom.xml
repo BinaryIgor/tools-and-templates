@@ -9,12 +9,12 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>commons-test-http</artifactId>
+    <artifactId>test-http</artifactId>
 
    <dependencies>
        <dependency>
            <groupId>io.codyn</groupId>
-           <artifactId>commons-json</artifactId>
+           <artifactId>json</artifactId>
            <version>${project.version}</version>
        </dependency>
        <dependency>

@@ -3,10 +3,10 @@ package io.codyn.app.template._shared.app;
 
 import io.codyn.app.template._shared.domain.email.Emails;
 import io.codyn.app.template._shared.domain.model.ApplicationLanguage;
-import io.codyn.commons.email.factory.EmailFactory;
-import io.codyn.commons.email.factory.EmailTemplatesFactory;
-import io.codyn.commons.email.factory.TemplatesEmailFactory;
-import io.codyn.commons.email.model.EmailTemplates;
+import io.codyn.email.factory.EmailFactory;
+import io.codyn.email.factory.EmailTemplatesFactory;
+import io.codyn.email.factory.TemplatesEmailFactory;
+import io.codyn.email.model.EmailTemplates;
 import io.codyn.tools.FilePathFinder;
 
 import java.nio.file.Files;

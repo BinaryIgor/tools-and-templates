@@ -1,6 +1,6 @@
 package io.codyn.system.monitor.logs.app;
 
-import io.codyn.commons.test.TestRandom;
+import io.codyn.test.TestRandom;
 import io.codyn.system.monitor.IntegrationTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

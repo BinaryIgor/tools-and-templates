@@ -1,7 +1,6 @@
 package io.codyn.system.monitor.logs.infra;
 
-import io.codyn.commons.test.TestRandom;
-import io.codyn.commons.test.http.TestHttpClient;
+import io.codyn.test.TestRandom;
 import io.codyn.system.monitor.logs.domain.model.ApplicationLogLevel;
 import io.codyn.system.monitor.logs.domain.model.LogRecord;
 import org.assertj.core.api.Assertions;

@@ -4,15 +4,15 @@ import io.codyn.app.template._shared.domain.model.UserRole;
 import io.codyn.app.template._shared.domain.model.UserState;
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
-import io.codyn.commons.sqldb.core.DSLContextProvider;
-import io.codyn.commons.sqldb.core.SqlMapper;
+import io.codyn.sqldb.core.DSLContextProvider;
+import io.codyn.sqldb.core.SqlMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static io.codyn.commons.sqldb.schema.user.Tables.ROLE;
-import static io.codyn.commons.sqldb.schema.user.Tables.USER;
+import static io.codyn.sqldb.schema.user.Tables.ROLE;
+import static io.codyn.sqldb.schema.user.Tables.USER;
 
 //TODO: test, cacheable version!
 @Repository

@@ -2,12 +2,12 @@ package io.codyn.app.template.user;
 
 import io.codyn.app.template.user.api.CurrentUser;
 import io.codyn.app.template.user.api.UserClient;
-import io.codyn.commons.test.TestRandom;
+import io.codyn.test.TestRandom;
 import org.jooq.DSLContext;
 
 import java.util.UUID;
 
-import static io.codyn.commons.sqldb.schema.user.Tables.USER;
+import static io.codyn.sqldb.schema.user.Tables.USER;
 
 public class TestUserClient implements UserClient {
 
