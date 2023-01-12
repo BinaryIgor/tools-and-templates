@@ -27,7 +27,7 @@ public class UserAuthController {
 
     @PostMapping("/activate-account")
     public void activate(@RequestBody ActivationToken activationToken) {
-
+        newUserService.activate(activationToken.activationToken());
     }
 
     //TODO: impl lacking endpoints

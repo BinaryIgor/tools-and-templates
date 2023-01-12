@@ -61,4 +61,9 @@ public class NewUserService {
 
         FieldValidator.validatePassword(user.password());
     }
+
+    //TODO
+    public void activate(String activationToken) {
+
+    }
 }
