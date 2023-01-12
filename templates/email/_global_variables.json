@@ -1,0 +1,7 @@
+{
+  "textStyle": "font-family: Arial Black, Helvetica, sans-serif",
+  "heyStyle": "color: hsl(254, 74%, 65%); font-weight: bolder",
+  "linkStyle": "color: hsl(254, 74%, 55%); text-decoration: none",
+  "footerStyle": "color: #414141; font-size: 0.9em",
+  "appUrl": "https://codyn.io"
+}

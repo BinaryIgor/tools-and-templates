@@ -18,3 +18,18 @@ app:
     token-key: "${JWT_TOKEN_KEY:xCwZ4zydRbu8kbKre59Hi2224Xdz0PupADTWkErvIg4=}"
     access-token-duration: "PT1H"
     refresh-token-duration: "PT24H"
+  email:
+    fake-server: false
+    templates-dir: "${EMAIL_TEMPLATES_DIR:/templates}"
+    postmark-api-token: "${POSTMARK_API_TOKEN}"
+    postmark-webhook-token: "${POSTMARK_WEBHOOK_TOKEN}"
+    frontend-domain: "https://codyn.io"
+    from-email:
+      name: Admin
+      email: "app@codyn.io"
+    user:
+      user-activation-url: "sign-in"
+      sign-up-url: "sign-up"
+      email-change-confirmation-url: "user-account"
+      password-reset-url: "forgot-password"
+      new-password-url: "new-password"

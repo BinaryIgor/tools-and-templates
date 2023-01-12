@@ -1,25 +1,39 @@
 package io.codyn.tools;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
+//TODO: tests
 public class DataTokens {
 
     private static final String PARTS_SEPARATOR = "~";
-    private static final String DEFAULT_DATA_SEPARATOR = "::";
+    private static final String DATA_ELEMENT_START = "{{";
+    private static final String DATA_ELEMENT_END = "}}";
+    private static final Pattern DATA_ELEMENT_PATTERN = Pattern.compile("\\{\\{(.+?)}}");
     private static final int PARTS = 2;
 
-    public static String containing(String dataSeparator, String... data) {
-        var hash = UUID.randomUUID().toString();
+    public static String containing(String... data) {
+        if (data.length == 0) {
+            throw new RuntimeException("Data can't be empty");
+        }
 
-        var mergedData = String.join(dataSeparator, data);
-        var withHash = String.join(PARTS_SEPARATOR, mergedData, hash);
+        var hash = UUID.randomUUID().toString();
+        var withHash = String.join(PARTS_SEPARATOR, mergedData(), hash);
 
         return Base64Url.asEncoded(withHash);
     }
 
-    public static String containing(String... data) {
-        return containing(DEFAULT_DATA_SEPARATOR, data);
+    private static String mergedData(String... data) {
+        var builder = new StringBuilder();
+        for (var e : data) {
+            builder.append(DATA_ELEMENT_START)
+                    .append(e)
+                    .append(DATA_ELEMENT_END);
+        }
+        return builder.toString();
     }
 
     public static Optional<String> decoded(String token) {
@@ -38,11 +52,19 @@ public class DataTokens {
         return decoded.split(PARTS_SEPARATOR)[0];
     }
 
-    public static String[] splitAndExtractedData(String decoded) {
+    public static List<String> splitAndExtractedData(String decoded) {
         return splitExtractedData(extractedData(decoded));
     }
 
-    public static String[] splitExtractedData(String data) {
-        return data.split(DEFAULT_DATA_SEPARATOR);
+    public static List<String> splitExtractedData(String data) {
+        var dataElements = new ArrayList<String>();
+
+        var matcher = DATA_ELEMENT_PATTERN.matcher(data);
+        while (matcher.find()) {
+            var el = matcher.group(1);
+            dataElements.add(el);
+        }
+
+        return dataElements;
     }
 }

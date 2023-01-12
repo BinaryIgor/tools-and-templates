@@ -1,0 +1,18 @@
+{
+  "PL": {
+    "greetings": "Hej",
+    "footer": "Codyn",
+    "footerInfo": "Do zobaczenia w Codyn!",
+    "psFooter1": "Jeśli korzystasz z Gmaila, przenieś tę wiadomość na kartę Główną, dzięki czemu będziemy się tam pojawiać w przyszłości.",
+    "psFooter2": "Dzięki i do zobaczenia w Codyn!",
+    "psFooterNotification": "Jeśli nie chcesz otrzymywać od nas notyfikacji, zawsze możesz zmienić swoje preferencje w ustawieniach aplikacji."
+  },
+  "EN": {
+    "greetings": "Hey",
+    "footer": "Codyn",
+    "footerInfo": "See you in Codyn!",
+    "psFooter1": "If you use Gmail, please move this message to the Primary tab so we'll appear there moving forward.",
+    "psFooter2": "Thanks and see you in Codyn!",
+    "psFooterNotification": "If you do not want to receive notifications from us, you can always change your preferences in the application settings."
+  }
+}

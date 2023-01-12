@@ -2,7 +2,12 @@ package io.codyn.app.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.codyn.app.template._shared.app.BadRequestsInterceptor;
+import io.codyn.app.template._shared.app.EmailModuleProvider;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
+import io.codyn.commons.email.factory.EmailFactory;
+import io.codyn.commons.email.server.EmailServer;
+import io.codyn.commons.email.server.PostmarkEmailServer;
+import io.codyn.commons.email.server.ToConsoleEmailServer;
 import io.codyn.commons.json.JsonMapper;
 import io.codyn.commons.sqldb.core.DSLContextFactory;
 import io.codyn.commons.sqldb.core.DSLContextProvider;
@@ -15,6 +20,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +32,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.time.Clock;
 
 @Configuration
+@EnableConfigurationProperties(EmailConfig.class)
 public class AppConfig implements WebMvcConfigurer {
 
     @Bean
@@ -41,6 +48,19 @@ public class AppConfig implements WebMvcConfigurer {
     @Bean
     public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
         return new SpringEventPublisher(applicationEventPublisher);
+    }
+
+    @Bean
+    public EmailServer emailServer(EmailConfig emailConfig) {
+        if (emailConfig.fakeServer()) {
+            return new ToConsoleEmailServer();
+        }
+        return new PostmarkEmailServer(emailConfig.postmarkApiToken());
+    }
+
+    @Bean
+    public EmailFactory emailFactory(EmailConfig emailConfig) {
+        return EmailModuleProvider.factory(emailConfig.templatesDir());
     }
 
     @Bean

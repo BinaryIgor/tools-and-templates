@@ -1,10 +1,7 @@
-package io.codyn.app.template.auth;
+package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._shared.app.StringBytesMapper;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
-import io.codyn.app.template.auth.app.JwtConfig;
-import io.codyn.app.template.auth.app.SecurityEndpoints;
-import io.codyn.app.template.auth.app.SecurityRules;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
 import io.codyn.app.template.auth.domain.JwtAuthTokenComponent;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

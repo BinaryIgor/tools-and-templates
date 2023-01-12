@@ -3,7 +3,7 @@ package io.codyn.app.template.user.domain;
 import io.codyn.app.template._shared.domain.exception.EmailTakenException;
 import io.codyn.app.template._shared.domain.exception.ValidationException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
-import io.codyn.app.template._shared.test.TestEventPublisher;
+import io.codyn.app.template._shared.test.TestEventHandler;
 import io.codyn.app.template._shared.test.TestPasswordHasher;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
@@ -29,7 +29,7 @@ public class NewUserServiceTest {
     private TestUserRepository userRepository;
     private TestPasswordHasher passwordHasher;
     private TestTransactions transactions;
-    private TestEventPublisher eventPublisher;
+    private TestEventHandler<UserCreatedEvent> userCreatedEventHandler;
 
     @BeforeEach
     void setup() {
@@ -37,10 +37,10 @@ public class NewUserServiceTest {
         userRepository = new TestUserRepository();
         passwordHasher = new TestPasswordHasher();
         transactions = new TestTransactions();
-        eventPublisher = new TestEventPublisher();
+        userCreatedEventHandler = new TestEventHandler<>();
 
         service = new NewUserService(newUserRepository, userRepository, passwordHasher,
-                transactions, eventPublisher);
+                transactions, userCreatedEventHandler);
     }
 
     @ParameterizedTest
@@ -74,11 +74,11 @@ public class NewUserServiceTest {
         transactions.test()
                 .before(() -> {
                     Assertions.assertThat(newUserRepository.createdUser).isNull();
-                    Assertions.assertThat(eventPublisher.publishedEvent).isNull();
+                    Assertions.assertThat(userCreatedEventHandler.handledEvent).isNull();
                 })
                 .after(() -> {
                     Assertions.assertThat(newUserRepository.createdUser).isEqualTo(expectedNewUser);
-                    Assertions.assertThat(eventPublisher.publishedEvent).isEqualTo(expectedEvent);
+                    Assertions.assertThat(userCreatedEventHandler.handledEvent).isEqualTo(expectedEvent);
                 })
                 .execute(() -> service.create(newUser));
     }

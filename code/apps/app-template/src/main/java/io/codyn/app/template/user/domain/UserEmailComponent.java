@@ -7,12 +7,10 @@ import io.codyn.commons.email.factory.EmailFactory;
 import io.codyn.commons.email.model.EmailAddress;
 import io.codyn.commons.email.model.NewEmailTemplate;
 import io.codyn.commons.email.server.EmailServer;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 //TODO: test, config
-@Component
 public class UserEmailComponent {
 
     private final EmailFactory factory;
@@ -57,14 +55,13 @@ public class UserEmailComponent {
         server.send(email);
     }
 
-
     public record Config(
             String frontendDomain,
             EmailAddress fromEmail,
             String userActivationUrl,
             String signUpUrl,
             String emailChangeConfirmationUrl,
-            String newPasswordUrl,
-            String passwordResetUrl) {
+            String passwordResetUrl,
+            String newPasswordUrl) {
     }
 }
