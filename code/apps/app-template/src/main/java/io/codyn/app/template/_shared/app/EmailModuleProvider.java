@@ -15,6 +15,10 @@ import java.util.Arrays;
 
 public class EmailModuleProvider {
 
+    public static EmailFactory factory() {
+        return factory(null);
+    }
+
     public static EmailFactory factory(String templatesDirectory) {
         if (templatesDirectory == null || !Files.exists(Path.of(templatesDirectory))) {
             templatesDirectory = FilePathFinder.templatesUpFromCurrentPath();

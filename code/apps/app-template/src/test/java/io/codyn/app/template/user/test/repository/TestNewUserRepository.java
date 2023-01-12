@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.test;
+package io.codyn.app.template.user.test.repository;
 
 import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;

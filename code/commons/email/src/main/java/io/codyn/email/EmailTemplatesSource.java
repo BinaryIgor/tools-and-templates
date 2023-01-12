@@ -73,13 +73,13 @@ public class EmailTemplatesSource {
     }
 
     private static EmailTemplate template(File rootDir, String templateName,
-                                          Collection<String> requireLanguages) {
+                                          Collection<String> requiredLanguages) {
         var rawTemplate = rawTemplate(rootDir, templateName);
 
         try {
             var components = new HashMap<String, String>();
 
-            var template = parsedTemplate(templateName, rawTemplate, requireLanguages);
+            var template = parsedTemplate(templateName, rawTemplate, requiredLanguages);
 
             loadComponents(rootDir, components,
                     Templates.components(template.html()));

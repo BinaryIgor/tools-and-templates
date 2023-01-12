@@ -12,5 +12,5 @@ public interface ActivationTokenRepository {
 
     Optional<ActivationToken> ofId(ActivationTokenId id);
 
-    void delete(ActivationTokenId activationTokenId);
+    void delete(ActivationTokenId id);
 }

@@ -15,7 +15,7 @@ public class EmailTemplatesFactory {
                                                     Map<String, List<String>> typesVariables,
                                                     Collection<String> requiredLanguages) {
         var templates = EmailTemplatesSource.fromFiles(new File(templatesDir, "email"),
-                typesVariables.keySet());
+                requiredLanguages);
         EmailTemplatesValidator.validate(templates, typesVariables, requiredLanguages);
         return templates;
     }
