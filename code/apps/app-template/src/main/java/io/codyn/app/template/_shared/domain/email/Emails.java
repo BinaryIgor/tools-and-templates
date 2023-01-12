@@ -1,6 +1,7 @@
 package io.codyn.app.template._shared.domain.email;
 
 
+import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,16 @@ public class Emails {
                     PASSWORD_RESET, List.of(USER, NEW_PASSWORD_URL, PASSWORD_RESET_URL),
                     EMAIL_CHANGE, List.of(USER, OLD_EMAIL, EMAIL_CHANGE_CONFIRMATION_URL),
                     SECOND_FACTOR_AUTHENTICATION, List.of(USER, CODE));
+
+    public static boolean isReachable(String email) {
+        try {
+            var emailDomain = email.split("@");
+            InetAddress.getByName(emailDomain[1]);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     public static class Types {
         public static final String USER_ACTIVATION = "user_activation";
@@ -32,5 +43,4 @@ public class Emails {
         public static final String PASSWORD_RESET_URL = "passwordResetUrl";
         public static final String CODE = "code";
     }
-
 }

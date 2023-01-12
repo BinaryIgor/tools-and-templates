@@ -1,5 +1,6 @@
 package io.codyn.app.template.user.domain;
 
+import io.codyn.app.template._shared.domain.exception.EmailNotReachableException;
 import io.codyn.app.template._shared.domain.exception.EmailTakenException;
 import io.codyn.app.template._shared.domain.exception.ValidationException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
@@ -7,9 +8,9 @@ import io.codyn.app.template._shared.test.TestEventHandler;
 import io.codyn.app.template._shared.test.TestPasswordHasher;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
-import io.codyn.app.template.user.test.repository.TestNewUserRepository;
 import io.codyn.app.template.user.test.TestUserMapper;
 import io.codyn.app.template.user.test.TestUserObjects;
+import io.codyn.app.template.user.test.repository.TestNewUserRepository;
 import io.codyn.app.template.user.test.repository.TestUserRepository;
 import io.codyn.test.TestTransactions;
 import org.assertj.core.api.Assertions;
@@ -59,6 +60,14 @@ public class NewUserServiceTest {
 
         Assertions.assertThatThrownBy(() -> service.create(TestUserMapper.toNewUser(user)))
                 .isEqualTo(new EmailTakenException(user.email()));
+    }
+
+    @Test
+    void shouldThrowExceptionGivenUserWithUnreachableEmail() {
+        var user = new NewUser("some-name", "some-name@unreacheable-xxx.com", "Password134");
+
+        Assertions.assertThatThrownBy(() -> service.create(user))
+                .isEqualTo(new EmailNotReachableException(user.email()));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package io.codyn.app.template.user.domain;
 
+import io.codyn.app.template._shared.domain.email.Emails;
+import io.codyn.app.template._shared.domain.exception.EmailNotReachableException;
 import io.codyn.app.template._shared.domain.exception.EmailTakenException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
@@ -31,7 +33,6 @@ public class NewUserService {
         this.userCreatedEventHandler = userCreatedEventHandler;
     }
 
-    //TODO: is email reachable?
     public void create(NewUser user) {
         validateUser(user);
 
@@ -49,7 +50,15 @@ public class NewUserService {
 
     private void validateUser(NewUser user) {
         FieldValidator.validateName(user.name());
-        FieldValidator.validateEmail(user.email());
+
+        var email = user.email();
+
+        FieldValidator.validateEmail(email);
+
+        if (!Emails.isReachable(email)) {
+            throw new EmailNotReachableException(email);
+        }
+
         FieldValidator.validatePassword(user.password());
     }
 }
