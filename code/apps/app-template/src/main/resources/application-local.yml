@@ -10,3 +10,7 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
+
+app:
+  email:
+    fake-server: true
