@@ -2,6 +2,7 @@ package io.codyn.app.template.user.domain.event;
 
 import io.codyn.app.template._shared.test.TestEmailServer;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
+import io.codyn.app.template.user.domain.component.ActivationTokenData;
 import io.codyn.app.template.user.domain.component.ActivationTokenFactory;
 import io.codyn.app.template.user.domain.component.UserEmailComponent;
 import io.codyn.app.template.user.domain.model.EmailUser;
@@ -13,6 +14,7 @@ import io.codyn.app.template.user.test.TestUserEmailComponentProvider;
 import io.codyn.app.template.user.test.repository.TestActivationTokenRepository;
 import io.codyn.email.model.Email;
 import io.codyn.test.TestClock;
+import io.codyn.test.TestRandom;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,7 +73,7 @@ public class UserCreatedEventHandlerTest {
 
         var expectedTokenId = ActivationTokenId.ofNewUser(event.id());
 
-        var token = tokenFactory.addNextToken(UUID.randomUUID().toString(), userId.toString());
+        var token = tokenFactory.addNextToken(ActivationTokenData.withUserId(userId), TestRandom.string());
         var expectedActivationToken = new ActivationToken(userId, ActivationTokenType.NEW_USER, token,
                 clock.instant().plus(Duration.ofMinutes(15)));
 

@@ -9,7 +9,7 @@ import io.codyn.tools.DataTokens;
 import io.codyn.types.Transactions;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -17,17 +17,13 @@ import java.util.function.Consumer;
 //TODO: tests
 public class ActivationTokenConsumer {
 
-
     private final ActivationTokenRepository activationTokenRepository;
     private final Transactions transactions;
-    private final Clock clock;
 
     public ActivationTokenConsumer(ActivationTokenRepository activationTokenRepository,
-                                   Transactions transactions,
-                                   Clock clock) {
+                                   Transactions transactions) {
         this.activationTokenRepository = activationTokenRepository;
         this.transactions = transactions;
-        this.clock = clock;
     }
 
     public void consume(String activationToken, ActivationTokenType tokenType, Consumer<UUID> onValidToken) {
@@ -38,10 +34,7 @@ public class ActivationTokenConsumer {
     public void consumeWithData(String activationToken,
                                 ActivationTokenType tokenType,
                                 Consumer<ActivationTokenData> onValidToken) {
-        var decodedToken = DataTokens.decoded(activationToken)
-                .orElseThrow(() -> InvalidActivationTokenException.ofToken(activationToken));
-
-        var tokenData = DataTokens.extractedData(decodedToken, ActivationTokenData.class);
+        var tokenData = activationTokenData(activationToken);
 
         var userId = tokenData.userId();
         var tokenId = new ActivationTokenId(userId, tokenType);
@@ -54,6 +47,14 @@ public class ActivationTokenConsumer {
         });
     }
 
+    private ActivationTokenData activationTokenData(String token) {
+        try {
+            return DataTokens.extractedData(token, ActivationTokenData.class);
+        } catch (Exception e) {
+            throw InvalidActivationTokenException.ofToken(token);
+        }
+    }
+
     private void validateToken(ActivationTokenId id, String receivedToken) {
         var token = activationTokenRepository.ofId(id)
                 .orElseThrow(() -> ResourceNotFoundException.ofId("ActivationToken", id));
@@ -62,7 +63,7 @@ public class ActivationTokenConsumer {
             throw InvalidActivationTokenException.ofToken(id, "Received token is not equal to saved one");
         }
 
-        if (clock.instant().isAfter(token.expiresAt())) {
+        if (Instant.now().isAfter(token.expiresAt())) {
             throw InvalidActivationTokenException.ofToken(id, "Token has expired");
         }
     }

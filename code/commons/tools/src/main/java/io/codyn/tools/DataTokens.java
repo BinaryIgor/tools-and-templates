@@ -2,7 +2,6 @@ package io.codyn.tools;
 
 import io.codyn.json.JsonMapper;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class DataTokens {
@@ -25,20 +24,23 @@ public class DataTokens {
         return Base64Url.asEncoded(withHash);
     }
 
-    public static Optional<String> decoded(String token) {
+    public static String extractedData(String token) {
+        String data;
         try {
             var decoded = Base64Url.asDecoded(token);
             if (decoded.split(PARTS_SEPARATOR).length == PARTS) {
-                return Optional.of(decoded);
+                data = decoded.split(PARTS_SEPARATOR)[0];
+            } else {
+                data = null;
             }
-            return Optional.empty();
         } catch (Exception e) {
-            return Optional.empty();
+            data = null;
         }
-    }
 
-    public static String extractedData(String decoded) {
-        return decoded.split(PARTS_SEPARATOR)[0];
+        if (data == null) {
+            throw new RuntimeException("Invalid data token");
+        }
+        return data;
     }
 
     public static <T> T extractedData(String decoded, Class<T> dataType) {

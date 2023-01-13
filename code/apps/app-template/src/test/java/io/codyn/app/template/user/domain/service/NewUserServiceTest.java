@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.domain;
+package io.codyn.app.template.user.domain.service;
 
 import io.codyn.app.template._shared.domain.exception.EmailNotReachableException;
 import io.codyn.app.template._shared.domain.exception.EmailTakenException;
