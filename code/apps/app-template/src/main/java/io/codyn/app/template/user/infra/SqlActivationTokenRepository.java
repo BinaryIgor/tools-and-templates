@@ -2,13 +2,16 @@ package io.codyn.app.template.user.infra;
 
 import io.codyn.app.template.user.domain.model.activation.ActivationToken;
 import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;
+import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
 import io.codyn.app.template.user.domain.repository.ActivationTokenRepository;
 import io.codyn.sqldb.core.DSLContextProvider;
+import org.jooq.Condition;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-//TODO: impl!
+import static io.codyn.sqldb.schema.user.tables.ActivationToken.ACTIVATION_TOKEN;
+
 @Repository
 public class SqlActivationTokenRepository implements ActivationTokenRepository {
 
@@ -20,16 +23,41 @@ public class SqlActivationTokenRepository implements ActivationTokenRepository {
 
     @Override
     public void save(ActivationToken token) {
+        contextProvider.context()
+                .insertInto(ACTIVATION_TOKEN)
+                .set(ACTIVATION_TOKEN.ID, token.userId())
+                .set(ACTIVATION_TOKEN.TYPE, token.type().name())
+                .set(ACTIVATION_TOKEN.TOKEN, token.token())
+                .set(ACTIVATION_TOKEN.EXPIRES_AT, token.expiresAt())
+                .onConflict()
+                .doUpdate()
+                .set(ACTIVATION_TOKEN.TOKEN, token.token())
+                .set(ACTIVATION_TOKEN.EXPIRES_AT, token.expiresAt())
+                .execute();
 
     }
 
     @Override
     public Optional<ActivationToken> ofId(ActivationTokenId id) {
-        return Optional.empty();
+        return contextProvider.context()
+                .selectFrom(ACTIVATION_TOKEN)
+                .where(idEqualsCondition(id))
+                .fetchOptional(r -> new ActivationToken(r.getId(),
+                        ActivationTokenType.valueOf(r.getType()),
+                        r.getToken(),
+                        r.getExpiresAt()));
+    }
+
+    private Condition idEqualsCondition(ActivationTokenId id) {
+        return ACTIVATION_TOKEN.ID.eq(id.userId())
+                .and(ACTIVATION_TOKEN.TYPE.eq(id.tokenType().name()));
     }
 
     @Override
     public void delete(ActivationTokenId id) {
-
+        contextProvider.context()
+                .deleteFrom(ACTIVATION_TOKEN)
+                .where(idEqualsCondition(id))
+                .execute();
     }
 }

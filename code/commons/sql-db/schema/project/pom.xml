@@ -31,6 +31,12 @@
                             <includes>.*</includes>
                             <excludes>.*flyway.*</excludes>
                             <inputSchema>project</inputSchema>
+                            <forcedTypes>
+                                <forcedType>
+                                    <name>INSTANT</name>
+                                    <includeTypes>TIMESTAMP</includeTypes>
+                                </forcedType>
+                            </forcedTypes>
                         </database>
                         <strategy>
                             <matchers>

@@ -8,7 +8,7 @@ import io.codyn.sqldb.schema.user.Keys;
 import io.codyn.sqldb.schema.user.User;
 import io.codyn.sqldb.schema.user.tables.records.SecondFactorAuthenticationRecord;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -67,12 +67,12 @@ public class SecondFactorAuthentication extends TableImpl<SecondFactorAuthentica
     /**
      * The column <code>user.second_factor_authentication.sent_at</code>.
      */
-    public final TableField<SecondFactorAuthenticationRecord, LocalDateTime> SENT_AT = createField(DSL.name("sent_at"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<SecondFactorAuthenticationRecord, Instant> SENT_AT = createField(DSL.name("sent_at"), SQLDataType.INSTANT.nullable(false), this, "");
 
     /**
      * The column <code>user.second_factor_authentication.expires_at</code>.
      */
-    public final TableField<SecondFactorAuthenticationRecord, LocalDateTime> EXPIRES_AT = createField(DSL.name("expires_at"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<SecondFactorAuthenticationRecord, Instant> EXPIRES_AT = createField(DSL.name("expires_at"), SQLDataType.INSTANT.nullable(false), this, "");
 
     private SecondFactorAuthentication(Name alias, Table<SecondFactorAuthenticationRecord> aliased) {
         this(alias, aliased, null);
@@ -167,7 +167,7 @@ public class SecondFactorAuthentication extends TableImpl<SecondFactorAuthentica
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<UUID, String, String, LocalDateTime, LocalDateTime> fieldsRow() {
+    public Row5<UUID, String, String, Instant, Instant> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 }

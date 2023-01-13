@@ -7,7 +7,7 @@ package io.codyn.sqldb.schema.user.tables;
 import io.codyn.sqldb.schema.user.Keys;
 import io.codyn.sqldb.schema.user.tables.records.UserRecord;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -86,7 +86,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>user.user.created_at</code>.
      */
-    public final TableField<UserRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("now()", SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<UserRecord, Instant> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.INSTANT.nullable(false).defaultValue(DSL.field("now()", SQLDataType.INSTANT)), this, "");
 
     private User(Name alias, Table<UserRecord> aliased) {
         this(alias, aliased, null);
@@ -167,7 +167,7 @@ public class User extends TableImpl<UserRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, String, String, String, Boolean, String, LocalDateTime> fieldsRow() {
+    public Row8<UUID, String, String, String, String, Boolean, String, Instant> fieldsRow() {
         return (Row8) super.fieldsRow();
     }
 }

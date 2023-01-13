@@ -2,6 +2,8 @@ package io.codyn.app.template.user.test;
 
 import io.codyn.app.template._shared.domain.model.UserState;
 import io.codyn.app.template.user.domain.model.User;
+import io.codyn.app.template.user.domain.model.activation.ActivationToken;
+import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.test.TestRandom;
 
@@ -40,5 +42,13 @@ public class TestUserObjects {
 
     public static NewUser newUser2() {
         return TestUserMapper.toNewUser(USERS.get(1));
+    }
+
+    public static ActivationToken activationToken(UUID userId) {
+        return activationToken(userId, TestRandom.oneOf(ActivationTokenType.values()));
+    }
+
+    public static ActivationToken activationToken(UUID userId, ActivationTokenType type) {
+        return new ActivationToken(userId, type, TestRandom.string(), TestRandom.instant());
     }
 }

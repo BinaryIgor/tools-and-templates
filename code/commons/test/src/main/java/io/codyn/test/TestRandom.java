@@ -3,7 +3,8 @@ package io.codyn.test;
 import io.codyn.types.Pair;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -137,19 +138,27 @@ public class TestRandom {
         return inRange(0, Double.MAX_VALUE);
     }
 
-    public static LocalDateTime futureDateTime(LocalDateTime now) {
-        return now.plusSeconds(inRange(1, DATES_RANGE));
+    public static Instant futureInstant(Instant now) {
+        return now.plusSeconds(inRange(1, DATES_RANGE)).truncatedTo(ChronoUnit.MILLIS);
     }
 
-    public static LocalDateTime dateTime(LocalDateTime now) {
+    public static Instant futureInstant() {
+        return futureInstant(Instant.now());
+    }
+
+    public static Instant instant() {
+        return instant(Instant.now());
+    }
+
+    public static Instant instant(Instant now) {
         if (isTrue()) {
-            return futureDateTime(now);
+            return futureInstant(now);
         }
-        return pastDateTime(now);
+        return pastInstant(now);
     }
 
-    public static LocalDateTime pastDateTime(LocalDateTime now) {
-        return now.minusSeconds(inRange(1, DATES_RANGE));
+    public static Instant pastInstant(Instant now) {
+        return now.minusSeconds(inRange(1, DATES_RANGE)).truncatedTo(ChronoUnit.MILLIS);
     }
 
     public static int inRange(int min, int max) {

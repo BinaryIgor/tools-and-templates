@@ -9,7 +9,7 @@ import io.codyn.sqldb.schema.user.Keys;
 import io.codyn.sqldb.schema.user.User;
 import io.codyn.sqldb.schema.user.tables.records.ActivationTokenRecord;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
     /**
      * The column <code>user.activation_token.expires_at</code>.
      */
-    public final TableField<ActivationTokenRecord, LocalDateTime> EXPIRES_AT = createField(DSL.name("expires_at"), SQLDataType.LOCALDATETIME(6).nullable(false), this, "");
+    public final TableField<ActivationTokenRecord, Instant> EXPIRES_AT = createField(DSL.name("expires_at"), SQLDataType.INSTANT.nullable(false), this, "");
 
     /**
      * The column <code>user.activation_token.type</code>.
@@ -169,7 +169,7 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<UUID, String, LocalDateTime, String> fieldsRow() {
+    public Row4<UUID, String, Instant, String> fieldsRow() {
         return (Row4) super.fieldsRow();
     }
 }
