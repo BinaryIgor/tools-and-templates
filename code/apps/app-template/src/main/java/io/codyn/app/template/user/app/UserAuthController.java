@@ -4,9 +4,11 @@ import io.codyn.app.template.auth.app.SecurityEndpoints;
 import io.codyn.app.template.auth.domain.AuthTokens;
 import io.codyn.app.template.user.app.model.ActivationToken;
 import io.codyn.app.template.user.app.model.RefreshToken;
+import io.codyn.app.template.user.domain.model.auth.*;
 import io.codyn.app.template.user.domain.service.NewUserService;
 import io.codyn.app.template.user.domain.service.UserActivationService;
-import io.codyn.app.template.user.domain.model.auth.*;
+import io.codyn.app.template.user.domain.service.UserAuthService;
+import io.codyn.app.template.user.domain.service.UserPasswordService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +18,17 @@ public class UserAuthController {
 
     private final NewUserService newUserService;
     private final UserActivationService userActivationService;
+    private final UserAuthService userAuthService;
+    private final UserPasswordService userPasswordService;
 
     public UserAuthController(NewUserService newUserService,
-                              UserActivationService userActivationService) {
+                              UserActivationService userActivationService,
+                              UserAuthService userAuthService,
+                              UserPasswordService userPasswordService) {
         this.newUserService = newUserService;
         this.userActivationService = userActivationService;
+        this.userAuthService = userAuthService;
+        this.userPasswordService = userPasswordService;
     }
 
     @PostMapping("/sign-up")
@@ -34,30 +42,30 @@ public class UserAuthController {
         userActivationService.activate(activationToken.activationToken());
     }
 
-    //TODO: impl lacking endpoints
+    //TODO: impl lacking services
     @PostMapping("/sign-in")
     public SignedInUserStep signIn(@RequestBody UserSignInRequest request) {
-        return null;
+        return userAuthService.authenticate(request);
     }
 
     @PostMapping("/sign-in-second-step")
     public SignedInUser signInSecondStep(@RequestBody UserSignInSecondStepRequest request) {
-        return null;
+        return userAuthService.authenticateSecondStep(request);
     }
 
     @PostMapping("/reset-password/{email}")
     public void resetPassword(@PathVariable("email") String email) {
-
+        userPasswordService.resetPassword(email);
     }
 
     @PostMapping("/set-new-password")
     public void setNewPassword(@RequestBody NewPasswordRequest request) {
-
+        userPasswordService.setNewPassword(request);
     }
 
     @PostMapping("/refresh-tokens")
     public AuthTokens refreshTokens(@RequestBody RefreshToken token) {
-        return null;
+        return userAuthService.newTokens(token.refreshToken());
     }
 
 }
