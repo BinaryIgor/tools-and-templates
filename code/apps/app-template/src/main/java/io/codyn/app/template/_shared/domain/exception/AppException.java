@@ -1,9 +1,18 @@
 package io.codyn.app.template._shared.domain.exception;
 
+import java.util.List;
+
 public class AppException extends RuntimeException {
 
-    public AppException(String message) {
+    public final List<String> reasons;
+
+    public AppException(String message, List<String> reasons) {
         super(message);
+        this.reasons = reasons;
+    }
+
+    public AppException(String message, String... reasons) {
+        this(message, List.of(reasons));
     }
 
     @Override
@@ -13,7 +22,8 @@ public class AppException extends RuntimeException {
         }
         if (obj instanceof AppException e) {
             return getClass().equals(e.getClass())
-                    && getMessage().equals(e.getMessage());
+                    && getMessage().equals(e.getMessage())
+                    && reasons.equals(e.reasons);
         }
 
         return false;
