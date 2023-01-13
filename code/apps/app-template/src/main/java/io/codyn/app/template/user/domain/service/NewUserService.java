@@ -37,7 +37,7 @@ public class NewUserService {
     public void create(NewUser user) {
         validateUser(user);
 
-        if (userRepository.findByEmail(user.email()).isPresent()) {
+        if (userRepository.ofEmail(user.email()).isPresent()) {
             throw new EmailTakenException(user.email());
         }
 

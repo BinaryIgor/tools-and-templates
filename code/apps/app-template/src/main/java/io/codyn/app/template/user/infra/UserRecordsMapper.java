@@ -18,6 +18,6 @@ public class UserRecordsMapper {
 
     public static User fromUserRecord(UserRecord record) {
         return new User(record.getId(), record.getName(), record.getEmail(), record.getPassword(),
-                UserState.valueOf(record.getName()));
+                UserState.valueOf(record.getState()));
     }
 }

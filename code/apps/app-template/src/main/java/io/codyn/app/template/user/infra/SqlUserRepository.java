@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import static io.codyn.sqldb.schema.user.tables.User.USER;
 
-//TODO test!
 @Repository
 public class SqlUserRepository implements NewUserRepository, UserRepository, UserUpdateRepository {
 
@@ -36,7 +35,7 @@ public class SqlUserRepository implements NewUserRepository, UserRepository, Use
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> ofEmail(String email) {
         return contextProvider.context()
                 .selectFrom(USER)
                 .where(USER.EMAIL.eq(email))

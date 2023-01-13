@@ -16,7 +16,7 @@ public class TestUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> ofEmail(String email) {
         return Optional.ofNullable(usersByEmails.get(email));
     }
 }

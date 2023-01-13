@@ -5,5 +5,5 @@ import io.codyn.app.template.user.domain.model.User;
 import java.util.Optional;
 
 public interface UserRepository {
-    Optional<User> findByEmail(String email);
+    Optional<User> ofEmail(String email);
 }
