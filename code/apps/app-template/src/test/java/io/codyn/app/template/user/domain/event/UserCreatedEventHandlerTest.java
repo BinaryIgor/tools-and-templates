@@ -2,8 +2,8 @@ package io.codyn.app.template.user.domain.event;
 
 import io.codyn.app.template._shared.test.TestEmailServer;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
-import io.codyn.app.template.user.domain.ActivationTokenFactory;
-import io.codyn.app.template.user.domain.UserEmailComponent;
+import io.codyn.app.template.user.domain.component.ActivationTokenFactory;
+import io.codyn.app.template.user.domain.component.UserEmailComponent;
 import io.codyn.app.template.user.domain.model.EmailUser;
 import io.codyn.app.template.user.domain.model.activation.ActivationToken;
 import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;

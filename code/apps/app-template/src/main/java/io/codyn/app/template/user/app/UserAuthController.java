@@ -4,7 +4,8 @@ import io.codyn.app.template.auth.app.SecurityEndpoints;
 import io.codyn.app.template.auth.domain.AuthTokens;
 import io.codyn.app.template.user.app.model.ActivationToken;
 import io.codyn.app.template.user.app.model.RefreshToken;
-import io.codyn.app.template.user.domain.NewUserService;
+import io.codyn.app.template.user.domain.service.NewUserService;
+import io.codyn.app.template.user.domain.service.UserActivationService;
 import io.codyn.app.template.user.domain.model.auth.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class UserAuthController {
 
     private final NewUserService newUserService;
+    private final UserActivationService userActivationService;
 
-    public UserAuthController(NewUserService newUserService) {
+    public UserAuthController(NewUserService newUserService,
+                              UserActivationService userActivationService) {
         this.newUserService = newUserService;
+        this.userActivationService = userActivationService;
     }
 
     @PostMapping("/sign-up")
@@ -27,7 +31,7 @@ public class UserAuthController {
 
     @PostMapping("/activate-account")
     public void activate(@RequestBody ActivationToken activationToken) {
-        newUserService.activate(activationToken.activationToken());
+        userActivationService.activate(activationToken.activationToken());
     }
 
     //TODO: impl lacking endpoints

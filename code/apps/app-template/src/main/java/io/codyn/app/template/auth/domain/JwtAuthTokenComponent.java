@@ -91,7 +91,7 @@ public class JwtAuthTokenComponent implements AuthTokenComponent {
 
         return authDataRepository.ofId(userId)
                 .map(UserAuthData::toAuthenticatedUser)
-                .orElseThrow(() -> ResourceNotFoundException.ofId("user", userId));
+                .orElseThrow(() -> ResourceNotFoundException.ofId("User", userId));
     }
 
     private JWTVerifier tokenVerifier(AuthTokenType type) {

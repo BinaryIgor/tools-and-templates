@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.domain;
+package io.codyn.app.template.user.domain.component;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;

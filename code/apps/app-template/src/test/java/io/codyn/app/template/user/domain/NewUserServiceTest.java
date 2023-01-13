@@ -8,6 +8,7 @@ import io.codyn.app.template._shared.test.TestEventHandler;
 import io.codyn.app.template._shared.test.TestPasswordHasher;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
+import io.codyn.app.template.user.domain.service.NewUserService;
 import io.codyn.app.template.user.test.TestUserMapper;
 import io.codyn.app.template.user.test.TestUserObjects;
 import io.codyn.app.template.user.test.repository.TestNewUserRepository;

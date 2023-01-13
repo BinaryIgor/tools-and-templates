@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.domain;
+package io.codyn.app.template.user.domain.component;
 
 import io.codyn.app.template._shared.domain.email.Emails;
 import io.codyn.app.template.user.domain.model.EmailUser;

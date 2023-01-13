@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template.user.domain.ActivationTokenFactory;
+import io.codyn.app.template.user.domain.component.ActivationTokenFactory;
 
 import java.util.HashMap;
 import java.util.Map;

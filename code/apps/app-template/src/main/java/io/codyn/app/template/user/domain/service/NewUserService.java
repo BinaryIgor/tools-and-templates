@@ -1,10 +1,11 @@
-package io.codyn.app.template.user.domain;
+package io.codyn.app.template.user.domain.service;
 
 import io.codyn.app.template._shared.domain.email.Emails;
 import io.codyn.app.template._shared.domain.exception.EmailNotReachableException;
 import io.codyn.app.template._shared.domain.exception.EmailTakenException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
+import io.codyn.app.template.user.domain.component.PasswordHasher;
 import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.repository.NewUserRepository;
 import io.codyn.app.template.user.domain.repository.UserRepository;
@@ -60,10 +61,5 @@ public class NewUserService {
         }
 
         FieldValidator.validatePassword(user.password());
-    }
-
-    //TODO
-    public void activate(String activationToken) {
-
     }
 }

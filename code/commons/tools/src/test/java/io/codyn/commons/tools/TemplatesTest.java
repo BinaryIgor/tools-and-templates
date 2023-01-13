@@ -38,12 +38,12 @@ public class TemplatesTest {
                 """;
 
         var variables = Map.of("x1", "A", "x2", "B");
-        var components = Map.of("component1", "Embedded component with a variable: ${x2}");
+        var components = Map.of("component1", "Embedded service with a variable: ${x2}");
 
         var expected = """
                 Hey A!
                                 
-                Embedded component with a variable: B
+                Embedded service with a variable: B
                 """;
 
         Assertions.assertThat(Templates.rendered(template, variables, components))
