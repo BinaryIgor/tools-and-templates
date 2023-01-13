@@ -8,4 +8,9 @@ public class TestPasswordHasher implements PasswordHasher {
     public String hash(String password) {
         return "test_hash-" + password;
     }
+
+    @Override
+    public boolean matches(String rawPassword, String hashedPassword) {
+        return hash(rawPassword).equals(hashedPassword);
+    }
 }

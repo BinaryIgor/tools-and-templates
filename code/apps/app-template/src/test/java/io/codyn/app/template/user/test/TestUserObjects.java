@@ -24,6 +24,14 @@ public class TestUserObjects {
         return USERS;
     }
 
+    public static User user1() {
+        return USERS.get(0);
+    }
+
+    public static User user2() {
+        return USERS.get(1);
+    }
+
     public static List<NewUser> newUsers() {
         return users().stream().map(TestUserMapper::toNewUser).toList();
     }
