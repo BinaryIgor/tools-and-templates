@@ -2,6 +2,7 @@ package io.codyn.app.template.user.domain.model.auth;
 
 public record SignedInUserStep(boolean secondFactor, SignedInUser user) {
 
+    //TODO: impl
     public static SignedInUserStep firstStep() {
         return new SignedInUserStep(true, null);
     }

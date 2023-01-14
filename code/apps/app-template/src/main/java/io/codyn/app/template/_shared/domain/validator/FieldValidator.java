@@ -49,8 +49,12 @@ public class FieldValidator {
 
     public static void validateEmail(String email) {
         if (!isEmailValid(email)) {
-            throw ValidationException.ofField("email", email);
+            throw emailException(email);
         }
+    }
+
+    public static ValidationException emailException(String email) {
+        return ValidationException.ofField("email", email);
     }
 
     public static boolean isNameValid(String name) {
@@ -66,8 +70,12 @@ public class FieldValidator {
 
     public static void validateName(String name) {
         if (!isNameValid(name)) {
-            throw ValidationException.ofField("name", name);
+            throw nameException(name);
         }
+    }
+
+    public static ValidationException nameException(String name) {
+        return ValidationException.ofField("name", name);
     }
 
     private static boolean hasAtLeastOneLetter(String string) {
@@ -109,8 +117,12 @@ public class FieldValidator {
 
     public static void validatePassword(String password) {
         if (!isPasswordValid(password)) {
-            throw ValidationException.ofField("password", password);
+            throw passwordException(password);
         }
+    }
+
+    public static ValidationException passwordException(String password) {
+        return ValidationException.ofField("password", password);
     }
 
     public static boolean hasAnyContent(String string) {
