@@ -1,0 +1,1392 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "App Template API",
+    "version": "1.0"
+  },
+  "externalDocs": {
+    "description": "Errors docs",
+    "url": "/docs/errors"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    {
+      "name": "User auth (/user-auth)",
+      "description": "Endpoints to handle user-auth flow, including:\nsign-up, sign-in, password-resets and refreshing tokens\n"
+    }
+  ],
+  "paths": {
+    "/projects/{id}": {
+      "get": {
+        "tags": [
+          "project-controller"
+        ],
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "arg0",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithUsers"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "project-controller"
+        ],
+        "operationId": "update",
+        "parameters": [
+          {
+            "name": "arg1",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiUpdateProject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "project-controller"
+        ],
+        "operationId": "delete",
+        "parameters": [
+          {
+            "name": "arg0",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      }
+    },
+    "/user-auth/sign-up": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "signUp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiNewUserRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/user-auth/sign-in": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "signIn",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignInRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedInUserStep"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-auth/sign-in-second-step": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "signInSecondStep",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignInSecondStepRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedInUser"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-auth/set-new-password": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "setNewPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPasswordRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/user-auth/reset-password/{email}": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/user-auth/refresh-tokens": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "refreshTokens",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokens"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-auth/activate-account": {
+      "post": {
+        "tags": [
+          "User auth (/user-auth)"
+        ],
+        "operationId": "activate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivationToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/projects": {
+      "get": {
+        "tags": [
+          "project-controller"
+        ],
+        "operationId": "getAllOfUser",
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectWithUsers"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "project-controller"
+        ],
+        "description": "Some nice description of create project endpoint\n",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApiNewProject"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      }
+    },
+    "/projects/{id}/users": {
+      "post": {
+        "tags": [
+          "project-controller"
+        ],
+        "operationId": "addUsers",
+        "parameters": [
+          {
+            "name": "arg0",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "project-controller"
+        ],
+        "operationId": "removeUsers",
+        "parameters": [
+          {
+            "name": "arg0",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Something about the request is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "We don't know who you are, or token has expired/was invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Given resource can't be found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Given resource exist or there was an optimist lock exception",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Given resource is not available for a user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiExceptionResponse"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "bearer-key": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiExceptionResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "One of the api exceptions. Details are documented under: /docs/errors"
+          },
+          "reasons": {
+            "type": "array",
+            "description": "Optional list of reasons codes to further interpret given exception type. Details are documented under: /docs/errors",
+            "items": {
+              "type": "string",
+              "description": "Optional list of reasons codes to further interpret given exception type. Details are documented under: /docs/errors"
+            }
+          },
+          "message": {
+            "type": "string",
+            "description": "Additional, contextualized info for debugging mostly"
+          }
+        }
+      },
+      "ApiUpdateProject": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ApiNewUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UserSignInRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthToken": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AuthTokens": {
+        "type": "object",
+        "properties": {
+          "access": {
+            "$ref": "#/components/schemas/AuthToken"
+          },
+          "refresh": {
+            "$ref": "#/components/schemas/AuthToken"
+          }
+        }
+      },
+      "CurrentUserData": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "CREATED",
+              "ACTIVATED",
+              "ONBOARDED",
+              "BANNED"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MODERATOR",
+                "ADMIN"
+              ]
+            }
+          }
+        }
+      },
+      "SignedInUser": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CurrentUserData"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/AuthTokens"
+          }
+        }
+      },
+      "SignedInUserStep": {
+        "type": "object",
+        "properties": {
+          "secondFactor": {
+            "type": "boolean"
+          },
+          "user": {
+            "$ref": "#/components/schemas/SignedInUser"
+          }
+        }
+      },
+      "UserSignInSecondStepRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "NewPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "RefreshToken": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string"
+          }
+        }
+      },
+      "ActivationToken": {
+        "type": "object",
+        "properties": {
+          "activationToken": {
+            "type": "string"
+          }
+        }
+      },
+      "ApiNewProject": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "[a-zA-Z0-9]{2,}. But you know, it's not that restrictive!"
+          }
+        }
+      },
+      "IdResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "ownerId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "ProjectWithUsers": {
+        "type": "object",
+        "properties": {
+          "project": {
+            "$ref": "#/components/schemas/Project"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearer-key": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

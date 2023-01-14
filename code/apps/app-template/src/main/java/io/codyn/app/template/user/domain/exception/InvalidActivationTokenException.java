@@ -1,9 +1,9 @@
 package io.codyn.app.template.user.domain.exception;
 
-import io.codyn.app.template._shared.domain.exception.AppException;
+import io.codyn.app.template._shared.domain.exception.CustomException;
 import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;
 
-public class InvalidActivationTokenException extends AppException {
+public class InvalidActivationTokenException extends CustomException {
 
     public InvalidActivationTokenException(String message) {
         super(message);

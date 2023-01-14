@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.domain.service;
 
-import io.codyn.app.template._shared.domain.exception.ResourceNotFoundException;
+import io.codyn.app.template._shared.domain.exception.NotFoundException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.auth.domain.AuthTokens;
@@ -52,7 +52,7 @@ public class UserAuthService {
 
     private User validatedUser(String email, String password) {
         var user = userRepository.ofEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(
+                .orElseThrow(() -> new NotFoundException(
                         "User of %s email doesn't exist".formatted(email)));
 
         if (passwordHasher.matches(password, user.password())) {

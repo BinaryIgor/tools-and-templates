@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
-import io.codyn.app.template._shared.domain.exception.ResourceNotFoundException;
+import io.codyn.app.template._shared.domain.exception.NotFoundException;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
@@ -91,7 +91,7 @@ public class JwtAuthTokenComponent implements AuthTokenComponent {
 
         return authDataRepository.ofId(userId)
                 .map(UserAuthData::toAuthenticatedUser)
-                .orElseThrow(() -> ResourceNotFoundException.ofId("User", userId));
+                .orElseThrow(() -> NotFoundException.ofId("User", userId));
     }
 
     private JWTVerifier tokenVerifier(AuthTokenType type) {

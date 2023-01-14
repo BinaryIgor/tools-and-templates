@@ -23,27 +23,21 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ApiExceptionsHandler {
 
 
+    @ExceptionHandler(UnauthenticatedException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(UnauthenticatedException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiExceptionResponse(exception));
+    }
+
     @ExceptionHandler(InvalidAuthTokenException.class)
     public ResponseEntity<ApiExceptionResponse> handleException(InvalidAuthTokenException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ApiExceptionResponse(exception));
     }
 
-    @ExceptionHandler(ResourceExistsException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(ResourceExistsException exception) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(ConflictException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ApiExceptionResponse(exception));
-    }
-
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(ResourceNotFoundException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiExceptionResponse(exception));
-    }
-
-    @ExceptionHandler(ResourceForbiddenException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(ResourceForbiddenException exception) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ApiExceptionResponse(exception));
     }
 
@@ -53,8 +47,20 @@ public class ApiExceptionsHandler {
                 .body(new ApiExceptionResponse(exception));
     }
 
-    @ExceptionHandler(AppException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(AppException exception) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(NotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiExceptionResponse(exception));
+    }
+
+    @ExceptionHandler(AccessForbiddenException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(AccessForbiddenException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ApiExceptionResponse(exception));
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(CustomException exception) {
         return badRequestResponse(exception);
     }
 

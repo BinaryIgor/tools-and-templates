@@ -9,7 +9,8 @@ public class SecurityEndpoints {
     public static final String USER_AUTH = "/user-auth";
     public static final String ADMIN = "/admin";
 
-    public static final List<String> PUBLIC_ENDPOINTS = List.of(USER_AUTH);
+    //This is fine since swagger is on only locally. See _docs module
+    public static final List<String> PUBLIC_ENDPOINTS = List.of(USER_AUTH, "/swagger", "/docs");
 
     public static boolean isPublic(String endpoint) {
         for (var e : PUBLIC_ENDPOINTS) {

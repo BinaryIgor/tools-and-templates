@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.domain;
 
-import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
+import io.codyn.app.template._shared.domain.exception.AccessForbiddenException;
 import io.codyn.app.template._shared.domain.exception.ValidationException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.project.domain.model.Project;
@@ -139,8 +139,8 @@ public class ProjectServiceTest {
         return new Project(project.id(), ownerId, project.name(), project.version() + 1);
     }
 
-    private ResourceForbiddenException projectForbiddenException(UUID userId, UUID projectId) {
-        return new ResourceForbiddenException("%s user doesn't have access to %s project"
+    private AccessForbiddenException projectForbiddenException(UUID userId, UUID projectId) {
+        return new AccessForbiddenException("%s user doesn't have access to %s project"
                 .formatted(userId, projectId));
     }
 

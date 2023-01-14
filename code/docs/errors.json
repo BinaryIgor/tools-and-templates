@@ -1,0 +1,64 @@
+{
+  "description": [
+    "List of all possible errors that client should handle.",
+    "Reasons are specific to concrete error type and are mostly optional.",
+    "In message there can be details helping with troubleshooting issues."
+  ],
+  "errors": [
+    {
+      "error": "AccessForbiddenException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "ConflictException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "EmailNotReachableException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "EmailTakenException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "InvalidAuthTokenException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "NotFoundException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "OptimisticLockException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "UnauthenticatedException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "ValidationException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "InvalidActivationTokenException",
+      "reasons": [],
+      "message": "Any optional string"
+    },
+    {
+      "error": "InvalidPasswordException",
+      "reasons": [],
+      "message": "Any optional string"
+    }
+  ]
+}

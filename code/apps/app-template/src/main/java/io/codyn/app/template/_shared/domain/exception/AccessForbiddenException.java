@@ -1,12 +1,12 @@
 package io.codyn.app.template._shared.domain.exception;
 
-public class ResourceForbiddenException extends AppException {
+public class AccessForbiddenException extends CustomException {
 
-    public ResourceForbiddenException(String message) {
+    public AccessForbiddenException(String message) {
         super(message);
     }
 
-    public ResourceForbiddenException() {
+    public AccessForbiddenException() {
         this("Current user doesn't have access to requested resource");
     }
 }

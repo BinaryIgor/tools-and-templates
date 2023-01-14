@@ -1,7 +1,7 @@
 package io.codyn.app.template.project.domain;
 
-import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
-import io.codyn.app.template._shared.domain.exception.ResourceNotFoundException;
+import io.codyn.app.template._shared.domain.exception.AccessForbiddenException;
+import io.codyn.app.template._shared.domain.exception.NotFoundException;
 import io.codyn.app.template._shared.domain.validator.FieldValidator;
 import io.codyn.app.template.project.domain.model.AddUsersToProjectCommand;
 import io.codyn.app.template.project.domain.model.Project;
@@ -40,7 +40,7 @@ public class ProjectService {
 
     private void getOwnerAndValidateAccessToProject(UUID projectId, UUID userId) {
         var currentProjectOwnerId = projectRepository.findOwnerById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException(
+                .orElseThrow(() -> new NotFoundException(
                         "There is no project of %s id".formatted(projectId)));
 
         validateAccessToProject(projectId, userId, currentProjectOwnerId);
@@ -48,7 +48,7 @@ public class ProjectService {
 
     private void validateAccessToProject(UUID projectId, UUID userId, UUID currentProjectOwnerId) {
         if (!userId.equals(currentProjectOwnerId)) {
-            throw new ResourceForbiddenException("%s user doesn't have access to %s project"
+            throw new AccessForbiddenException("%s user doesn't have access to %s project"
                     .formatted(userId, projectId));
         }
     }
@@ -60,7 +60,7 @@ public class ProjectService {
 
     public ProjectWithUsers get(UUID projectId, UUID userId) {
         var project = projectRepository.findById(projectId)
-                .orElseThrow(() -> new ResourceNotFoundException(
+                .orElseThrow(() -> new NotFoundException(
                         "There is no project of %s id".formatted(projectId)));
 
         validateAccessToProject(projectId, userId, project.ownerId());

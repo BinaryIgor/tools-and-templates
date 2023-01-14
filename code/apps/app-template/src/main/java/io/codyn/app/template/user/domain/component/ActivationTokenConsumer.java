@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.domain.component;
 
-import io.codyn.app.template._shared.domain.exception.ResourceNotFoundException;
+import io.codyn.app.template._shared.domain.exception.NotFoundException;
 import io.codyn.app.template.user.domain.exception.InvalidActivationTokenException;
 import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;
 import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
@@ -57,7 +57,7 @@ public class ActivationTokenConsumer {
 
     private void validateToken(ActivationTokenId id, String receivedToken) {
         var token = activationTokenRepository.ofId(id)
-                .orElseThrow(() -> ResourceNotFoundException.ofId("ActivationToken", id));
+                .orElseThrow(() -> NotFoundException.ofId("ActivationToken", id));
 
         if (!receivedToken.equals(token.token())) {
             throw InvalidActivationTokenException.ofToken(id, "Received token is not equal to saved one");

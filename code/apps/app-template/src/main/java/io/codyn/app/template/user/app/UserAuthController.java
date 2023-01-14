@@ -10,9 +10,15 @@ import io.codyn.app.template.user.domain.service.NewUserService;
 import io.codyn.app.template.user.domain.service.UserActivationService;
 import io.codyn.app.template.user.domain.service.UserAuthService;
 import io.codyn.app.template.user.domain.service.UserPasswordService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User auth (/user-auth)",
+        description = """
+                Endpoints to handle user-auth flow, including:
+                sign-up, sign-in, password-resets and refreshing tokens
+                """)
 @RestController
 @RequestMapping(SecurityEndpoints.USER_AUTH)
 public class UserAuthController {

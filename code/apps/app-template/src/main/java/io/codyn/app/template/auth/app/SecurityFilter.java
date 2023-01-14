@@ -2,7 +2,7 @@ package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._shared.app.exception.ApiExceptionResponse;
 import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
-import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
+import io.codyn.app.template._shared.domain.exception.AccessForbiddenException;
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
@@ -50,7 +50,7 @@ public class SecurityFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (UnauthenticatedException | InvalidAuthTokenException e) {
             sendExceptionResponse(request, response, 401, e);
-        } catch (ResourceForbiddenException e) {
+        } catch (AccessForbiddenException e) {
             sendExceptionResponse(request, response, 403, e);
         } catch (Exception e) {
             sendExceptionResponse(request, response, 400, e);

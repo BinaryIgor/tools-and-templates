@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.app;
 
-import io.codyn.app.template._shared.domain.exception.ResourceForbiddenException;
+import io.codyn.app.template._shared.domain.exception.AccessForbiddenException;
 import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
 import io.codyn.app.template._shared.domain.model.UserState;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
@@ -32,10 +32,10 @@ public class SecurityRules {
 
     private void validateUserHasAccessToEndpoint(String endpoint, AuthenticatedUser user) {
         if (predicates.adminEndpoint().test(endpoint) && !user.roles().containsAdmin()) {
-            throw new ResourceForbiddenException("User is not an admin");
+            throw new AccessForbiddenException("User is not an admin");
         }
         if (!predicates.isUserOfStateAllowed().test(endpoint, user.state())) {
-            throw new ResourceForbiddenException(
+            throw new AccessForbiddenException(
                     "User of %s state can't access requested resource".formatted(user.state()));
         }
     }

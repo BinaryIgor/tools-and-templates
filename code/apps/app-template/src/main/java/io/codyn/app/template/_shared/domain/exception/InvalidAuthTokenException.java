@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.domain.exception;
 
-public class InvalidAuthTokenException extends AppException {
+public class InvalidAuthTokenException extends CustomException {
 
     public InvalidAuthTokenException(String message) {
         super(message);

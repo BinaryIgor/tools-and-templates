@@ -11,6 +11,12 @@ management:
       exposure:
         include: [ "health", "info", "prometheus" ]
 
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
 #Real values
 app:
   jwt:
