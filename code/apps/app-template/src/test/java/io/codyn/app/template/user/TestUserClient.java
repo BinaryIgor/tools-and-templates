@@ -2,20 +2,20 @@ package io.codyn.app.template.user;
 
 import io.codyn.app.template.user.api.CurrentUser;
 import io.codyn.app.template.user.api.UserClient;
+import io.codyn.app.template.user.domain.model.User;
+import io.codyn.app.template.user.infra.SqlUserRepository;
+import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.test.TestRandom;
-import org.jooq.DSLContext;
 
 import java.util.UUID;
 
-import static io.codyn.sqldb.schema.user.Tables.USER;
-
 public class TestUserClient implements UserClient {
 
-    private final DSLContext context;
+    private final SqlUserRepository userRepository;
     private CurrentUser currentUser;
 
-    public TestUserClient(DSLContext context) {
-        this.context = context;
+    public TestUserClient(DSLContextProvider contextProvider) {
+        this.userRepository = new SqlUserRepository(contextProvider);
     }
 
     public void setCurrentUser(CurrentUser currentUser) {
@@ -45,29 +45,13 @@ public class TestUserClient implements UserClient {
         return currentUser().id();
     }
 
-    public UUID createUser(NewUser user) {
-        context.newRecord(USER)
-                .setId(user.id)
-                .setName(user.name)
-                .setEmail(user.email)
-                .setPassword(user.password)
-                .insert();
-
-        return user.id;
+    public UUID createUser(User user) {
+        userRepository.create(user);
+        return user.id();
     }
 
     public UUID createRandomUser(UUID userId) {
         var name = TestRandom.string(5, 30);
-        return createUser(new NewUser(userId, name, name + "@email.com"));
-    }
-
-    public record NewUser(UUID id,
-                          String name,
-                          String email,
-                          String password) {
-
-        public NewUser(UUID id, String name, String email) {
-            this(id, name, email, "some-password");
-        }
+        return createUser(User.newUser(userId, name, name + "@email.com", "SomePass1234"));
     }
 }

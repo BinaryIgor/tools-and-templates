@@ -2,31 +2,30 @@ CREATE TABLE "user" (
     id UUID PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
-    password TEXT,
+    password TEXT NOT NULL,
     state TEXT NOT NULL DEFAULT 'CREATED',
-    second_factor_authentication BOOLEAN NOT NULL DEFAULT false,
-    external_authentication TEXT,
+    second_factor_auth BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
 CREATE TABLE role (
-    id UUID NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,
     value TEXT NOT NULL,
 
-    PRIMARY KEY(id, value)
+    PRIMARY KEY(user_id, value)
 );
 
 CREATE TABLE activation_token (
-    id UUID REFERENCES "user"(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES "user"(id) ON DELETE CASCADE,
     token TEXT NOT NULL UNIQUE,
     expires_at TIMESTAMP NOT NULL,
     type TEXT NOT NULL,
-    PRIMARY KEY(id, type)
+    PRIMARY KEY(user_id, type)
 );
 CREATE INDEX activation_token_expires_at on activation_token(expires_at);
 
 CREATE TABLE second_factor_authentication (
-    id UUID PRIMARY KEY REFERENCES "user"(id) ON DELETE CASCADE,
+    user_id UUID PRIMARY KEY REFERENCES "user"(id) ON DELETE CASCADE,
     email TEXT NOT NULL UNIQUE,
     code TEXT NOT NULL,
     sent_at TIMESTAMP NOT NULL,

@@ -50,9 +50,9 @@ public class SecondFactorAuthentication extends TableImpl<SecondFactorAuthentica
     }
 
     /**
-     * The column <code>user.second_factor_authentication.id</code>.
+     * The column <code>user.second_factor_authentication.user_id</code>.
      */
-    public final TableField<SecondFactorAuthenticationRecord, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID.nullable(false), this, "");
+    public final TableField<SecondFactorAuthenticationRecord, UUID> USER_ID = createField(DSL.name("user_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
      * The column <code>user.second_factor_authentication.email</code>.
@@ -124,14 +124,14 @@ public class SecondFactorAuthentication extends TableImpl<SecondFactorAuthentica
 
     @Override
     public List<ForeignKey<SecondFactorAuthenticationRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<SecondFactorAuthenticationRecord, ?>>asList(Keys.SECOND_FACTOR_AUTHENTICATION__SECOND_FACTOR_AUTHENTICATION_ID_FKEY);
+        return Arrays.<ForeignKey<SecondFactorAuthenticationRecord, ?>>asList(Keys.SECOND_FACTOR_AUTHENTICATION__SECOND_FACTOR_AUTHENTICATION_USER_ID_FKEY);
     }
 
     private transient io.codyn.sqldb.schema.user.tables.User _user;
 
     public io.codyn.sqldb.schema.user.tables.User user() {
         if (_user == null)
-            _user = new io.codyn.sqldb.schema.user.tables.User(this, Keys.SECOND_FACTOR_AUTHENTICATION__SECOND_FACTOR_AUTHENTICATION_ID_FKEY);
+            _user = new io.codyn.sqldb.schema.user.tables.User(this, Keys.SECOND_FACTOR_AUTHENTICATION__SECOND_FACTOR_AUTHENTICATION_USER_ID_FKEY);
 
         return _user;
     }

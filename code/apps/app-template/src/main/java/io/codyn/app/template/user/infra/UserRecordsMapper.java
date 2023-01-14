@@ -1,23 +1,22 @@
 package io.codyn.app.template.user.infra;
 
 import io.codyn.app.template._shared.domain.model.UserState;
-import io.codyn.app.template.user.domain.model.auth.NewUser;
 import io.codyn.app.template.user.domain.model.User;
 import io.codyn.sqldb.schema.user.tables.records.UserRecord;
 
-import java.util.UUID;
-
 public class UserRecordsMapper {
 
-    public static UserRecord setFromNewUser(UserRecord record, NewUser newUser) {
-        return record.setId(UUID.randomUUID())
-                .setName(newUser.name())
-                .setEmail(newUser.email())
-                .setPassword(newUser.password());
+    public static UserRecord setFromUser(UserRecord record, User user) {
+        return record.setId(user.id())
+                .setName(user.name())
+                .setEmail(user.email())
+                .setPassword(user.password())
+                .setState(user.state().name())
+                .setSecondFactorAuth(user.secondFactorAuth());
     }
 
     public static User fromUserRecord(UserRecord record) {
         return new User(record.getId(), record.getName(), record.getEmail(), record.getPassword(),
-                UserState.valueOf(record.getState()));
+                UserState.valueOf(record.getState()), record.getSecondFactorAuth());
     }
 }

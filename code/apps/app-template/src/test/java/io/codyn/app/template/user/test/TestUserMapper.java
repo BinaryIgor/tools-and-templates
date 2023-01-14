@@ -1,11 +1,11 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template.user.domain.model.auth.NewUser;
+import io.codyn.app.template.user.domain.model.NewUserRequest;
 import io.codyn.app.template.user.domain.model.User;
 
 public class TestUserMapper {
 
-    public static NewUser toNewUser(User user) {
-        return new NewUser(user.name(), user.email(), user.password());
+    public static NewUserRequest toNewUserRequest(User user) {
+        return new NewUserRequest(user.id(), user.name(), user.email(), user.password());
     }
 }

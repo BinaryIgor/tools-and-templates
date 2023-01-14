@@ -25,17 +25,17 @@ public class ActivationTokenRecord extends UpdatableRecordImpl<ActivationTokenRe
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>user.activation_token.id</code>.
+     * Setter for <code>user.activation_token.user_id</code>.
      */
-    public ActivationTokenRecord setId(UUID value) {
+    public ActivationTokenRecord setUserId(UUID value) {
         set(0, value);
         return this;
     }
 
     /**
-     * Getter for <code>user.activation_token.id</code>.
+     * Getter for <code>user.activation_token.user_id</code>.
      */
-    public UUID getId() {
+    public UUID getUserId() {
         return (UUID) get(0);
     }
 
@@ -109,7 +109,7 @@ public class ActivationTokenRecord extends UpdatableRecordImpl<ActivationTokenRe
 
     @Override
     public Field<UUID> field1() {
-        return ActivationToken.ACTIVATION_TOKEN.ID;
+        return ActivationToken.ACTIVATION_TOKEN.USER_ID;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ActivationTokenRecord extends UpdatableRecordImpl<ActivationTokenRe
 
     @Override
     public UUID component1() {
-        return getId();
+        return getUserId();
     }
 
     @Override
@@ -149,7 +149,7 @@ public class ActivationTokenRecord extends UpdatableRecordImpl<ActivationTokenRe
 
     @Override
     public UUID value1() {
-        return getId();
+        return getUserId();
     }
 
     @Override
@@ -169,7 +169,7 @@ public class ActivationTokenRecord extends UpdatableRecordImpl<ActivationTokenRe
 
     @Override
     public ActivationTokenRecord value1(UUID value) {
-        setId(value);
+        setUserId(value);
         return this;
     }
 
@@ -214,10 +214,10 @@ public class ActivationTokenRecord extends UpdatableRecordImpl<ActivationTokenRe
     /**
      * Create a detached, initialised ActivationTokenRecord
      */
-    public ActivationTokenRecord(UUID id, String token, Instant expiresAt, String type) {
+    public ActivationTokenRecord(UUID userId, String token, Instant expiresAt, String type) {
         super(ActivationToken.ACTIVATION_TOKEN);
 
-        setId(id);
+        setUserId(userId);
         setToken(token);
         setExpiresAt(expiresAt);
         setType(type);

@@ -25,7 +25,7 @@ public class SqlActivationTokenRepository implements ActivationTokenRepository {
     public void save(ActivationToken token) {
         contextProvider.context()
                 .insertInto(ACTIVATION_TOKEN)
-                .set(ACTIVATION_TOKEN.ID, token.userId())
+                .set(ACTIVATION_TOKEN.USER_ID, token.userId())
                 .set(ACTIVATION_TOKEN.TYPE, token.type().name())
                 .set(ACTIVATION_TOKEN.TOKEN, token.token())
                 .set(ACTIVATION_TOKEN.EXPIRES_AT, token.expiresAt())
@@ -42,14 +42,14 @@ public class SqlActivationTokenRepository implements ActivationTokenRepository {
         return contextProvider.context()
                 .selectFrom(ACTIVATION_TOKEN)
                 .where(idEqualsCondition(id))
-                .fetchOptional(r -> new ActivationToken(r.getId(),
+                .fetchOptional(r -> new ActivationToken(r.getUserId(),
                         ActivationTokenType.valueOf(r.getType()),
                         r.getToken(),
                         r.getExpiresAt()));
     }
 
     private Condition idEqualsCondition(ActivationTokenId id) {
-        return ACTIVATION_TOKEN.ID.eq(id.userId())
+        return ACTIVATION_TOKEN.USER_ID.eq(id.userId())
                 .and(ACTIVATION_TOKEN.TYPE.eq(id.tokenType().name()));
     }
 

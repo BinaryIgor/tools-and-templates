@@ -2,9 +2,9 @@ package io.codyn.app.template;
 
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.user.TestUserClient;
+import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.sqldb.test.CustomPostgreSQLContainer;
 import io.codyn.test.http.TestHttpClient;
-import org.jooq.DSLContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +67,8 @@ public abstract class SpringIntegrationTest {
 
         @Bean
         @Primary
-        TestUserClient userClient(DSLContext context) {
-            return new TestUserClient(context);
+        TestUserClient userClient(DSLContextProvider contextProvider) {
+            return new TestUserClient(contextProvider);
         }
     }
 

@@ -15,7 +15,7 @@ public class SqlProjectRepositoryTest extends DbIntegrationTest {
     @Override
     protected void setup() {
         repository = new SqlProjectRepository(context);
-        userClient = new TestUserClient(context);
+        userClient = new TestUserClient(contextProvider);
     }
 
     @Test

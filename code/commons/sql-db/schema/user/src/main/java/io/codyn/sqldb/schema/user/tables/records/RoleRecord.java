@@ -23,17 +23,17 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> implements Recor
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>user.role.id</code>.
+     * Setter for <code>user.role.user_id</code>.
      */
-    public RoleRecord setId(UUID value) {
+    public RoleRecord setUserId(UUID value) {
         set(0, value);
         return this;
     }
 
     /**
-     * Getter for <code>user.role.id</code>.
+     * Getter for <code>user.role.user_id</code>.
      */
-    public UUID getId() {
+    public UUID getUserId() {
         return (UUID) get(0);
     }
 
@@ -77,7 +77,7 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> implements Recor
 
     @Override
     public Field<UUID> field1() {
-        return Role.ROLE.ID;
+        return Role.ROLE.USER_ID;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> implements Recor
 
     @Override
     public UUID component1() {
-        return getId();
+        return getUserId();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> implements Recor
 
     @Override
     public UUID value1() {
-        return getId();
+        return getUserId();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> implements Recor
 
     @Override
     public RoleRecord value1(UUID value) {
-        setId(value);
+        setUserId(value);
         return this;
     }
 
@@ -138,10 +138,10 @@ public class RoleRecord extends UpdatableRecordImpl<RoleRecord> implements Recor
     /**
      * Create a detached, initialised RoleRecord
      */
-    public RoleRecord(UUID id, String value) {
+    public RoleRecord(UUID userId, String value) {
         super(Role.ROLE);
 
-        setId(id);
+        setUserId(userId);
         setValue(value);
     }
 }

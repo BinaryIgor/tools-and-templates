@@ -52,9 +52,9 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
     }
 
     /**
-     * The column <code>user.activation_token.id</code>.
+     * The column <code>user.activation_token.user_id</code>.
      */
-    public final TableField<ActivationTokenRecord, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID.nullable(false), this, "");
+    public final TableField<ActivationTokenRecord, UUID> USER_ID = createField(DSL.name("user_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
      * The column <code>user.activation_token.token</code>.
@@ -126,14 +126,14 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
 
     @Override
     public List<ForeignKey<ActivationTokenRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<ActivationTokenRecord, ?>>asList(Keys.ACTIVATION_TOKEN__ACTIVATION_TOKEN_ID_FKEY);
+        return Arrays.<ForeignKey<ActivationTokenRecord, ?>>asList(Keys.ACTIVATION_TOKEN__ACTIVATION_TOKEN_USER_ID_FKEY);
     }
 
     private transient io.codyn.sqldb.schema.user.tables.User _user;
 
     public io.codyn.sqldb.schema.user.tables.User user() {
         if (_user == null)
-            _user = new io.codyn.sqldb.schema.user.tables.User(this, Keys.ACTIVATION_TOKEN__ACTIVATION_TOKEN_ID_FKEY);
+            _user = new io.codyn.sqldb.schema.user.tables.User(this, Keys.ACTIVATION_TOKEN__ACTIVATION_TOKEN_USER_ID_FKEY);
 
         return _user;
     }

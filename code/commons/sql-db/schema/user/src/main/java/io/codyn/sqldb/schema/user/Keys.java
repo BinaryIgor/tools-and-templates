@@ -31,11 +31,11 @@ public class Keys {
     // UNIQUE and PRIMARY KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final UniqueKey<ActivationTokenRecord> ACTIVATION_TOKEN_PKEY = Internal.createUniqueKey(ActivationToken.ACTIVATION_TOKEN, DSL.name("activation_token_pkey"), new TableField[] { ActivationToken.ACTIVATION_TOKEN.ID, ActivationToken.ACTIVATION_TOKEN.TYPE }, true);
+    public static final UniqueKey<ActivationTokenRecord> ACTIVATION_TOKEN_PKEY = Internal.createUniqueKey(ActivationToken.ACTIVATION_TOKEN, DSL.name("activation_token_pkey"), new TableField[] { ActivationToken.ACTIVATION_TOKEN.USER_ID, ActivationToken.ACTIVATION_TOKEN.TYPE }, true);
     public static final UniqueKey<ActivationTokenRecord> ACTIVATION_TOKEN_TOKEN_KEY = Internal.createUniqueKey(ActivationToken.ACTIVATION_TOKEN, DSL.name("activation_token_token_key"), new TableField[] { ActivationToken.ACTIVATION_TOKEN.TOKEN }, true);
-    public static final UniqueKey<RoleRecord> ROLE_PKEY = Internal.createUniqueKey(Role.ROLE, DSL.name("role_pkey"), new TableField[] { Role.ROLE.ID, Role.ROLE.VALUE }, true);
+    public static final UniqueKey<RoleRecord> ROLE_PKEY = Internal.createUniqueKey(Role.ROLE, DSL.name("role_pkey"), new TableField[] { Role.ROLE.USER_ID, Role.ROLE.VALUE }, true);
     public static final UniqueKey<SecondFactorAuthenticationRecord> SECOND_FACTOR_AUTHENTICATION_EMAIL_KEY = Internal.createUniqueKey(SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION, DSL.name("second_factor_authentication_email_key"), new TableField[] { SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.EMAIL }, true);
-    public static final UniqueKey<SecondFactorAuthenticationRecord> SECOND_FACTOR_AUTHENTICATION_PKEY = Internal.createUniqueKey(SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION, DSL.name("second_factor_authentication_pkey"), new TableField[] { SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.ID }, true);
+    public static final UniqueKey<SecondFactorAuthenticationRecord> SECOND_FACTOR_AUTHENTICATION_PKEY = Internal.createUniqueKey(SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION, DSL.name("second_factor_authentication_pkey"), new TableField[] { SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.USER_ID }, true);
     public static final UniqueKey<UserRecord> USER_EMAIL_KEY = Internal.createUniqueKey(User.USER, DSL.name("user_email_key"), new TableField[] { User.USER.EMAIL }, true);
     public static final UniqueKey<UserRecord> USER_PKEY = Internal.createUniqueKey(User.USER, DSL.name("user_pkey"), new TableField[] { User.USER.ID }, true);
 
@@ -43,7 +43,7 @@ public class Keys {
     // FOREIGN KEY definitions
     // -------------------------------------------------------------------------
 
-    public static final ForeignKey<ActivationTokenRecord, UserRecord> ACTIVATION_TOKEN__ACTIVATION_TOKEN_ID_FKEY = Internal.createForeignKey(ActivationToken.ACTIVATION_TOKEN, DSL.name("activation_token_id_fkey"), new TableField[] { ActivationToken.ACTIVATION_TOKEN.ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
-    public static final ForeignKey<RoleRecord, UserRecord> ROLE__ROLE_ID_FKEY = Internal.createForeignKey(Role.ROLE, DSL.name("role_id_fkey"), new TableField[] { Role.ROLE.ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
-    public static final ForeignKey<SecondFactorAuthenticationRecord, UserRecord> SECOND_FACTOR_AUTHENTICATION__SECOND_FACTOR_AUTHENTICATION_ID_FKEY = Internal.createForeignKey(SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION, DSL.name("second_factor_authentication_id_fkey"), new TableField[] { SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
+    public static final ForeignKey<ActivationTokenRecord, UserRecord> ACTIVATION_TOKEN__ACTIVATION_TOKEN_USER_ID_FKEY = Internal.createForeignKey(ActivationToken.ACTIVATION_TOKEN, DSL.name("activation_token_user_id_fkey"), new TableField[] { ActivationToken.ACTIVATION_TOKEN.USER_ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
+    public static final ForeignKey<RoleRecord, UserRecord> ROLE__ROLE_USER_ID_FKEY = Internal.createForeignKey(Role.ROLE, DSL.name("role_user_id_fkey"), new TableField[] { Role.ROLE.USER_ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
+    public static final ForeignKey<SecondFactorAuthenticationRecord, UserRecord> SECOND_FACTOR_AUTHENTICATION__SECOND_FACTOR_AUTHENTICATION_USER_ID_FKEY = Internal.createForeignKey(SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION, DSL.name("second_factor_authentication_user_id_fkey"), new TableField[] { SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.USER_ID }, Keys.USER_PKEY, new TableField[] { User.USER.ID }, true);
 }

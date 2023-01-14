@@ -25,17 +25,17 @@ public class SecondFactorAuthenticationRecord extends UpdatableRecordImpl<Second
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>user.second_factor_authentication.id</code>.
+     * Setter for <code>user.second_factor_authentication.user_id</code>.
      */
-    public SecondFactorAuthenticationRecord setId(UUID value) {
+    public SecondFactorAuthenticationRecord setUserId(UUID value) {
         set(0, value);
         return this;
     }
 
     /**
-     * Getter for <code>user.second_factor_authentication.id</code>.
+     * Getter for <code>user.second_factor_authentication.user_id</code>.
      */
-    public UUID getId() {
+    public UUID getUserId() {
         return (UUID) get(0);
     }
 
@@ -124,7 +124,7 @@ public class SecondFactorAuthenticationRecord extends UpdatableRecordImpl<Second
 
     @Override
     public Field<UUID> field1() {
-        return SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.ID;
+        return SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION.USER_ID;
     }
 
     @Override
@@ -149,7 +149,7 @@ public class SecondFactorAuthenticationRecord extends UpdatableRecordImpl<Second
 
     @Override
     public UUID component1() {
-        return getId();
+        return getUserId();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class SecondFactorAuthenticationRecord extends UpdatableRecordImpl<Second
 
     @Override
     public UUID value1() {
-        return getId();
+        return getUserId();
     }
 
     @Override
@@ -199,7 +199,7 @@ public class SecondFactorAuthenticationRecord extends UpdatableRecordImpl<Second
 
     @Override
     public SecondFactorAuthenticationRecord value1(UUID value) {
-        setId(value);
+        setUserId(value);
         return this;
     }
 
@@ -251,10 +251,10 @@ public class SecondFactorAuthenticationRecord extends UpdatableRecordImpl<Second
     /**
      * Create a detached, initialised SecondFactorAuthenticationRecord
      */
-    public SecondFactorAuthenticationRecord(UUID id, String email, String code, Instant sentAt, Instant expiresAt) {
+    public SecondFactorAuthenticationRecord(UUID userId, String email, String code, Instant sentAt, Instant expiresAt) {
         super(SecondFactorAuthentication.SECOND_FACTOR_AUTHENTICATION);
 
-        setId(id);
+        setUserId(userId);
         setEmail(email);
         setCode(code);
         setSentAt(sentAt);

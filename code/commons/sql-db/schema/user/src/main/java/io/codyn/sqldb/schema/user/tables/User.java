@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row8;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -66,7 +66,7 @@ public class User extends TableImpl<UserRecord> {
     /**
      * The column <code>user.user.password</code>.
      */
-    public final TableField<UserRecord, String> PASSWORD = createField(DSL.name("password"), SQLDataType.CLOB, this, "");
+    public final TableField<UserRecord, String> PASSWORD = createField(DSL.name("password"), SQLDataType.CLOB.nullable(false), this, "");
 
     /**
      * The column <code>user.user.state</code>.
@@ -74,14 +74,9 @@ public class User extends TableImpl<UserRecord> {
     public final TableField<UserRecord, String> STATE = createField(DSL.name("state"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field("'CREATED'::text", SQLDataType.CLOB)), this, "");
 
     /**
-     * The column <code>user.user.second_factor_authentication</code>.
+     * The column <code>user.user.second_factor_auth</code>.
      */
-    public final TableField<UserRecord, Boolean> SECOND_FACTOR_AUTHENTICATION = createField(DSL.name("second_factor_authentication"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
-
-    /**
-     * The column <code>user.user.external_authentication</code>.
-     */
-    public final TableField<UserRecord, String> EXTERNAL_AUTHENTICATION = createField(DSL.name("external_authentication"), SQLDataType.CLOB, this, "");
+    public final TableField<UserRecord, Boolean> SECOND_FACTOR_AUTH = createField(DSL.name("second_factor_auth"), SQLDataType.BOOLEAN.nullable(false).defaultValue(DSL.field("false", SQLDataType.BOOLEAN)), this, "");
 
     /**
      * The column <code>user.user.created_at</code>.
@@ -163,11 +158,11 @@ public class User extends TableImpl<UserRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row8 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row8<UUID, String, String, String, String, Boolean, String, Instant> fieldsRow() {
-        return (Row8) super.fieldsRow();
+    public Row7<UUID, String, String, String, String, Boolean, Instant> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 }

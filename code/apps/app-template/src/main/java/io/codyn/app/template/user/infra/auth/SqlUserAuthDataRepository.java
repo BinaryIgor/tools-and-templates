@@ -30,7 +30,7 @@ public class SqlUserAuthDataRepository implements UserAuthDataRepository {
                 .select(USER.STATE, ROLE.VALUE)
                 .from(USER)
                 .leftJoin(ROLE)
-                .on(USER.ID.eq(ROLE.ID))
+                .on(USER.ID.eq(ROLE.USER_ID))
                 .where(USER.ID.eq(id))
                 .fetch();
 

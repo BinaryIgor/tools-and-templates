@@ -3,6 +3,7 @@ package io.codyn.app.template.user.app;
 import io.codyn.app.template.auth.app.SecurityEndpoints;
 import io.codyn.app.template.auth.domain.AuthTokens;
 import io.codyn.app.template.user.app.model.ActivationToken;
+import io.codyn.app.template.user.app.model.ApiNewUserRequest;
 import io.codyn.app.template.user.app.model.RefreshToken;
 import io.codyn.app.template.user.domain.model.auth.*;
 import io.codyn.app.template.user.domain.service.NewUserService;
@@ -33,8 +34,8 @@ public class UserAuthController {
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody NewUser user) {
-        newUserService.create(user);
+    public void signUp(@RequestBody ApiNewUserRequest user) {
+        newUserService.create(user.toRequest());
     }
 
     @PostMapping("/activate-account")

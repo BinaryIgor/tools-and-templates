@@ -49,9 +49,9 @@ public class Role extends TableImpl<RoleRecord> {
     }
 
     /**
-     * The column <code>user.role.id</code>.
+     * The column <code>user.role.user_id</code>.
      */
-    public final TableField<RoleRecord, UUID> ID = createField(DSL.name("id"), SQLDataType.UUID.nullable(false), this, "");
+    public final TableField<RoleRecord, UUID> USER_ID = createField(DSL.name("user_id"), SQLDataType.UUID.nullable(false), this, "");
 
     /**
      * The column <code>user.role.value</code>.
@@ -108,14 +108,14 @@ public class Role extends TableImpl<RoleRecord> {
 
     @Override
     public List<ForeignKey<RoleRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<RoleRecord, ?>>asList(Keys.ROLE__ROLE_ID_FKEY);
+        return Arrays.<ForeignKey<RoleRecord, ?>>asList(Keys.ROLE__ROLE_USER_ID_FKEY);
     }
 
     private transient io.codyn.sqldb.schema.user.tables.User _user;
 
     public io.codyn.sqldb.schema.user.tables.User user() {
         if (_user == null)
-            _user = new io.codyn.sqldb.schema.user.tables.User(this, Keys.ROLE__ROLE_ID_FKEY);
+            _user = new io.codyn.sqldb.schema.user.tables.User(this, Keys.ROLE__ROLE_USER_ID_FKEY);
 
         return _user;
     }
