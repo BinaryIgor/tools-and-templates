@@ -1,9 +1,14 @@
-from commons import meta, crypto
+import shutil
 from datetime import datetime
 from os import path
-import shutil
 
+from commons import meta, crypto
+
+CI_REPO_ROOT_PATH = "CI_REPO_ROOT_PATH"
 CI_PACKAGE_TARGET = "CI_PACKAGE_TARGET"
+CI_BUILD_COMMONS = "CI_BUILD_COMMONS"
+CI_SKIP_COMMONS_TESTS = "CI_SKIP_COMMONS_TESTS"
+CI_SKIP_TESTS = "CI_SKIP_TESTS"
 
 SECRETS_BUILD_ENV_PREFIX = "secrets:"
 BUILD_ENV = "build_env"
@@ -15,6 +20,22 @@ args = meta.cmd_args({
     "app": {
         "help": "Name of the app",
         "required": True
+    },
+    "skip_build": {
+        "help": "Skip build, package ready artifact",
+        "action": "store_true"
+    },
+    "skip_commons": {
+        "help": "Skip commons, if you have them built",
+        "action": "store_true"
+    },
+    "skip_commons_tests": {
+        "help": "Skip commons tests, if there were no changes there",
+        "action": "store_true"
+    },
+    "skip_tests": {
+        "help": "Skip tests, if you don't need their assurance",
+        "action": "store_true"
     },
     "skip_image_export": {
         "help": "Don't export final image to tar, which is time-consuming and not needed for local builds (in most cases)",
@@ -30,7 +51,7 @@ def new_tag(app_name):
     return datetime.utcnow().strftime("%Y%m%d%H%M%S")
 
 
-def build_app(app, app_name, tag):
+def build_app(app, app_name, tag, build_env_vars=None):
     app_dir = path.join(meta.root_dir(), meta.app_dir(app))
 
     log.info(f"About to build {app_name} app docker image ({tag}) from path: {app_dir}")
@@ -42,7 +63,7 @@ def build_app(app, app_name, tag):
 
         meta.execute_bash_script(f"""
             cd {app_dir}
-            {app_build_env_exports_str(app_config, app_name)}
+            {app_build_env_exports_str(app_config, app_name, build_env_vars)}
             {app_build_cmd}
         """)
         log.info("build cmd executed")
@@ -52,9 +73,16 @@ def build_app(app, app_name, tag):
     docker build . -t {app_name}:{tag}""")
 
 
-def app_build_env_exports_str(app_config, app_name):
+def app_build_env_exports_str(app_config, app_name, build_env_vars):
     env = app_config.get(BUILD_ENV, {})
-    exports = [f'export {CI_PACKAGE_TARGET}={meta.cli_app_package_dir(app_name)}']
+    exports = [
+        export_env_var_str(CI_REPO_ROOT_PATH, meta.root_dir()),
+        export_env_var_str(CI_PACKAGE_TARGET, meta.cli_app_package_dir(app_name))
+    ]
+
+    if build_env_vars:
+        for k, v in build_env_vars.items():
+            exports.append(export_env_var_str(k, v))
 
     for k, v in env.items():
         v_str = str(v)
@@ -64,9 +92,13 @@ def app_build_env_exports_str(app_config, app_name):
         else:
             value = v
 
-        exports.append(f'export {k}="{value}"')
+        exports.append(export_env_var_str(k, value))
 
     return "\n".join(exports)
+
+
+def export_env_var_str(key, value):
+    return f'export {key}="{value}"'
 
 
 def package_app(app, app_name, tag, skip_image_export=False):
@@ -113,7 +145,7 @@ def prepared_run_script(app_name, app_config, tagged_image_name):
     run_lines = []
 
     for key, value in script_env(app_config).items():
-        run_lines.append(f'export {key}="{value}"\n')
+        run_lines.append(export_env_var_str(key, value) + "\n")
 
     log_driver = "" if "fluentd" in app_name or meta.is_local_env() \
         else '--log-driver=fluentd --log-opt tag="docker.{{.ID}}"'
@@ -184,7 +216,6 @@ def prepared_load_and_run_script(tagged_image_name, docker_image_tar):
         'echo "Image loaded, running it..."',
         'exec bash run.bash'
     ])
-
 
 
 def script_comments(app_config):
@@ -280,8 +311,19 @@ if path.exists(app_package_dir):
     shutil.rmtree(app_package_dir)
 meta.create_dir(app_package_dir)
 
-log.info("About to build app...")
-build_app(app, app_name, tag)
+if args["skip_build"]:
+    log.info("Skipping build, using existing files to create a package...")
+else:
+    build_env = {}
+    if args["skip_commons"]:
+        build_env[CI_BUILD_COMMONS] = "false"
+    if args["skip_commons_tests"]:
+        build_env[CI_SKIP_COMMONS_TESTS] = "true"
+    if args["skip_tests"]:
+        build_env[CI_SKIP_TESTS] = "true"
+
+    log.info("About to build app...")
+    build_app(app, app_name, tag, build_env_vars=build_env)
 
 log.info(f"Packaging app...")
 package_app(app, app_name, tag, skip_image_export)

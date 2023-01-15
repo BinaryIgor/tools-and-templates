@@ -4,11 +4,15 @@
   ],
   "build_cmd": "bash build_cmd.bash",
   "env": {
-    "JVM_OPTS": "-Xmx450m"
+    "JVM_OPTS": "-Xmx450m",
+    "DB_URL": "${db-url}",
+    "DB_USER": "${db-user}",
+    "DB_PASSWORD": "secrets:db-password",
+    "JWT_TOKEN_KEY": "secrets:jwt-token-key"
   },
   "secrets": [
     "db-password",
-    "token-key"
+    "jwt-token-key"
   ],
   "network": "host",
   "memory": "500M",
