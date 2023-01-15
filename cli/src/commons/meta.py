@@ -145,6 +145,10 @@ def root_code_dir():
     return path.join(root_dir(), "code")
 
 
+def root_tools_dir():
+    return path.join(root_dir(), "tools")
+
+
 def config_dir():
     return path.join(root_cli_dir(), "config")
 
