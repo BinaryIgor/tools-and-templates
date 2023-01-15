@@ -1,5 +1,14 @@
 [
   {
+    "_comment": "Only for local development. On product we have managed db",
+    "name": "postgres-db",
+    "dir": "tools/postgres-db"
+  },
+  {
+    "name": "app-template",
+    "dir": "code/apps/app-template"
+  },
+  {
     "name": "prometheus",
     "dir": "tools/prometheus"
   },
@@ -35,7 +44,7 @@
     "name": "nginx-api",
     "dir": "tools/nginx/api"
   },
-   {
+  {
     "name": "nginx-files-browser",
     "dir": "tools/nginx/files-browser"
   }

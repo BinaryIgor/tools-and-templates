@@ -1,5 +1,8 @@
 {
-  "build_cmd": "mvn clean install",
+  "volumes": [
+    "${SECRETS_DIR}:/secrets:ro"
+  ],
+  "build_cmd": "bash build_cmd.bash",
   "env": {
     "JVM_OPTS": "-Xmx450m"
   },

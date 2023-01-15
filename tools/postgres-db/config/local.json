@@ -1,6 +1,6 @@
 {
   "volumes": [
-    "${ADB_DATA_PATH}:/var/lib/postgresql/data"
+    "${PG_DB_VOLUME}:/var/lib/postgresql/data"
   ],
   "ports": [
     "5678:5432"

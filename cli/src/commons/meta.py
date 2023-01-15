@@ -267,11 +267,15 @@ def replaced_placeholders_content(content, placeholders_values, objects_values=N
 
 
 def execute_script(script):
-    code = sp.run(script, shell=True).returncode
-    if code != 0:
-        log.error(f"Fail to execute script: {script}")
-        log.error(f"Exiting: {code}")
-        sys.exit(code)
+    try:
+        code = sp.run(script, shell=True).returncode
+        if code != 0:
+            log.error(f"Fail to execute script: {script}")
+            log.error(f"Exiting: {code}")
+            sys.exit(code)
+    except KeyboardInterrupt:
+        log.info("Script executing interrupted by user, exiting!")
+        sys.exit(0)
 
 
 def execute_script_returning_process(script, raise_on_error=True):

@@ -1,6 +1,10 @@
 spring:
   application:
     name: app-template
+  datasource:
+    url: "${DB_URL}"
+    username: "${DB_USER}"
+    password: "${DB_PASSWORD}"
 
 server:
   port: 8080
@@ -21,12 +25,12 @@ springdoc:
 app:
   jwt:
     issuer: system-template
-    token-key: "${JWT_TOKEN_KEY:xCwZ4zydRbu8kbKre59Hi2224Xdz0PupADTWkErvIg4=}"
+    token-key: "${JWT_TOKEN_KEY}"
     access-token-duration: "PT1H"
     refresh-token-duration: "PT24H"
   email:
     fake-server: false
-    templates-dir: "${EMAIL_TEMPLATES_DIR:/templates}"
+    templates-dir: "${TEMPLATES_DIR:/templates}"
     postmark-api-token: "${POSTMARK_API_TOKEN}"
     postmark-webhook-token: "${POSTMARK_WEBHOOK_TOKEN}"
     frontend-domain: "https://codyn.io"

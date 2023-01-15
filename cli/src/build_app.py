@@ -9,9 +9,6 @@ SECRETS_BUILD_ENV_PREFIX = "secrets:"
 BUILD_ENV = "build_env"
 LOAD_AND_RUN_SCRIPT = "load_and_run.bash"
 
-LAST_DOCKER_LOGS_COLLECTOR_READ_AT_FILE = "/tmp/docker-logs-collector-last-data-read-at.txt"
-LAST_DOCKER_LOGS_COLLECTOR_READ_AT_FILE_VARIABLE = "last_docker_logs_collector_read_at_file"
-
 log = meta.new_log("build_app")
 
 args = meta.cmd_args({
@@ -80,8 +77,6 @@ def package_app(app, app_name, tag, skip_image_export=False):
     log.info("App config loaded")
 
     tagged_image_name = f'{app_name}:{tag}'
-
-    decrypt_needed_locally_secrets(app_config)
 
     app_package_dir = meta.cli_app_package_dir(app_name)
     docker_image_tar = f'{app_name}.tar.gz'
@@ -190,28 +185,6 @@ def prepared_load_and_run_script(tagged_image_name, docker_image_tar):
         'exec bash run.bash'
     ])
 
-
-def decrypt_needed_locally_secrets(app_config):
-    decrypted_secrets = app_config.get("decrypted_secrets")
-    if not decrypted_secrets:
-        return
-
-    print()
-    log.info(f"Decrypting {decrypted_secrets} secrets for local app usage")
-    print()
-
-    decrypted_secrets_dir = crypto.decrypted_secrets_dir()
-    meta.create_dir(decrypted_secrets_dir)
-
-    decrypted_secrets_values = crypto.system_secrets()
-
-    for s in decrypted_secrets:
-        with open(path.join(decrypted_secrets_dir, f"{s}.txt"), "w") as f:
-            secret = decrypted_secrets_values[s]
-            f.write(secret)
-
-    log.info(f"Decrypted secrets saved to {decrypted_secrets_dir}")
-    print()
 
 
 def script_comments(app_config):

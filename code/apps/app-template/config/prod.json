@@ -1,9 +1,15 @@
 {
-  "build_cmd": "mvn clean install",
+  "volumes": [
+    "${secrets-path}:/secrets:ro"
+  ],
+  "build_cmd": "bash build_cmd.bash",
   "env": {
     "JVM_OPTS": "-Xmx450m"
   },
-  "secrets": {},
+  "secrets": [
+    "db-password",
+    "token-key"
+  ],
   "network": "host",
   "memory": "500M",
   "cpus": "0.5"
