@@ -5,10 +5,11 @@
   "build_cmd": "bash build_cmd.bash",
   "env": {
     "JVM_OPTS": "-Xmx450m",
+    "ENV": "prod",
     "DB_URL": "${db-url}",
     "DB_USER": "${db-user}",
-    "DB_PASSWORD": "secrets:db-password",
-    "JWT_TOKEN_KEY": "secrets:jwt-token-key"
+    "DB_PASSWORD": "file:/secrets/db-password.txt",
+    "JWT_TOKEN_KEY": "file:/secrets/jwt-token-key.txt"
   },
   "secrets": [
     "db-password",

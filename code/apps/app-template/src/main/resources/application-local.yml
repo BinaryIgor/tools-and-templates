@@ -18,4 +18,4 @@ app:
     fake-server: true
   jwt:
     #valid, random token key for using tokens locally
-    token-key: "xCwZ4zydRbu8kbKre59Hi2224Xdz0PupADTWkErvIg4"
+    token-key: "${JWT_TOKEN_KEY:xCwZ4zydRbu8kbKre59Hi2224Xdz0PupADTWkErvIg4}"

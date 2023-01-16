@@ -72,9 +72,9 @@ export PG_DB_VOLUME_PATH=$SYSTEM_DATA_PATH/pg-db-volume
 export SYSTEM_DATA_VOLUME_PATH=$SYSTEM_DATA_PATH/system-data-volume
 export SYSTEM_LOGS_VOLUME_PATH=$SYSTEM_DATA_PATH/logs-volume
 
-CERTS_VOLUME_PATH="${PWD}/../../config/fake-certs"
-SECRETS_VOLUME_PATH="${PWD}/../config/local-secrets"
-PACKAGES_DIR="${PWD}/../target"
+export CERTS_VOLUME_PATH="${PWD}/../../config/fake-certs"
+export SECRETS_VOLUME_PATH="${PWD}/../config/local-secrets"
+export PACKAGES_DIR="${PWD}/../target"
 
 echo "Creating volume directories, if they don't exist..."
 mkdir -p "$SYSTEM_DATA_PATH"

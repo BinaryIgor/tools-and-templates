@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.app;
 
-import io.codyn.app.template._shared.app.StringBytesMapper;
+import io.codyn.app.template._shared.app.PropertiesConverter;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
 import io.codyn.app.template.auth.domain.AuthTokenComponent;
 import io.codyn.app.template.auth.domain.JwtAuthTokenComponent;
@@ -26,9 +26,12 @@ public class AuthModuleConfig {
     public AuthTokenComponent authTokenComponent(UserAuthDataRepository authDataRepository,
                                                  JwtConfig config,
                                                  Clock clock) {
+        var readTokenKey = PropertiesConverter.valueOrFromFile(config.tokenKey());
+        var bytesTokenKey = PropertiesConverter.bytesFromString(readTokenKey);
+
         var componentConfig = new JwtAuthTokenComponent.Config(
                 config.issuer(),
-                StringBytesMapper.bytesFromString(config.tokenKey()),
+                bytesTokenKey,
                 config.accessTokenDuration(),
                 config.refreshTokenDuration(),
                 clock);

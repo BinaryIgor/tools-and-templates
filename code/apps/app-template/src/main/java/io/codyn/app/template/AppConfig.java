@@ -3,6 +3,7 @@ package io.codyn.app.template;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.codyn.app.template._shared.app.BadRequestsInterceptor;
 import io.codyn.app.template._shared.app.EmailModuleProvider;
+import io.codyn.app.template._shared.app.PropertiesConverter;
 import io.codyn.app.template._shared.app.SpringEventPublisher;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.server.EmailServer;
@@ -20,7 +21,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.SpringProperties;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -51,7 +51,8 @@ public class AppConfig implements WebMvcConfigurer {
         if (emailConfig.fakeServer()) {
             return new ToConsoleEmailServer();
         }
-        return new PostmarkEmailServer(emailConfig.postmarkApiToken());
+        var apiToken = PropertiesConverter.valueOrFromFile(emailConfig.postmarkApiToken());
+        return new PostmarkEmailServer(apiToken);
     }
 
     @Bean
@@ -63,8 +64,8 @@ public class AppConfig implements WebMvcConfigurer {
     public DSLContext dslContext(@Value("${spring.datasource.url}") String jdbcUrl,
                                  @Value("${spring.datasource.username}") String username,
                                  @Value("${spring.datasource.password}") String password) {
-        //TODO: support reading password from file!
-        return DSLContextFactory.newContext(jdbcUrl, username, password);
+        return DSLContextFactory.newContext(jdbcUrl, username,
+                PropertiesConverter.valueOrFromFile(password));
     }
 
     @Bean
