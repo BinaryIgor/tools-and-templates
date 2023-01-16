@@ -9,9 +9,13 @@ public record ErrorDocs(List<String> description, List<ErrorDoc> errors) {
                            List<String> reasons,
                            String message) {
 
+        public ErrorDoc(String error, List<String> reasons) {
+            this(error, reasons, "Any optional string");
+        }
+
         public ErrorDoc(Class<? extends Throwable> exception,
                         List<String> reasons) {
-            this(exception.getSimpleName(), reasons, "Any optional string");
+            this(exception.getSimpleName(), reasons);
         }
 
         public ErrorDoc(Class<? extends Throwable> exception) {
@@ -24,6 +28,11 @@ public record ErrorDocs(List<String> description, List<ErrorDoc> errors) {
 
         public Builder add(Class<? extends Throwable> exception, String... reasons) {
             errorDocs.add(new ErrorDoc(exception, List.of(reasons)));
+            return this;
+        }
+
+        public Builder add(String exception) {
+            errorDocs.add(new ErrorDoc(exception, List.of()));
             return this;
         }
 

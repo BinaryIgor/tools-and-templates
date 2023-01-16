@@ -1,7 +1,8 @@
 {
   "app-url-file": "app_url.txt",
-  "current-app-url-file-path": "$PWD/../nginx-api/app_url.txt",
-  "upstream-nginx-dir": "$PWD/../nginx-reverse-proxy",
+  "current-app-url-file-path": "$PWD/../../app-template/latest/app_url.txt",
+  "upstream-nginx-dir": "$PWD/../../nginx-gateway/latest",
+  "frontend-domain": "system-template.io",
   "static-path": "/home/monitor/static",
   "files-path": "/home/monitor/system-logs",
   "monitor-port": "10101",

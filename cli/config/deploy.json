@@ -14,8 +14,8 @@
         "system-monitor",
         "docker-metrics-collector",
         "test-app",
-        "nginx-reverse-proxy",
-        "nginx-api",
+        "nginx-gateway",
+        "app-template",
         "nginx-files-browser"
       ]
     }

@@ -72,7 +72,9 @@ export PG_DB_VOLUME_PATH=$SYSTEM_DATA_PATH/pg-db-volume
 export SYSTEM_DATA_VOLUME_PATH=$SYSTEM_DATA_PATH/system-data-volume
 export SYSTEM_LOGS_VOLUME_PATH=$SYSTEM_DATA_PATH/logs-volume
 
-export CERTS_VOLUME_PATH="${PWD}/../../config/fake-certs"
+export STATIC_FILES_PATH=${STATIC_FILES_PATH:-$PWD}
+
+export CERTS_VOLUME_PATH="${PWD}/../config/fake-certs"
 export SECRETS_VOLUME_PATH="${PWD}/../config/local-secrets"
 export PACKAGES_DIR="${PWD}/../target"
 
@@ -89,13 +91,12 @@ echo
 WAIT_FOR_CONTAINER_INTERVAL=1
 
 POSTGRES_DB="postgres-db"
-#TODO: add and handle it!
-NGINX="nginx"
+NGINX_GATEWAY="nginx-gateway"
 
 APP_TEMPLATE="app-template"
 
-COMPONENTS=("$POSTGRES_DB" "$APP_TEMPLATE")
-COMPONENTS_REVERSED=("$APP_TEMPLATE" "$POSTGRES_DB")
+COMPONENTS=("$POSTGRES_DB" "$APP_TEMPLATE" "$NGINX_GATEWAY")
+COMPONENTS_REVERSED=("$NGINX_GATEWAY" "$APP_TEMPLATE" "$POSTGRES_DB")
 
 echo "Building all..."
 
@@ -157,22 +158,6 @@ echo
 echo "$POSTGRES_DB migrations executed with code: $db_migration_code"
 echo
 
-#echo "Starting ${NGINX}..."
-#cd $PACKAGES_DIR
-#cd $NGINX
-#
-#export NGINX_CONFIG_PATH=$PACKAGES_DIR/$NGINX/nginx.conf
-#export NGINX_CERTS_PATH=$CERTS_VOLUME_PATH
-#export NGINX_SITE_PATH=$NGINX_STATIC_CONTENT_PATH
-#
-#bash run.bash
-#
-#wait_for_container $NGINX
-#
-#echo
-#echo "$NGINX is up!"
-#echo
-
 #echo "Starting ${MONITOR}..."
 #cd $PACKAGES_DIR
 #cd $MONITOR
@@ -198,6 +183,18 @@ wait_for_container $APP_TEMPLATE 5
 
 echo
 echo "$APP_TEMPLATE is up!"
+echo
+
+echo "Starting ${NGINX_GATEWAY}..."
+cd $PACKAGES_DIR
+cd $NGINX_GATEWAY
+
+bash run.bash
+
+wait_for_container $NGINX_GATEWAY
+
+echo
+echo "$NGINX_GATEWAY is up!"
 echo
 
 echo "Checking if all system components are healthy..."

@@ -29,6 +29,10 @@ public class DocsController {
                 .add(ValidationException.class)
                 .add(InvalidActivationTokenException.class)
                 .add(InvalidPasswordException.class)
+                //From Nginx errors
+                .add("BodyTooLargeException")
+                .add("ApiUnavailableException")
+                .add("TooManyRequestsException")
                 .build();
     }
 }

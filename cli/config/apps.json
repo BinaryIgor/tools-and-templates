@@ -37,8 +37,8 @@
     "dir": "code/tools/test-app"
   },
   {
-    "name": "nginx-reverse-proxy",
-    "dir": "tools/nginx/reverse-proxy"
+    "name": "nginx-gateway",
+    "dir": "tools/nginx/gateway"
   },
   {
     "name": "nginx-api",

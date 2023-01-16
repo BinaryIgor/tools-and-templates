@@ -5,6 +5,7 @@ from os import path
 from commons import meta, crypto
 
 CI_REPO_ROOT_PATH = "CI_REPO_ROOT_PATH"
+CI_ENV = "CI_ENV"
 CI_PACKAGE_TARGET = "CI_PACKAGE_TARGET"
 CI_BUILD_COMMONS = "CI_BUILD_COMMONS"
 CI_SKIP_COMMONS_TESTS = "CI_SKIP_COMMONS_TESTS"
@@ -77,7 +78,8 @@ def app_build_env_exports_str(app_config, app_name, build_env_vars):
     env = app_config.get(BUILD_ENV, {})
     exports = [
         export_env_var_str(CI_REPO_ROOT_PATH, meta.root_dir()),
-        export_env_var_str(CI_PACKAGE_TARGET, meta.cli_app_package_dir(app_name))
+        export_env_var_str(CI_PACKAGE_TARGET, meta.cli_app_package_dir(app_name)),
+        export_env_var_str(CI_ENV, meta.current_env())
     ]
 
     if build_env_vars:

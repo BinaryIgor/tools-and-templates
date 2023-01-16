@@ -46,10 +46,20 @@ def app_latest_package_dir(app_name):
     return f'{app_package_dir(app_name, deploy_config)}/latest'
 
 
+def perform_pre_deploy_actions(remote_host, app, deploy_dir):
+    actions = app.get("pre_deploy_actions")
+    if not actions:
+        return
+
+    print()
+    log.info("Performing pre deploy actions...")
+    perform_deploy_actions(actions, remote_host, deploy_dir)
+
+
 def perform_deploy_actions(actions, remote_host, deploy_dir):
     for a in actions:
         cmd = meta.replaced_placeholders_content(a, {
-            "deploy_dir": deploy_dir
+            "deploy-dir": deploy_dir
         })
         log.info(f"Executing: {cmd}")
         meta.execute_bash_script(f'ssh {remote_host} "{cmd}"')
@@ -167,6 +177,8 @@ copy_app_secrets_if(app, remote_host)
 copy_app_package(remote_host, previous_deploy_dir, latest_deploy_dir, package_dir)
 
 log.info("About to start app....")
+
+perform_pre_deploy_actions(remote_host, app, latest_deploy_dir)
 
 meta.execute_bash_script(f'ssh {remote_host} "cd {latest_deploy_dir}; bash load_and_run.bash"')
 
