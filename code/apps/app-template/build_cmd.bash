@@ -24,3 +24,7 @@ else
 fi
 
 cp -r $TEMPLATES_PATH target/templates
+
+HTTP_PORT=$(shuf -i 10000-20000 -n 1)
+echo "http://0.0.0.0:$HTTP_PORT" > "$CI_PACKAGE_TARGET/$APP_URL_FILE"
+echo "$HTTP_PORT" > "$CI_PACKAGE_TARGET/$APP_SERVER_PORT_FILE"

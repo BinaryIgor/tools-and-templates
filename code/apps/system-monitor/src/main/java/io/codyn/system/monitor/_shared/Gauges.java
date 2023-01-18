@@ -3,6 +3,8 @@ package io.codyn.system.monitor._shared;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class Gauges {
 
+    private static final Logger log = LoggerFactory.getLogger(Gauges.class);
     private final Map<String, AtomicReference<Double>> metricsReferences = new ConcurrentHashMap<>();
     private final MeterRegistry registry;
     private final MetricIdSupplier metricIdSupplier;
@@ -27,11 +30,14 @@ public class Gauges {
     }
 
     public void updateValue(String metric, Tags tags, double value) {
-        var previousReference = metricsReferences.computeIfAbsent(metricIdSupplier.get(metric, tags),
+        var key = metricIdSupplier.get(metric, tags);
+        var previousReference = metricsReferences.computeIfAbsent(key,
                 k -> new AtomicReference<>());
         previousReference.set(value);
 
         registry.gauge(metric, tags, previousReference, AtomicReference::get);
+
+        log.info("Updating gauge: {} with value: {}", key, value);
     }
 
     public interface MetricIdSupplier {

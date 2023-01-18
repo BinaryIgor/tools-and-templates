@@ -23,8 +23,8 @@ logs-mappings:
           - "[EMERG]"
     - supported-applications-keywords: [ monitor ]
       mapping:
-        warning-keywords: [ "WARNING", "warning", "WARN", "warn" ]
-        error-keywords: [ "ERROR", "error" ]
+        warning-keywords: [ "WARNING","WARN" ]
+        error-keywords: [ "ERROR" ]
         messages-to-swallow:
           - "New alert:"
 

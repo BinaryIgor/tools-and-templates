@@ -2,9 +2,14 @@
   "volumes": [
     "${secrets-path}:/secrets:ro"
   ],
+  "build_env": {
+    "APP_URL_FILE": "${app-template-url-file}",
+    "APP_SERVER_PORT_FILE": "app_server_port.txt"
+  },
   "build_cmd": "bash build_cmd.bash",
   "env": {
     "JVM_OPTS": "-Xmx450m",
+    "SERVER_PORT": "$SERVER_PORT",
     "ENV": "prod",
     "DB_URL": "${db-url}",
     "DB_USER": "${db-user}",
@@ -15,6 +20,11 @@
     "db-password",
     "jwt-token-key"
   ],
+  "pre_run_cmd": "export SERVER_PORT=$(cat app_server_port.txt)",
+  "zero_downtime_deploy": {
+    "upstream_nginx_dir": "${upstream-app-template-nginx-dir}",
+    "app_url_file": "${app-template-url-file}"
+  },
   "network": "host",
   "memory": "500M",
   "cpus": "0.5"

@@ -10,7 +10,7 @@
     "HTTPS_PORT": 43,
     "DOMAIN": "${frontend-domain}"
   },
-  "pre_run_cmd": "bash update_app_url_pre_start.bash ${current-app-url-file-path}",
+  "pre_run_cmd": "bash update_app_url_pre_start.bash ${current-app-template-url-file-path}",
   "post_run_cmd": "bash check_proxied_app.bash",
   "pre_deploy_actions": [
     "chmod +x ${deploy-dir}/reload_nginx_config.sh",
