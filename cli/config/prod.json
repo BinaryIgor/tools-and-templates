@@ -4,6 +4,7 @@
   "upstream-app-template-nginx-dir": "$PWD/../../nginx-gateway/latest",
   "frontend-domain": "droplet.roztropinski.com",
   "static-path": "/home/monitor/static",
+  "certs-path": "/etc/letsencrypt",
   "files-path": "/home/monitor/system-logs",
   "db-url": "jdbc:postgresql://localhost:5432/system-template",
   "db-host": "localhost",

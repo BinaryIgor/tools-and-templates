@@ -16,7 +16,7 @@ fi
 
 export nginx_container="nginx-gateway"
 # check if both proxying and proxied app are working properly
-export app_health_check_url="http://0.0.0.0:${HTTPS_PORT}/api/actuator/health"
+export app_health_check_url="https://0.0.0.0:${HTTPS_PORT}/api/actuator/health"
 
 envsubst '${nginx_container} ${app_health_check_url}' < template_update_app_url.bash > target/update_app_url.bash
 

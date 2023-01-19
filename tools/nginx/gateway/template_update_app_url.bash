@@ -21,7 +21,7 @@ if [ -z "${SKIP_RELOAD:-}" ]; then
     docker exec ${nginx_container} nginx -s reload
     echo "Nginx is running with new app url ($APP_URL)!"
 
-    echo "Cheking proxied app connection.."
+    echo "Checking proxied app connection.."
     curl --silent --retry-connrefused --retry 15 --retry-delay 1 --fail ${app_health_check_url}
     echo
 

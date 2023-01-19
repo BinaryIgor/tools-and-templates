@@ -1,17 +1,16 @@
 {
   "volumes": [
     "$PWD/conf:/etc/nginx/conf.d",
-    "${certs-path}/live/${frontend-domain}/fullchain.pem:/etc/certs/fullchain.pem:ro",
-    "${certs-path}/live/${frontend-domain}/privkey.pem:/etc/certs/privkey.pem:ro",
+    "${certs-path}:/etc/certs",
     "${static-path}:/usr/share/nginx/site:ro"
   ],
   "build_cmd": "bash build.bash",
   "build_env": {
     "HTTP_PORT": 80,
-    "HTTPS_PORT": 43,
+    "HTTPS_PORT": 443,
     "DOMAIN": "${frontend-domain}"
   },
-  "pre_run_cmd": "bash update_app_url_pre_start.bash ${current-app-template-url-file-path}",
+  "pre_run_cmd": "bash update_app_url_pre_start.bash \"${current-app-template-url-file-path}\"",
   "post_run_cmd": "bash check_proxied_app.bash",
   "network": "host",
   "memory": "500M",
