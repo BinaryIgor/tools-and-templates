@@ -1,6 +1,7 @@
 package io.codyn.system.monitor.alerts.domain;
 
 import io.codyn.system.monitor._shared.Metrics;
+import io.codyn.test.TestClock;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,14 +18,14 @@ import java.util.Map;
 
 public class AlertsServiceTest {
 
-    private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-12T20:11:22Z"), ZoneId.of("UTC"));
+    private static final Clock CLOCK = new TestClock(Instant.parse("2022-12-12T20:11:22Z"));
     private AlertsService service;
     private SimpleMeterRegistry registry;
 
     @BeforeEach
     void setup() {
         registry = new SimpleMeterRegistry();
-        service = new AlertsService(registry, FIXED_CLOCK);
+        service = new AlertsService(registry, CLOCK);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class AlertsServiceTest {
             tags.addAll(mapToTags("label", a.labels()));
             tags.addAll(mapToTags("annotation", a.annotations()));
 
-            expectedCounterTagsValues.put(Tags.of(tags), Metrics.secondsTimestamp(FIXED_CLOCK));
+            expectedCounterTagsValues.put(Tags.of(tags), Metrics.secondsTimestamp(CLOCK));
         });
 
         return new AddTestCase(firstAddAlerts, secondAddAlerts,

@@ -5,27 +5,24 @@ import io.codyn.system.monitor.logs.infra.FileLogsRepository;
 import io.codyn.system.monitor.test.TestMetric;
 import io.codyn.system.monitor.test.TestMetrics;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @AutoConfigureObservability
-@Import(LogsControllerTest.TestConfig.class)
 public class LogsControllerTest extends IntegrationTest {
 
-    private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-22T19:11:22Z"), ZoneId.of("UTC"));
+    @BeforeEach
+    void setup() {
+        clock.setTime(Instant.parse("2022-12-22T19:11:22Z"));
+    }
 
     @Test
     void shouldAddLogsAndUpdatePrometheusMetrics() {
@@ -90,7 +87,7 @@ public class LogsControllerTest extends IntegrationTest {
     }
 
     private String toSecondsTimestampString() {
-        return String.valueOf(FIXED_CLOCK.instant().toEpochMilli() / 1000.0);
+        return String.valueOf(clock.instant().toEpochMilli() / 1000.0);
     }
 
     private record LogEntry(String host,
@@ -118,14 +115,5 @@ public class LogsControllerTest extends IntegrationTest {
     private record AddLogsTestCase(List<Map<String, String>> logsToSend,
                                    List<TestMetric> expectedMetrics,
                                    List<Path> expectedLogFiles) {
-    }
-
-    @TestConfiguration
-    static class TestConfig {
-        @Bean
-        @Primary
-        Clock fixedClock() {
-            return FIXED_CLOCK;
-        }
     }
 }

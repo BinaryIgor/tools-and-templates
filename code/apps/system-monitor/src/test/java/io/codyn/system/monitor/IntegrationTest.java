@@ -1,5 +1,6 @@
 package io.codyn.system.monitor;
 
+import io.codyn.test.TestClock;
 import io.codyn.test.http.TestHttpClient;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.io.TempDir;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.servlet.context.ServletWebServerInitializedEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.event.EventListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -25,6 +27,8 @@ public abstract class IntegrationTest {
     protected static File logsRoot;
     @Autowired
     protected TestHttpClient testHttpClient;
+    @Autowired
+    protected TestClock clock;
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
@@ -42,6 +46,12 @@ public abstract class IntegrationTest {
         @Bean
         TestHttpClient testHttp(ServerPortListener portListener) {
             return new TestHttpClient(portListener::port);
+        }
+
+        @Bean
+        @Primary
+        public TestClock testClock() {
+            return new TestClock();
         }
     }
 
