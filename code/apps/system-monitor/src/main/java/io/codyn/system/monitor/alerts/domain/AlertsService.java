@@ -21,6 +21,8 @@ public class AlertsService {
     static final String DESCRIPTION = "description";
     static final String ALERTS_TOTAL = Metrics.fullName("alerts_total");
     static final String ALERT_TIMESTAMP = Metrics.fullName("alert_timestamp_seconds");
+    private static final String ERROR_REGEX = "error|ERROR|Error";
+    private static final String ERROR_REPLACEMENT = ".e.";
     private static final Logger log = LoggerFactory.getLogger(AlertsService.class);
     private final Counter alertsFiringCounter;
     private final Counter alertsResolvedCounter;
@@ -41,10 +43,10 @@ public class AlertsService {
 
     public void add(List<Alert> alerts) {
         for (var a : alerts) {
-            log.info("Alert: {}", a);
+            var alertSt = a.toString().replaceAll(ERROR_REGEX, ERROR_REPLACEMENT);
+            log.info("Alert: {}", alertSt);
             increaseAlertsTotal(a);
             setAlertTimestamp(a);
-            log.info("Timestamp set!");
         }
     }
 
