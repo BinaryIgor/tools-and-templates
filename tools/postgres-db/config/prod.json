@@ -1,0 +1,12 @@
+{
+  "volumes": [
+  ],
+  "env": {},
+  "secrets": {},
+  "memory": "500M",
+  "cpus": "0.5",
+  "network": "host",
+  "run_args": [
+    "-c 'config_file=/etc/postgresql/postgresql.conf'"
+  ]
+}

@@ -8,8 +8,10 @@ log = meta.new_log("generate_secrets")
 
 # TODO replace with real secrets keys
 SECRETS_NAMES = [
-    "some-db-password",
-    "some-service-token"
+    "db-password",
+    "db-reader-password",
+    "db-root-password",
+    "jwt-token-key"
 ]
 
 SECRETS_PATH = crypto.secrets_path()

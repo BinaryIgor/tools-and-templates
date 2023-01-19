@@ -10,7 +10,7 @@ import subprocess as sp
 import pathlib
 
 # TODO: change it!
-CLI_NAME = "system-cli"
+CLI_NAME = "system-template-cli"
 
 APPS_JSON = "apps.json"
 

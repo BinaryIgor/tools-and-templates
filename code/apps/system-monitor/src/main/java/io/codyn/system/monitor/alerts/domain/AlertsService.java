@@ -41,8 +41,10 @@ public class AlertsService {
 
     public void add(List<Alert> alerts) {
         for (var a : alerts) {
+            log.info("Alert: {}", a);
             increaseAlertsTotal(a);
             setAlertTimestamp(a);
+            log.info("Timestamp set!");
         }
     }
 

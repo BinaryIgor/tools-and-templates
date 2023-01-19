@@ -15,6 +15,7 @@
         "docker-metrics-collector",
         "test-app",
         "nginx-gateway",
+        "postgres-db",
         "app-template",
         "nginx-files-browser"
       ]

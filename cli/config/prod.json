@@ -2,7 +2,13 @@
   "app-template-url-file": "app_url.txt",
   "current-app-template-url-file-path": "$PWD/../../app-template/latest/app_url.txt",
   "upstream-app-template-nginx-dir": "$PWD/../../nginx-gateway/latest",
-  "frontend-domain": "system-template.io",
+  "frontend-domain": "droplet.roztropinski.com",
   "static-path": "/home/monitor/static",
-  "files-path": "/home/monitor/system-logs"
+  "files-path": "/home/monitor/system-logs",
+  "db-url": "jdbc:postgresql://localhost:5432/system-template",
+  "db-host": "localhost",
+  "db-port": "5432",
+  "db-local-port": "5678",
+  "db-user": "system-template",
+  "db-name": "system-template"
 }
