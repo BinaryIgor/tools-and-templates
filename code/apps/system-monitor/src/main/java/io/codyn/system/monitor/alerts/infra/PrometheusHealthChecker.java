@@ -1,6 +1,6 @@
 package io.codyn.system.monitor.alerts.infra;
 
-import io.codyn.system.monitor._shared.Metrics;
+import io.codyn.system.monitor._shared.domain.Metrics;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

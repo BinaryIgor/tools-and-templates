@@ -1,7 +1,7 @@
 package io.codyn.system.monitor.metrics.domain;
 
-import io.codyn.system.monitor._shared.Gauges;
-import io.codyn.system.monitor._shared.Metrics;
+import io.codyn.system.monitor._shared.domain.Gauges;
+import io.codyn.system.monitor._shared.domain.Metrics;
 import io.codyn.system.monitor.metrics.app.ContainersMetrics;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;

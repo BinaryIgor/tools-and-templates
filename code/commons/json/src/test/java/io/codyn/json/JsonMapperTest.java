@@ -1,14 +1,15 @@
 package io.codyn.json;
 
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
-import io.codyn.json.JsonMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -127,7 +128,7 @@ public class JsonMapperTest {
     }
 
     @Test
-    void shouldSerializesAndDeserializeRecordWithMethods() {
+    void shouldSerializeAndDeserializeRecordWithMethods() {
         var record = new RecordWithMethods(22, "Some name", false);
 
         var json = JsonMapper.json(record);
@@ -135,6 +136,32 @@ public class JsonMapperTest {
         var parsedRecord = JsonMapper.object(json, RecordWithMethods.class);
 
         Assertions.assertThat(parsedRecord).isEqualTo(record);
+    }
+
+    @Test
+    void shouldSerializeAndDeserializeInstant() {
+        var instant = Instant.now();
+        var instantObject = new InstantObject(instant);
+
+        var json = JsonMapper.json(instantObject);
+
+        Assertions.assertThat(instantObject)
+                .isEqualTo(JsonMapper.object(json, InstantObject.class));
+    }
+
+    @Test
+    void shouldDeserializeInstantFromTimestamp() {
+        var instant = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+        var instantObject = new InstantObject(instant);
+
+        var json = """
+                {
+                  "instant": %d
+                }
+                """.formatted(instant.toEpochMilli());
+
+        Assertions.assertThat(instantObject)
+                .isEqualTo(JsonMapper.object(json, InstantObject.class));
     }
 
     private String dateString(Object date) {
@@ -159,6 +186,9 @@ public class JsonMapperTest {
     }
 
     private record LocalDateTimeObject(LocalDateTime date) {
+    }
+
+    private record InstantObject(Instant instant) {
     }
 
     private record ComplexObject(long id,

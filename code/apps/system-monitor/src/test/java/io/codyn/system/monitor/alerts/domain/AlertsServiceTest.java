@@ -1,6 +1,6 @@
 package io.codyn.system.monitor.alerts.domain;
 
-import io.codyn.system.monitor._shared.Metrics;
+import io.codyn.system.monitor._shared.domain.Metrics;
 import io.codyn.test.TestClock;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
@@ -9,16 +9,13 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AlertsServiceTest {
 
-    private static final Clock CLOCK = new TestClock(Instant.parse("2022-12-12T20:11:22Z"));
+    private static final TestClock CLOCK = new TestClock(Instant.parse("2022-12-12T20:11:22Z"));
     private AlertsService service;
     private SimpleMeterRegistry registry;
 
@@ -48,11 +45,21 @@ public class AlertsServiceTest {
         Assertions.assertThat(registry.counter(AlertsService.ALERTS_TOTAL, Alerts.STATUS, Alerts.RESOLVED).count())
                 .isEqualTo(testCase.expectedResolvedAlertsCounter);
 
-        testCase.expectedAlertsTimestampsValues()
-                .forEach((t, m) -> {
-                    var actualMetric = registry.get(AlertsService.ALERT_TIMESTAMP).tags(t).gauge().value();
-                    Assertions.assertThat(actualMetric).isEqualTo(m);
-                });
+        assertAlertsOfTagsHaveProperTimestamps(testCase.expectedAlertsTags);
+
+        CLOCK.moveForward(Duration.ofHours(2));
+
+        service.add(testCase.firstAddAlerts());
+        service.add(testCase.secondAddAlerts());
+
+        assertAlertsOfTagsHaveProperTimestamps(testCase.expectedAlertsTags);
+    }
+
+    private void assertAlertsOfTagsHaveProperTimestamps(Set<Tags> alertTags) {
+        alertTags.forEach(t -> {
+            var actualMetric = registry.get(AlertsService.ALERT_TIMESTAMP).tags(t).gauge().value();
+            Assertions.assertThat(actualMetric).isEqualTo(Metrics.secondsTimestamp(CLOCK.instant()));
+        });
     }
 
     private AddTestCase prepareAddTestCase() {
@@ -72,7 +79,7 @@ public class AlertsServiceTest {
                 new Alert("firing", Map.of("env", "dev"),
                         Map.of("meta-annotation", "134")));
 
-        var expectedCounterTagsValues = new HashMap<Tags, Double>();
+        var expectedAlertsTags = new HashSet<Tags>();
 
         var alerts = new ArrayList<>(firstAddAlerts);
         alerts.addAll(secondAddAlerts);
@@ -83,12 +90,12 @@ public class AlertsServiceTest {
             tags.addAll(mapToTags("label", a.labels()));
             tags.addAll(mapToTags("annotation", a.annotations()));
 
-            expectedCounterTagsValues.put(Tags.of(tags), Metrics.secondsTimestamp(CLOCK));
+            expectedAlertsTags.add(Tags.of(tags));
         });
 
         return new AddTestCase(firstAddAlerts, secondAddAlerts,
                 4, 1,
-                expectedCounterTagsValues);
+                expectedAlertsTags);
     }
 
     private List<Tag> mapToTags(String keyPrefix, Map<String, String> map) {
@@ -102,6 +109,6 @@ public class AlertsServiceTest {
                                List<Alert> secondAddAlerts,
                                double expectedFiringAlertsCounter,
                                double expectedResolvedAlertsCounter,
-                               Map<Tags, Double> expectedAlertsTimestampsValues) {
+                               Set<Tags> expectedAlertsTags) {
     }
 }

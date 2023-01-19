@@ -1,6 +1,5 @@
 package io.codyn.json;
 
-import io.codyn.json.LocalDateTimeDeserializer;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +27,16 @@ public class LocalDateTimeDeserializerTest {
         var datetime = "2022-10-10T12:00:00";
 
         var expected = LocalDateTime.parse(datetime);
+
+        Assertions.assertThat(LocalDateTimeDeserializer.fromString(datetime))
+                .isEqualTo(expected);
+    }
+
+    @Test
+    void shouldReturnProperDateTimeGivenDateTimeStringWithSubSecondsPartAndZ() {
+        var datetime = "2023-01-18T21:07:15.028469114Z";
+
+        var expected = LocalDateTime.of(2023, 1, 18, 21, 7, 15, 28469114);
 
         Assertions.assertThat(LocalDateTimeDeserializer.fromString(datetime))
                 .isEqualTo(expected);

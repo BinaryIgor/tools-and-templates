@@ -1,27 +1,27 @@
 package io.codyn.system.monitor.metrics.app;
 
 import io.codyn.system.monitor.IntegrationTest;
-import io.codyn.system.monitor._shared.Metrics;
+import io.codyn.system.monitor._shared.domain.Metrics;
 import io.codyn.system.monitor.test.TestMetric;
 import io.codyn.system.monitor.test.TestMetrics;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 
-import java.time.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @AutoConfigureObservability
-@Import(MetricsControllerTest.TestConfig.class)
 public class MetricsControllerTest extends IntegrationTest {
 
-    private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2022-12-24T22:11:22Z"), ZoneId.of("UTC"));
+
+    @BeforeEach
+    void setup() {
+        clock.setTime(Instant.parse("2022-12-24T22:11:22Z"));
+    }
 
     @Test
     void shouldAddMetricsToPrometheus() {
@@ -44,15 +44,17 @@ public class MetricsControllerTest extends IntegrationTest {
     }
 
     private AddMetricsTestCase prepareAddMetricsTestCase() {
+        var now = clock.instant();
+
         var containersMetrics = List.of(
                 new ContainerMetrics("nginx", "nginx-default",
-                        LocalDateTime.parse("2022-10-10T10:00:00"), System.currentTimeMillis(),
+                        Instant.parse("2022-10-10T10:00:00Z"), now,
                         100_000, 100_000_000, 0.2),
                 new ContainerMetrics("java-app", "java-app-II",
-                        LocalDateTime.parse("2022-12-10T13:00:00"), System.currentTimeMillis() - 1000,
+                        Instant.parse("2022-12-10T13:00:00Z"), now.minusSeconds(1000),
                         250_000_000, 100_000_000_000L, 0.1),
                 new ContainerMetrics("postgres", "postgres-1",
-                        LocalDateTime.parse("2023-01-01T10:00:00"), FIXED_CLOCK.millis(),
+                        Instant.parse("2023-01-01T10:00:00Z"), now,
                         99_000_000, 500_000_000, 0.01));
 
         var source = "some-machine";
@@ -60,19 +62,15 @@ public class MetricsControllerTest extends IntegrationTest {
         var expectedMetrics = new ArrayList<TestMetric>();
 
         expectedMetrics.add(TestMetrics.metric("monitoring_collector_up_timestamp_seconds", Map.of("source", source),
-                toSecondsTimestampString(FIXED_CLOCK.instant().toEpochMilli())));
+                toSecondsTimestampString(now)));
 
         containersMetrics.forEach(c -> expectedMetrics.addAll(toExpectedContainerMetrics(source, c)));
 
         return new AddMetricsTestCase(new ContainersMetrics(source, containersMetrics), expectedMetrics);
     }
 
-    private String toSecondsTimestampString(LocalDateTime dateTime) {
-        return toSecondsTimestampString(dateTime.toInstant(ZoneOffset.UTC).toEpochMilli());
-    }
-
-    private String toSecondsTimestampString(long timestamp) {
-        return String.valueOf(timestamp / 1000.0);
+    private String toSecondsTimestampString(Instant timestamp) {
+        return String.valueOf(timestamp.toEpochMilli() / 1000.0);
     }
 
     private List<TestMetric> toExpectedContainerMetrics(String source, ContainerMetrics metrics) {
@@ -103,14 +101,5 @@ public class MetricsControllerTest extends IntegrationTest {
 
     private record AddMetricsTestCase(ContainersMetrics metricsToSend,
                                       List<TestMetric> expectedMetrics) {
-    }
-
-    @TestConfiguration
-    static class TestConfig {
-        @Bean
-        @Primary
-        Clock fixedClock() {
-            return FIXED_CLOCK;
-        }
     }
 }

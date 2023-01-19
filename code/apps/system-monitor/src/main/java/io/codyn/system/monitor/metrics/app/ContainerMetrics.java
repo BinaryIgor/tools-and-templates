@@ -1,11 +1,11 @@
 package io.codyn.system.monitor.metrics.app;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public record ContainerMetrics(String containerName,
                                String instanceId,
-                               LocalDateTime startedAt,
-                               long timestamp,
+                               Instant startedAt,
+                               Instant timestamp,
                                long usedMemory,
                                long maxMemory,
                                double cpuUsage) {

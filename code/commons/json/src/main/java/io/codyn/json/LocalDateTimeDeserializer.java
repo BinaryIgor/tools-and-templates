@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
 
     private static final Pattern DATE_TIME_TIMEZONE_PATTERN = Pattern.compile("(.*)\\[(.*)]");
+    private static final String REDUNDANT_UTC_ZONE = "Z";
 
     public LocalDateTimeDeserializer() {
         super(LocalDateTime.class);
@@ -30,7 +31,7 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
     public static LocalDateTime fromString(String dateString) {
         try {
             var dateTimezone = dateAndTimezone(dateString);
-            var date = dateTimezone.first();
+            var date = sanitizedDate(dateTimezone.first());
             var timezone = dateTimezone.second();
 
             return tryAsTimestamp(date)
@@ -40,7 +41,7 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
                             timezone));
         } catch (Exception e) {
             throw new RuntimeException(
-                    "Unix timestamp or date in ISO UTC format is required (with or without timezone). %s meets neither of those requirements"
+                    "Unix timestamp or date in ISO UTC format is required (with or without timezone). %s meets neither of these requirements"
                             .formatted(dateString));
         }
     }
@@ -59,6 +60,13 @@ public class LocalDateTimeDeserializer extends StdDeserializer<LocalDateTime> {
         }
 
         return new Pair<>(date, timezone);
+    }
+
+    private static String sanitizedDate(String date) {
+        if (date.endsWith(REDUNDANT_UTC_ZONE)) {
+            return date.substring(0, date.length() - REDUNDANT_UTC_ZONE.length());
+        }
+        return date;
     }
 
     private static Optional<Long> tryAsTimestamp(String date) {

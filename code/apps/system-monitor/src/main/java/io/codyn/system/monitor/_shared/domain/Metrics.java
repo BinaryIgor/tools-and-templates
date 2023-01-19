@@ -1,9 +1,6 @@
-package io.codyn.system.monitor._shared;
+package io.codyn.system.monitor._shared.domain;
 
-import java.time.Clock;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 public class Metrics {
     public static final String APPLICATION_LABEL = "application";
@@ -18,16 +15,8 @@ public class Metrics {
         return "%s_%s".formatted("monitoring", metric);
     }
 
-    public static double secondsTimestamp(LocalDateTime dateTime) {
-        return secondsTimestamp(dateTime.toInstant(ZoneOffset.UTC).toEpochMilli());
-    }
-
     public static double secondsTimestamp(Instant timestamp) {
         return secondsTimestamp(timestamp.toEpochMilli());
-    }
-
-    public static double secondsTimestamp(Clock clock) {
-        return secondsTimestamp(clock.instant());
     }
 
     public static double secondsTimestamp(long timestamp) {
