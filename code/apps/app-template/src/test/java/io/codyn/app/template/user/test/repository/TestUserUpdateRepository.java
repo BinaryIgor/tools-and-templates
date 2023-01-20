@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.test.repository;
 
-import io.codyn.app.template._shared.domain.model.UserState;
-import io.codyn.app.template.user.domain.repository.UserUpdateRepository;
+import io.codyn.app.template._shared.core.model.UserState;
+import io.codyn.app.template.user.core.repository.UserUpdateRepository;
 import io.codyn.types.Pair;
 
 import java.util.UUID;

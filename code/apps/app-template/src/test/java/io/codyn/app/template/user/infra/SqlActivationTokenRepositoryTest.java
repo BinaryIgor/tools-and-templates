@@ -1,8 +1,8 @@
 package io.codyn.app.template.user.infra;
 
-import io.codyn.app.template.user.domain.model.activation.ActivationToken;
-import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;
-import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
+import io.codyn.app.template.user.core.model.activation.ActivationToken;
+import io.codyn.app.template.user.core.model.activation.ActivationTokenId;
+import io.codyn.app.template.user.core.model.activation.ActivationTokenType;
 import io.codyn.app.template.user.test.TestUserObjects;
 import io.codyn.sqldb.test.DbIntegrationTest;
 import io.codyn.test.TestRandom;

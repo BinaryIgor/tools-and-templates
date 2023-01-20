@@ -1,7 +1,8 @@
 {
   "volumes": [
     "$PWD/conf:/etc/nginx/conf.d",
-    "${CERTS_VOLUME_PATH}:/etc/certs:ro",
+    "${CERTS_VOLUME_PATH}/fullchain.pem:/etc/certs/live/${frontend-domain}/fullchain.pem",
+    "${CERTS_VOLUME_PATH}/privkey.pem:/etc/certs/live/${frontend-domain}/privkey.pem",
     "${STATIC_FILES_PATH}:/usr/share/nginx/site:ro"
   ],
   "build_cmd": "bash build.bash",
@@ -12,10 +13,6 @@
   },
   "pre_run_cmd": "bash update_app_url_pre_start.bash \"${current-app-template-url-file-path}\"",
   "post_run_cmd": "bash check_proxied_app.bash",
-  "pre_deploy_actions": [
-    "chmod +x ${deploy-dir}/reload_nginx_config.sh",
-    "sudo cp ${deploy-dir}/reload_nginx_config.sh /etc/letsencrypt/renewal-hooks/post/reload_nginx_config.sh"
-  ],
   "network": "host",
   "memory": "500M",
   "cpus": "0.5"

@@ -12,6 +12,10 @@
   },
   "pre_run_cmd": "bash update_app_url_pre_start.bash \"${current-app-template-url-file-path}\"",
   "post_run_cmd": "bash check_proxied_app.bash",
+  "pre_deploy_actions": [
+    "chmod +x ${deploy-dir}/reload_nginx_config.sh",
+    "sudo cp ${deploy-dir}/reload_nginx_config.sh /etc/letsencrypt/renewal-hooks/post/reload_nginx_config.sh"
+  ],
   "network": "host",
   "memory": "500M",
   "cpus": "0.5"

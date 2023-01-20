@@ -1,8 +1,8 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template._shared.domain.exception.OptimisticLockException;
-import io.codyn.app.template.project.domain.ProjectRepository;
-import io.codyn.app.template.project.domain.model.Project;
+import io.codyn.app.template._shared.core.exception.OptimisticLockException;
+import io.codyn.app.template.project.core.ProjectRepository;
+import io.codyn.app.template.project.core.model.Project;
 import io.codyn.sqldb.schema.project.tables.records.ProjectRecord;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;

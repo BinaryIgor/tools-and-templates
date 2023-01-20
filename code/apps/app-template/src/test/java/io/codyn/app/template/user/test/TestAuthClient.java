@@ -2,9 +2,9 @@ package io.codyn.app.template.user.test;
 
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
-import io.codyn.app.template.auth.domain.AuthToken;
-import io.codyn.app.template.auth.domain.AuthTokenType;
-import io.codyn.app.template.auth.domain.AuthTokens;
+import io.codyn.app.template.auth.core.AuthToken;
+import io.codyn.app.template.auth.core.AuthTokenType;
+import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.test.TestClock;
 
 import java.time.Clock;

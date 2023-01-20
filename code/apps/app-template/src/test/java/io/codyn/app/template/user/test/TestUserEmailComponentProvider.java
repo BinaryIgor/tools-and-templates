@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.test;
 
 import io.codyn.app.template._shared.app.EmailModuleProvider;
-import io.codyn.app.template.user.domain.component.UserEmailComponent;
+import io.codyn.app.template.user.core.component.UserEmailComponent;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.model.EmailAddress;
 import io.codyn.email.server.EmailServer;

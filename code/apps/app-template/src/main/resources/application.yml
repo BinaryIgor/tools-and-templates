@@ -34,7 +34,6 @@ app:
     fake-server: false
     templates-dir: "${TEMPLATES_DIR:/templates}"
     postmark-api-token: "${POSTMARK_API_TOKEN}"
-    # TODO: impl!
     postmark-webhook-token: "${POSTMARK_WEBHOOK_TOKEN}"
     frontend-domain: "https://codyn.io"
     from-email:

@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template.project.domain.model.Project;
+import io.codyn.app.template.project.core.model.Project;
 import io.codyn.sqldb.schema.project.tables.records.ProjectRecord;
 
 public class ProjectRecordsMapper {

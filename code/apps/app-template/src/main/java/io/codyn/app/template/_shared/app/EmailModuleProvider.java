@@ -1,8 +1,8 @@
 package io.codyn.app.template._shared.app;
 
 
-import io.codyn.app.template._shared.domain.email.Emails;
-import io.codyn.app.template._shared.domain.model.ApplicationLanguage;
+import io.codyn.app.template._shared.core.email.Emails;
+import io.codyn.app.template._shared.core.model.ApplicationLanguage;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.factory.EmailTemplatesFactory;
 import io.codyn.email.factory.TemplatesEmailFactory;

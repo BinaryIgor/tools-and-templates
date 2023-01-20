@@ -1,9 +1,9 @@
 package io.codyn.app.template.user.infra;
 
-import io.codyn.app.template.user.domain.model.activation.ActivationToken;
-import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;
-import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
-import io.codyn.app.template.user.domain.repository.ActivationTokenRepository;
+import io.codyn.app.template.user.core.model.activation.ActivationToken;
+import io.codyn.app.template.user.core.model.activation.ActivationTokenId;
+import io.codyn.app.template.user.core.model.activation.ActivationTokenType;
+import io.codyn.app.template.user.core.repository.ActivationTokenRepository;
 import io.codyn.sqldb.core.DSLContextProvider;
 import org.jooq.Condition;
 import org.springframework.stereotype.Repository;

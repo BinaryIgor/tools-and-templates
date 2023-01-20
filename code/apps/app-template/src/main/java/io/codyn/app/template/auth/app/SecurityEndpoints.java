@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.app;
 
-import io.codyn.app.template._shared.domain.model.UserState;
+import io.codyn.app.template._shared.core.model.UserState;
 
 import java.util.List;
 

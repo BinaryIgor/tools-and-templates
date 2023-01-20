@@ -47,7 +47,7 @@ sleep 5
 echo
 
 if [ "$found_container" ]; then
-  echo "stopping previous ${app_backup} container..."
+  echo "Stopping previous ${app_backup} container..."
   docker stop ${app_backup} --time ${stop_timeout}
 fi
 

@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template.user.domain.model.NewUserRequest;
-import io.codyn.app.template.user.domain.model.User;
+import io.codyn.app.template.user.core.model.NewUserRequest;
+import io.codyn.app.template.user.core.model.User;
 
 public class TestUserMapper {
 

@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.api;
 
-import io.codyn.app.template.auth.domain.AuthTokens;
+import io.codyn.app.template.auth.core.AuthTokens;
 
 import java.util.UUID;
 

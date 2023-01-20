@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template.project.domain.ProjectUsersRepository;
+import io.codyn.app.template.project.core.ProjectUsersRepository;
 import org.jooq.DSLContext;
 import org.springframework.stereotype.Repository;
 

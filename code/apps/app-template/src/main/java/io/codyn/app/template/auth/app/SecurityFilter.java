@@ -1,11 +1,11 @@
 package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._shared.app.exception.ApiExceptionResponse;
-import io.codyn.app.template._shared.domain.exception.InvalidAuthTokenException;
-import io.codyn.app.template._shared.domain.exception.AccessForbiddenException;
-import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
+import io.codyn.app.template._shared.core.exception.InvalidAuthTokenException;
+import io.codyn.app.template._shared.core.exception.AccessForbiddenException;
+import io.codyn.app.template._shared.core.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
-import io.codyn.app.template.auth.domain.AuthTokenComponent;
+import io.codyn.app.template.auth.core.AuthTokenComponent;
 import io.codyn.json.JsonMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template.user.domain.component.ActivationTokenData;
-import io.codyn.app.template.user.domain.component.ActivationTokenFactory;
+import io.codyn.app.template.user.core.component.ActivationTokenData;
+import io.codyn.app.template.user.core.component.ActivationTokenFactory;
 
 import java.util.HashMap;
 import java.util.Map;

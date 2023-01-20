@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.app.exception;
 
-import io.codyn.app.template._shared.domain.exception.CustomException;
+import io.codyn.app.template._shared.core.exception.AppException;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public record ApiExceptionResponse(
         this(exception.getClass().getSimpleName(), List.of(), exception.getMessage());
     }
 
-    public ApiExceptionResponse(CustomException exception) {
+    public ApiExceptionResponse(AppException exception) {
         this(exception.toError(), exception.reasons(), exception.getMessage());
     }
 }

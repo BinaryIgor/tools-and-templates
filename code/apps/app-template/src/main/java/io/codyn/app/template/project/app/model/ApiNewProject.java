@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.app.model;
 
-import io.codyn.app.template.project.domain.model.Project;
+import io.codyn.app.template.project.core.model.Project;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.UUID;

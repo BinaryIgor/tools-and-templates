@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.test;
 
-import io.codyn.app.template.user.domain.component.PasswordHasher;
+import io.codyn.app.template.user.core.component.PasswordHasher;
 
 public class TestPasswordHasher implements PasswordHasher {
 

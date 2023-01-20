@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.infra.auth;
 
-import io.codyn.app.template._shared.domain.model.UserRole;
-import io.codyn.app.template._shared.domain.model.UserState;
+import io.codyn.app.template._shared.core.model.UserRole;
+import io.codyn.app.template._shared.core.model.UserState;
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
 import io.codyn.sqldb.core.DSLContextProvider;

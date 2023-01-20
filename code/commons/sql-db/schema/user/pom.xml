@@ -48,42 +48,42 @@
                             <!--                                    <includeTypes>application_language</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.common.user.UserState</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.common.user.UserState</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>user_state</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.common.user.UserExternalAuthentication</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.common.user.UserExternalAuthentication</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>user_external_authentication</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.common.user.UserAccountType</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.common.user.UserAccountType</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>user_account_type</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.user.domain.ActivationTokenType</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.user.core.ActivationTokenType</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>activation_token_type</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.user.domain.UserActivityType</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.user.core.UserActivityType</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>user_activity_type</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.common.user.UserVerificationResult</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.common.user.UserVerificationResult</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>user_verification_result</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.user.domain.UserRole</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.user.core.UserRole</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>user_role_type</includeTypes>-->
                             <!--                                </forcedType>-->
                             <!--                                <forcedType>-->
-                            <!--                                    <userType>io.hairo.commons.domain.common.Sex</userType>-->
+                            <!--                                    <userType>io.hairo.commons.core.common.Sex</userType>-->
                             <!--                                    <enumConverter>true</enumConverter>-->
                             <!--                                    <includeTypes>sex</includeTypes>-->
                             <!--                                </forcedType>-->

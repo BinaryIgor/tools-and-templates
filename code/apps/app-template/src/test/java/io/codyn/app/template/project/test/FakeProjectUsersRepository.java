@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.test;
 
-import io.codyn.app.template.project.domain.ProjectUsersRepository;
+import io.codyn.app.template.project.core.ProjectUsersRepository;
 
 import java.util.*;
 

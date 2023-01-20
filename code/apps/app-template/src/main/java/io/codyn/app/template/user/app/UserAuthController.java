@@ -1,15 +1,15 @@
 package io.codyn.app.template.user.app;
 
 import io.codyn.app.template.auth.app.SecurityEndpoints;
-import io.codyn.app.template.auth.domain.AuthTokens;
+import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.app.template.user.app.model.ActivationToken;
 import io.codyn.app.template.user.app.model.ApiNewUserRequest;
 import io.codyn.app.template.user.app.model.RefreshToken;
-import io.codyn.app.template.user.domain.model.auth.*;
-import io.codyn.app.template.user.domain.service.NewUserService;
-import io.codyn.app.template.user.domain.service.UserActivationService;
-import io.codyn.app.template.user.domain.service.UserAuthService;
-import io.codyn.app.template.user.domain.service.UserPasswordService;
+import io.codyn.app.template.user.core.model.auth.*;
+import io.codyn.app.template.user.core.service.NewUserService;
+import io.codyn.app.template.user.core.service.UserActivationService;
+import io.codyn.app.template.user.core.service.UserAuthService;
+import io.codyn.app.template.user.core.service.UserPasswordService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

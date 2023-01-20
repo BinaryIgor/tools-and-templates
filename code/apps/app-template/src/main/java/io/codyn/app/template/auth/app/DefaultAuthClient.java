@@ -1,9 +1,9 @@
 package io.codyn.app.template.auth.app;
 
-import io.codyn.app.template._shared.domain.exception.UnauthenticatedException;
+import io.codyn.app.template._shared.core.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthClient;
-import io.codyn.app.template.auth.domain.AuthTokenComponent;
-import io.codyn.app.template.auth.domain.AuthTokens;
+import io.codyn.app.template.auth.core.AuthTokenComponent;
+import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import org.springframework.stereotype.Component;
 

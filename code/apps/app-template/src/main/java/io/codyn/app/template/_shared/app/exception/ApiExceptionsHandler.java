@@ -1,6 +1,6 @@
 package io.codyn.app.template._shared.app.exception;
 
-import io.codyn.app.template._shared.domain.exception.*;
+import io.codyn.app.template._shared.core.exception.*;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
@@ -59,8 +59,8 @@ public class ApiExceptionsHandler {
                 .body(new ApiExceptionResponse(exception));
     }
 
-    @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(CustomException exception) {
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<ApiExceptionResponse> handleException(AppException exception) {
         return badRequestResponse(exception);
     }
 

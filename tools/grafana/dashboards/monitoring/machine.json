@@ -239,7 +239,7 @@
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
-                "value": 85
+                "value": 80
               },
               {
                 "color": "rgba(245, 54, 54, 0.9)",
@@ -280,7 +280,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(node_load5{instance=\"$node\",job=\"$job\"}) / count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu)) * 100",
+          "expr": "(avg(node_load5{instance=\"$node\",job=\"$job\"}) / count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu))) * 100",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -326,7 +326,7 @@
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
-                "value": 85
+                "value": 80
               },
               {
                 "color": "rgba(245, 54, 54, 0.9)",
@@ -367,7 +367,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg(node_load15{instance=\"$node\",job=\"$job\"}) /  count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu)) * 100",
+          "expr": "(avg(node_load15{instance=\"$node\",job=\"$job\"}) /  count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu))) * 100",
           "hide": false,
           "instant": true,
           "intervalFactor": 1,
@@ -1359,7 +1359,7 @@
               },
               {
                 "color": "red",
-                "value": 0.8
+                "value": 0.9
               }
             ]
           },

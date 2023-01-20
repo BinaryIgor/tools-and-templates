@@ -2,7 +2,7 @@ package io.codyn.app.template.user;
 
 import io.codyn.app.template.user.api.CurrentUser;
 import io.codyn.app.template.user.api.UserClient;
-import io.codyn.app.template.user.domain.model.User;
+import io.codyn.app.template.user.core.model.User;
 import io.codyn.app.template.user.infra.SqlUserRepository;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.test.TestRandom;

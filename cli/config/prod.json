@@ -6,6 +6,8 @@
   "static-path": "/home/monitor/static",
   "certs-path": "/etc/letsencrypt",
   "files-path": "/home/monitor/system-logs",
+  "secrets-path": "/home/monitor/.secrets",
+  "monitor-port": "10101",
   "db-url": "jdbc:postgresql://localhost:5432/system-template",
   "db-host": "localhost",
   "db-port": "5432",

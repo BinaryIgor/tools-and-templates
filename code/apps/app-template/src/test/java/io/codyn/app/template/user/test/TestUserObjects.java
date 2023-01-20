@@ -1,10 +1,10 @@
 package io.codyn.app.template.user.test;
 
-import io.codyn.app.template._shared.domain.model.UserState;
-import io.codyn.app.template.user.domain.model.NewUserRequest;
-import io.codyn.app.template.user.domain.model.User;
-import io.codyn.app.template.user.domain.model.activation.ActivationToken;
-import io.codyn.app.template.user.domain.model.activation.ActivationTokenType;
+import io.codyn.app.template._shared.core.model.UserState;
+import io.codyn.app.template.user.core.model.NewUserRequest;
+import io.codyn.app.template.user.core.model.User;
+import io.codyn.app.template.user.core.model.activation.ActivationToken;
+import io.codyn.app.template.user.core.model.activation.ActivationTokenType;
 import io.codyn.test.TestRandom;
 
 import java.util.List;

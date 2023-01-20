@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.app.model;
 
-import io.codyn.app.template.user.domain.model.NewUserRequest;
+import io.codyn.app.template.user.core.model.NewUserRequest;
 
 public record ApiNewUserRequest(String name,
                                 String email,

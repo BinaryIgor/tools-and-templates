@@ -1,7 +1,7 @@
 package io.codyn.app.template.project.test;
 
-import io.codyn.app.template.project.domain.ProjectRepository;
-import io.codyn.app.template.project.domain.model.Project;
+import io.codyn.app.template.project.core.ProjectRepository;
+import io.codyn.app.template.project.core.model.Project;
 
 import java.util.HashMap;
 import java.util.Map;

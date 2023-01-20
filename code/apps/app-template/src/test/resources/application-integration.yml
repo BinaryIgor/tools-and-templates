@@ -9,5 +9,4 @@ app:
   email:
     fake-server: true
   jwt:
-    #valid, random token key for testing tokens
-    token-key: "xCwZ4zydRbu8kbKre59Hi2224Xdz0PupADTWkErvIg4"
+    token-key: "and0LWxvY2FsLXRva2VuCg=="

@@ -1,8 +1,8 @@
 package io.codyn.app.template.user.test.repository;
 
-import io.codyn.app.template.user.domain.model.activation.ActivationToken;
-import io.codyn.app.template.user.domain.model.activation.ActivationTokenId;
-import io.codyn.app.template.user.domain.repository.ActivationTokenRepository;
+import io.codyn.app.template.user.core.model.activation.ActivationToken;
+import io.codyn.app.template.user.core.model.activation.ActivationTokenId;
+import io.codyn.app.template.user.core.repository.ActivationTokenRepository;
 
 import java.util.HashMap;
 import java.util.Map;
