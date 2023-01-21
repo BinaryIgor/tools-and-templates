@@ -28,13 +28,12 @@ groups:
         summary: "Machine {{ $labels.job }} high CPU Usage"
         description: "Machine {{ $labels.job }} is using more than 80% of CPU for 5 minutes"
     - alert: HighMachineSystemLoad
-      expr: '(avg by (job) (node_load5)) / (count by (job) (count(node_cpu_seconds_total) by (job, cpu))) > 0.8'
-      for: 5m
+      expr: '(avg by (job) (node_load5)) / (count by (job) (count(node_cpu_seconds_total) by (job, cpu))) > 1.0'
       labels:
         severity: critical
       annotations: 
         summary: "Machine {{ $labels.job }} high System Load"
-        description: "Machine {{ $labels.job }} is under more than 80% of load for 5 minutes"
+        description: "Machine {{ $labels.job }} is under more than 100% load for 5 minutes"
     - alert: HighMachineDiskSpaceUsage
       expr: '(sum by (job) (1 - ((node_filesystem_avail_bytes) / node_filesystem_size_bytes))) > 0.8'
       for: 5m
