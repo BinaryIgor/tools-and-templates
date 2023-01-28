@@ -5,6 +5,7 @@ import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.app.template.user.auth.core.exception.InvalidPasswordException;
+import io.codyn.app.template.user.auth.core.exception.UserExceptions;
 import io.codyn.app.template.user.auth.core.model.*;
 import io.codyn.app.template.user.auth.core.repository.UserAuthRepository;
 import io.codyn.app.template.user.auth.core.repository.UserRepository;
@@ -47,8 +48,7 @@ public class UserAuthService {
 
     private User validatedUser(String email, String password) {
         var user = userRepository.ofEmail(email)
-                .orElseThrow(() -> new NotFoundException(
-                        "User of %s email doesn't exist".formatted(email)));
+                .orElseThrow(() -> UserExceptions.userOfEmailNotFound(email));
 
         if (passwordHasher.matches(password, user.password())) {
             return user;

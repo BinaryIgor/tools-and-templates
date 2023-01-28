@@ -9,9 +9,15 @@ import java.util.UUID;
 public class TestUserUpdateRepository implements UserUpdateRepository {
 
     public Pair<UUID, UserState> updatedState;
+    public Pair<UUID, String> updatedPassword;
 
     @Override
     public void updateState(UUID id, UserState state) {
         updatedState = new Pair<>(id, state);
+    }
+
+    @Override
+    public void updatePassword(UUID id, String password) {
+        updatedPassword = new Pair<>(id, password);
     }
 }

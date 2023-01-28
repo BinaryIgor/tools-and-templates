@@ -51,6 +51,15 @@ public class SqlUserRepository implements UserRepository, UserUpdateRepository, 
     }
 
     @Override
+    public void updatePassword(UUID id, String password) {
+        contextProvider.context()
+                .update(USER)
+                .set(USER.PASSWORD, password)
+                .where(USER.ID.eq(id))
+                .execute();
+    }
+
+    @Override
     public Collection<UserRole> rolesOfUser(UUID id) {
         return contextProvider.context()
                 .select(ROLE.VALUE)

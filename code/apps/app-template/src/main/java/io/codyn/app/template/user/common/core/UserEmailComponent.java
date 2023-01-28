@@ -32,6 +32,10 @@ public class UserEmailComponent {
         sendEmail(user, Emails.Types.USER_ACTIVATION, variables);
     }
 
+    public void sendPasswordReset(EmailUser user, String resetToken) {
+        //TODO: impl
+    }
+
     private String fullTokenUrl(String endpoint, String token, ActivationTokenType type) {
         var url = String.join("/", config.frontendDomain(), endpoint);
         var params = "token=%s&type=%s".formatted(token, type);

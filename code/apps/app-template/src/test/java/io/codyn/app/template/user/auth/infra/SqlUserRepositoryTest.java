@@ -52,21 +52,42 @@ public class SqlUserRepositoryTest extends DbIntegrationTest {
     void shouldUpdateUserState() {
         var user1 = TestUserObjects.user1();
         var user2 = TestUserObjects.user2();
-        var userId1 = repository.create(user1);
-        var userId2 = repository.create(user2);
+        var user1Id = repository.create(user1);
+        var user2Id = repository.create(user2);
 
-        Assertions.assertThat(userStateOfId(userId1))
+        Assertions.assertThat(userStateOfId(user1Id))
                 .isEqualTo(user1.state());
-        Assertions.assertThat(userStateOfId(userId2))
+        Assertions.assertThat(userStateOfId(user2Id))
                 .isEqualTo(user2.state());
 
         var user1NewState = TestRandom.oneOfExcluding(UserState.values(), user1.state());
-        repository.updateState(userId1, user1NewState);
+        repository.updateState(user1Id, user1NewState);
 
-        Assertions.assertThat(userStateOfId(userId1))
+        Assertions.assertThat(userStateOfId(user1Id))
                 .isEqualTo(user1NewState);
-        Assertions.assertThat(userStateOfId(userId2))
+        Assertions.assertThat(userStateOfId(user2Id))
                 .isEqualTo(user2.state());
+    }
+
+    @Test
+    void shouldUpdateUserPassword() {
+        var user1 = TestUserObjects.user1();
+        var user2 = TestUserObjects.user2();
+        var user1Id = repository.create(user1);
+        var user2Id = repository.create(user2);
+
+        Assertions.assertThat(userPasswordOfId(user1Id))
+                .isEqualTo(user1.password());
+        Assertions.assertThat(userPasswordOfId(user2Id))
+                .isEqualTo(user2.password());
+
+        var user1NewPassword = user1.password() + "-234";
+        repository.updatePassword(user1Id, user1NewPassword);
+
+        Assertions.assertThat(userPasswordOfId(user1Id))
+                .isEqualTo(user1NewPassword);
+        Assertions.assertThat(userPasswordOfId(user2Id))
+                .isEqualTo(user2.password());
     }
 
     @Test
@@ -91,12 +112,11 @@ public class SqlUserRepositoryTest extends DbIntegrationTest {
     }
 
     private UserState userStateOfId(UUID id) {
-        return context.select(USER.STATE)
-                .from(USER)
-                .where(USER.ID.eq(id))
-                .fetchOptional(USER.STATE)
-                .map(UserState::valueOf)
-                .orElseThrow();
+        return userOfId(id).state();
+    }
+
+    private String userPasswordOfId(UUID id) {
+        return userOfId(id).password();
     }
 
     public void insertUserRoles(UUID id, Collection<UserRole> roles) {
