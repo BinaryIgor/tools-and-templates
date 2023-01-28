@@ -1,5 +1,6 @@
 package io.codyn.app.template;
 
+import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.user.common.test.TestUserClient;
 import io.codyn.sqldb.core.DSLContextProvider;
@@ -32,6 +33,8 @@ public abstract class SpringIntegrationTest {
     protected TestUserClient userClient;
     @Autowired
     protected TestHttpClient testHttpClient;
+    @Autowired
+    protected TestEmailServer emailServer;
 
     protected void setCurrentUser(UUID id) {
         userClient.setCurrentUser(id);
@@ -49,6 +52,7 @@ public abstract class SpringIntegrationTest {
     @AfterEach
     protected void tearDown() {
         POSTGRES.clearDb();
+        emailServer.clear();
     }
 
 
@@ -69,6 +73,12 @@ public abstract class SpringIntegrationTest {
         @Primary
         TestUserClient userClient(DSLContextProvider contextProvider) {
             return new TestUserClient(contextProvider);
+        }
+
+        @Bean
+        @Primary
+        TestEmailServer testEmailServer() {
+            return new TestEmailServer();
         }
     }
 

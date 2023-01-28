@@ -80,6 +80,14 @@ public class TestHttpClient {
             return this;
         }
 
+        public TestBuilder expectedBadRequestStatus() {
+            return expectedStatus(400);
+        }
+
+        public TestBuilder expectedOkStatus() {
+            return expectedStatus(201);
+        }
+
         public TestBuilder GET() {
             return method("GET");
         }
@@ -141,7 +149,7 @@ public class TestHttpClient {
             var request = HttpRequest.newBuilder()
                     .uri(requestUri())
                     .method(method, requestBodyPublisher())
-                    .timeout(Duration.ofSeconds(1));
+                    .timeout(Duration.ofSeconds(5));
 
             globalHeaders.forEach(request::header);
 

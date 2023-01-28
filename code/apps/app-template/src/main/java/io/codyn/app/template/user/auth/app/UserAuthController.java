@@ -9,7 +9,7 @@ import io.codyn.app.template.user.auth.core.model.*;
 import io.codyn.app.template.user.auth.core.service.NewUserService;
 import io.codyn.app.template.user.auth.core.service.UserActivationService;
 import io.codyn.app.template.user.auth.core.service.UserAuthService;
-import io.codyn.app.template.user.auth.core.service.UserPasswordService;
+import io.codyn.app.template.user.auth.core.service.UserPasswordResetService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +26,12 @@ public class UserAuthController {
     private final NewUserService newUserService;
     private final UserActivationService userActivationService;
     private final UserAuthService userAuthService;
-    private final UserPasswordService userPasswordService;
+    private final UserPasswordResetService userPasswordService;
 
     public UserAuthController(NewUserService newUserService,
                               UserActivationService userActivationService,
                               UserAuthService userAuthService,
-                              UserPasswordService userPasswordService) {
+                              UserPasswordResetService userPasswordService) {
         this.newUserService = newUserService;
         this.userActivationService = userActivationService;
         this.userAuthService = userAuthService;
