@@ -28,12 +28,19 @@ public class SpringEventPublisherTest extends SpringIntegrationTest {
 
         var event = new CustomEvent("some-id", "some-data");
 
+        var currentThread = Thread.currentThread().getId();
+
         publisher.publish(event);
 
         Assertions.assertThat(firstEventListener.capturedEvent)
                 .isEqualTo(event);
+        Assertions.assertThat(firstEventListener.onEventThread)
+                .isEqualTo(currentThread);
+
         Assertions.assertThat(secondEventListener.capturedEvent)
                 .isEqualTo(event);
+        Assertions.assertThat(secondEventListener.onEventThread)
+                .isEqualTo(currentThread);
     }
 
 
@@ -43,10 +50,12 @@ public class SpringEventPublisherTest extends SpringIntegrationTest {
     static class CustomEventListener {
 
         private CustomEvent capturedEvent;
+        private long onEventThread;
 
         @EventListener
         public void onEvent(CustomEvent event) {
             capturedEvent = event;
+            onEventThread = Thread.currentThread().getId();
         }
     }
 
