@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.app;
 
-import io.codyn.app.template._shared.app.PropertiesConverter;
+import io.codyn.app.template._common.app.PropertiesConverter;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
 import io.codyn.app.template.auth.core.AuthTokenComponent;
 import io.codyn.app.template.auth.core.JwtAuthTokenComponent;

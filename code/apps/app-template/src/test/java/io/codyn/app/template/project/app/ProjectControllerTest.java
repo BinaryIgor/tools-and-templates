@@ -1,7 +1,7 @@
 package io.codyn.app.template.project.app;
 
 import io.codyn.app.template.SpringIntegrationTest;
-import io.codyn.app.template._shared.app.IdResponse;
+import io.codyn.app.template._common.app.IdResponse;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
 import io.codyn.app.template.project.core.ProjectRepository;

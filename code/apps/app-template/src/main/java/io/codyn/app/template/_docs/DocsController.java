@@ -1,8 +1,8 @@
 package io.codyn.app.template._docs;
 
-import io.codyn.app.template._shared.core.exception.*;
-import io.codyn.app.template.user.core.exception.InvalidActivationTokenException;
-import io.codyn.app.template.user.core.exception.InvalidPasswordException;
+import io.codyn.app.template._common.core.exception.*;
+import io.codyn.app.template.user.auth.core.exception.InvalidPasswordException;
+import io.codyn.app.template.user.common.core.exception.InvalidActivationTokenException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,5 @@
 package io.codyn.app.template.auth.test;
 
-import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
 

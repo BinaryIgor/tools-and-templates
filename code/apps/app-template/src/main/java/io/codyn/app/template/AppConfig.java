@@ -1,10 +1,10 @@
 package io.codyn.app.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.codyn.app.template._shared.app.BadRequestsInterceptor;
-import io.codyn.app.template._shared.app.EmailModuleProvider;
-import io.codyn.app.template._shared.app.PropertiesConverter;
-import io.codyn.app.template._shared.app.SpringEventPublisher;
+import io.codyn.app.template._common.app.BadRequestsInterceptor;
+import io.codyn.app.template._common.app.EmailModuleProvider;
+import io.codyn.app.template._common.app.PropertiesConverter;
+import io.codyn.app.template._common.app.SpringEventPublisher;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.server.EmailServer;
 import io.codyn.email.server.PostmarkEmailServer;

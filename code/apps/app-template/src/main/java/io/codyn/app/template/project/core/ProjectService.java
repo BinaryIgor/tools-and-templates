@@ -1,8 +1,8 @@
 package io.codyn.app.template.project.core;
 
-import io.codyn.app.template._shared.core.exception.AccessForbiddenException;
-import io.codyn.app.template._shared.core.exception.NotFoundException;
-import io.codyn.app.template._shared.core.validator.FieldValidator;
+import io.codyn.app.template._common.core.exception.AccessForbiddenException;
+import io.codyn.app.template._common.core.exception.NotFoundException;
+import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.project.core.model.AddUsersToProjectCommand;
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.app.template.project.core.model.ProjectWithUsers;

@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template._shared.core.exception.OptimisticLockException;
+import io.codyn.app.template._common.core.exception.OptimisticLockException;
 import io.codyn.app.template.project.core.ProjectRepository;
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.sqldb.schema.project.tables.records.ProjectRecord;

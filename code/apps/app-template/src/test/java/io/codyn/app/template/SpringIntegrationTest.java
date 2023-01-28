@@ -1,7 +1,7 @@
 package io.codyn.app.template;
 
 import io.codyn.app.template.auth.api.AuthClient;
-import io.codyn.app.template.user.TestUserClient;
+import io.codyn.app.template.user.common.test.TestUserClient;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.sqldb.test.CustomPostgreSQLContainer;
 import io.codyn.test.http.TestHttpClient;

@@ -1,10 +1,10 @@
 package io.codyn.app.template.auth.core;
 
 import com.auth0.jwt.algorithms.Algorithm;
-import io.codyn.app.template._shared.core.exception.InvalidAuthTokenException;
-import io.codyn.app.template._shared.core.model.UserRole;
-import io.codyn.app.template._shared.core.model.UserRoles;
-import io.codyn.app.template._shared.core.model.UserState;
+import io.codyn.app.template._common.core.exception.InvalidAuthTokenException;
+import io.codyn.app.template._common.core.model.UserRole;
+import io.codyn.app.template._common.core.model.UserRoles;
+import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.test.TestUserAuthDataRepository;
