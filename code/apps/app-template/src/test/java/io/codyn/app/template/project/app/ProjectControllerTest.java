@@ -4,13 +4,11 @@ import io.codyn.app.template.SpringIntegrationTest;
 import io.codyn.app.template._common.app.IdResponse;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
-import io.codyn.app.template.project.core.ProjectRepository;
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.app.template.project.core.model.ProjectWithUsers;
 import io.codyn.test.http.TestHttpClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +16,6 @@ import java.util.UUID;
 
 public class ProjectControllerTest extends SpringIntegrationTest {
 
-    @Autowired
-    private ProjectRepository projectRepository;
 
     @Test
     void shouldCreateNewProject() {
@@ -27,7 +23,7 @@ public class ProjectControllerTest extends SpringIntegrationTest {
 
         var expectedProject = createNewProject(userId);
 
-        Assertions.assertThat(projectRepository.findById(expectedProject.id()).orElseThrow())
+        Assertions.assertThat(fetchProject(expectedProject.id()))
                 .isEqualTo(expectedProject);
     }
 
@@ -39,12 +35,12 @@ public class ProjectControllerTest extends SpringIntegrationTest {
         var projectUpdate = new ApiUpdateProject(project.name() + "-new-name", project.version());
 
         updateRequest(project.id(), projectUpdate)
-                .execute();
+                .expectOkStatus();
 
         var expectedProject = new Project(project.id(), project.ownerId(), projectUpdate.name(),
                 project.version() + 1);
 
-        Assertions.assertThat(projectRepository.findById(project.id()).orElseThrow())
+        Assertions.assertThat(fetchProject(expectedProject.id()))
                 .isEqualTo(expectedProject);
     }
 
@@ -59,16 +55,18 @@ public class ProjectControllerTest extends SpringIntegrationTest {
         toAddUsers.forEach(uid -> userClient.createRandomUser(uid));
 
         testHttpClient.test()
-                .path("/projects/%s/users".formatted(project.id()))
+                .path(projectsPath("%s/users".formatted(project.id())))
                 .POST()
                 .body(toAddUsers)
-                .execute();
+                .execute()
+                .expectOkStatus();
 
         testHttpClient.test()
-                .path("/projects/%s/users".formatted(project.id()))
+                .path(projectsPath("%s/users".formatted(project.id())))
                 .DELETE()
                 .body(toRemoveUsers)
-                .execute();
+                .execute()
+                .expectOkStatus();
 
         var expectedFirstUsers = new ArrayList<>(toAddUsers.subList(2, toAddUsers.size()));
         var expectedProjectWithUsers = new ProjectWithUsers(project, expectedFirstUsers);
@@ -83,14 +81,23 @@ public class ProjectControllerTest extends SpringIntegrationTest {
     void shouldDeleteExistingProject() {
         var project = createNewProject(UUID.randomUUID());
 
-        Assertions.assertThat(projectRepository.findById(project.id())).isNotEmpty();
+        testHttpClient.test()
+                .path(projectPath(project.id()))
+                .GET()
+                .execute()
+                .expectOkStatus();
 
         testHttpClient.test()
-                .path("/projects/" + project.id())
+                .path(projectPath(project.id()))
                 .DELETE()
-                .execute();
+                .execute()
+                .expectOkStatus();
 
-        Assertions.assertThat(projectRepository.findById(project.id())).isEmpty();
+        testHttpClient.test()
+                .path(projectPath(project.id()))
+                .GET()
+                .execute()
+                .expectNotFoundStatus();
     }
 
     private Project createNewProject(UUID ownerId, ApiNewProject project) {
@@ -100,8 +107,9 @@ public class ProjectControllerTest extends SpringIntegrationTest {
                 .path("/projects")
                 .POST()
                 .body(project)
-                .expectedStatus(201)
-                .executeReturningObject(IdResponse.class)
+                .execute()
+                .expectCreatedStatus()
+                .expectObjectBody(IdResponse.class)
                 .id();
 
         return new Project(projectId, ownerId, project.name(), 1);
@@ -109,19 +117,34 @@ public class ProjectControllerTest extends SpringIntegrationTest {
 
     private ProjectWithUsers fetchProjectWithUsers(UUID projectId) {
         return testHttpClient.test()
-                .path("/projects/%s".formatted(projectId))
+                .path(projectPath(projectId))
                 .GET()
-                .executeReturningObject(ProjectWithUsers.class);
+                .execute()
+                .expectOkStatus()
+                .expectObjectBody(ProjectWithUsers.class);
+    }
+
+    private Project fetchProject(UUID projectId) {
+        return fetchProjectWithUsers(projectId).project();
     }
 
     private Project createNewProject(UUID ownerId) {
         return createNewProject(ownerId, new ApiNewProject("some-project"));
     }
 
-    private TestHttpClient.TestBuilder updateRequest(UUID projectId, ApiUpdateProject projectUpdate) {
+    private TestHttpClient.Response updateRequest(UUID projectId, ApiUpdateProject projectUpdate) {
         return testHttpClient.test()
-                .path("/projects/" + projectId)
+                .path(projectPath(projectId))
                 .PUT()
-                .body(projectUpdate);
+                .body(projectUpdate)
+                .execute();
+    }
+
+    private String projectsPath(String path) {
+        return "/projects/" + path;
+    }
+
+    private String projectPath(UUID projectId) {
+        return projectsPath(projectId.toString());
     }
 }

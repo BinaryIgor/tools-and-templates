@@ -49,8 +49,9 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
     }
 
     private void expectBadRequestExceptionResponse(TestHttpClient.TestBuilder builder) {
-        builder.expectedBadRequestStatus()
-                .executeReturningObject(ApiExceptionResponse.class);
+        builder.execute()
+                .expectBadRequestStatus()
+                .expectObjectBody(ApiExceptionResponse.class);
     }
 
     @Test
@@ -108,7 +109,9 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .path(userAuthPath("refresh-tokens"))
                 .POST()
                 .body(new RefreshToken(tokens.refresh().value()))
-                .executeReturningObject(AuthTokens.class);
+                .execute()
+                .expectOkStatus()
+                .expectObjectBody(AuthTokens.class);
 
         Assertions.assertThat(refreshedTokens).isNotEqualTo(tokens);
     }
@@ -119,8 +122,9 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .path(userAuthPath("refresh-tokens"))
                 .POST()
                 .body(new RefreshToken("invalid-token"))
-                .expectedStatus(401)
-                .executeReturningObject(ApiExceptionResponse.class);
+                .execute()
+                .expectStatus(401)
+                .expectObjectBody(ApiExceptionResponse.class);
     }
 
     private void shouldSignUp(ApiNewUserRequest request) {
@@ -128,8 +132,8 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .path(userAuthPath("sign-up"))
                 .POST()
                 .body(request)
-                .expectedStatus(201)
-                .execute();
+                .execute()
+                .expectCreatedStatus();
     }
 
     private String userAuthPath(String path) {
@@ -162,7 +166,9 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .path(userAuthPath("sign-in"))
                 .POST()
                 .body(new UserSignInRequest(email, password))
-                .executeReturningObject(SignedInUserStep.class);
+                .execute()
+                .expectOkStatus()
+                .expectObjectBody(SignedInUserStep.class);
 
         var expectedCurrentData = new CurrentUserData(id, email, name, UserState.ACTIVATED, List.of());
 

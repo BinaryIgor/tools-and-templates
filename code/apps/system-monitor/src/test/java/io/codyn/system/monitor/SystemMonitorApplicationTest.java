@@ -17,7 +17,7 @@ public class SystemMonitorApplicationTest extends IntegrationTest {
         var response = testHttpClient.test()
                 .path("/logs")
                 .POST()
-                .expectedStatus(400)
+                .expectStatus(400)
                 .executeReturningObject(ExceptionResponse.class);
 
         Assertions.assertThat(response.error())

@@ -53,7 +53,6 @@ public class TestHttpClient {
         private String path;
         private Object body;
         private String method;
-        private int expectedStatus = 200;
 
         public TestBuilder path(String path) {
             this.path = path;
@@ -73,19 +72,6 @@ public class TestHttpClient {
         public TestBuilder headers(Map<String, List<String>> headers) {
             this.headers.putAll(headers);
             return this;
-        }
-
-        public TestBuilder expectedStatus(int expectedStatus) {
-            this.expectedStatus = expectedStatus;
-            return this;
-        }
-
-        public TestBuilder expectedBadRequestStatus() {
-            return expectedStatus(400);
-        }
-
-        public TestBuilder expectedOkStatus() {
-            return expectedStatus(201);
         }
 
         public TestBuilder GET() {
@@ -113,33 +99,10 @@ public class TestHttpClient {
             return header("content-type", "application/json");
         }
 
-        public <T> T executeReturningObject(Class<T> type) {
-            var json = execute();
-            return JsonMapper.object(json, type);
-        }
-
-        public <T> List<T> executeReturningObjects(Class<T> type) {
-            var json = execute();
-            return JsonMapper.objects(json, type);
-        }
-
-        public String execute() {
+        public Response execute() {
             try {
                 var response = httpClient.send(request(), HttpResponse.BodyHandlers.ofString());
-                var body = response.body();
-                Assertions.assertEquals(expectedStatus, response.statusCode(),
-                        "Expected status: %d, but was %d. Response body: %s"
-                                .formatted(expectedStatus, response.statusCode(), body));
-                return body;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        public void executeIgnoringBody() {
-            try {
-                var response = httpClient.send(request(), HttpResponse.BodyHandlers.discarding());
-                Assertions.assertEquals(expectedStatus, response.statusCode());
+                return new Response(response.statusCode(), response.body());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -176,6 +139,47 @@ public class TestHttpClient {
                 return HttpRequest.BodyPublishers.noBody();
             }
             return HttpRequest.BodyPublishers.ofString(JsonMapper.json(body));
+        }
+    }
+
+    public static class Response {
+        final int statusCode;
+        final String body;
+
+        public Response(int statusCode, String body) {
+            this.statusCode = statusCode;
+            this.body = body;
+        }
+
+        public Response expectStatus(int expectedStatus) {
+            Assertions.assertEquals(expectedStatus, statusCode,
+                    "Expected status: %d, but was %d. Response body: %s"
+                            .formatted(expectedStatus, statusCode, body));
+            return this;
+        }
+
+        public Response expectOkStatus() {
+            return expectStatus(200);
+        }
+
+        public Response expectCreatedStatus() {
+            return expectStatus(201);
+        }
+
+        public Response expectBadRequestStatus() {
+            return expectStatus(400);
+        }
+
+        public Response expectNotFoundStatus() {
+            return expectStatus(404);
+        }
+
+        public <T> T expectObjectBody(Class<T> type) {
+            return JsonMapper.object(body, type);
+        }
+
+        public <T> List<T> expectObjectsBody(Class<T> type) {
+            return JsonMapper.objects(body, type);
         }
     }
 
