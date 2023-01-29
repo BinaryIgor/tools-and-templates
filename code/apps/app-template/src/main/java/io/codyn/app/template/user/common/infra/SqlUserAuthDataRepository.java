@@ -13,7 +13,6 @@ import java.util.UUID;
 import static io.codyn.sqldb.schema.user.Tables.ROLE;
 import static io.codyn.sqldb.schema.user.Tables.USER;
 
-//TODO: test, cacheable version!
 public class SqlUserAuthDataRepository implements UserAuthDataRepository {
 
     private final DSLContextProvider contextProvider;

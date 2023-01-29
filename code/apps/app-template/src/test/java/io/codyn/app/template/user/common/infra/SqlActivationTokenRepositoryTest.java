@@ -23,12 +23,12 @@ public class SqlActivationTokenRepositoryTest extends DbIntegrationTest {
 
     @Test
     void shouldSaveAndDeleteActivationToken() {
-        var userId1 = userRepository.create(TestUserObjects.user1());
-        var userId2 = userRepository.create(TestUserObjects.user2());
+        var user1Id = userRepository.create(TestUserObjects.user1());
+        var user2Id = userRepository.create(TestUserObjects.user2());
 
-        var activationToken1 = TestUserObjects.activationToken(userId1, ActivationTokenType.NEW_USER);
-        var activationToken2 = TestUserObjects.activationToken(userId1, ActivationTokenType.NEW_EMAIL);
-        var activationToken3 = TestUserObjects.activationToken(userId2);
+        var activationToken1 = TestUserObjects.activationToken(user1Id, ActivationTokenType.NEW_USER);
+        var activationToken2 = TestUserObjects.activationToken(user1Id, ActivationTokenType.NEW_EMAIL);
+        var activationToken3 = TestUserObjects.activationToken(user2Id);
 
         repository.save(activationToken1);
         repository.save(activationToken2);
