@@ -1,6 +1,8 @@
 package io.codyn.app.template.user.auth.core.service;
 
 import io.codyn.app.template._common.core.model.UserState;
+import io.codyn.app.template._common.test.TestEventHandler;
+import io.codyn.app.template.user.api.UserStateChangedEvent;
 import io.codyn.app.template.user.auth.test.TestUserUpdateRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenConsumer;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
@@ -27,16 +29,18 @@ public class UserActivationServiceTest {
     private TestUserUpdateRepository userUpdateRepository;
     private TestTransactions transactions;
     private ActivationTokenFactory activationTokenFactory;
+    private TestEventHandler<UserStateChangedEvent> eventHandler;
 
     @BeforeEach
     void setup() {
         activationTokenRepository = new TestActivationTokenRepository();
         userUpdateRepository = new TestUserUpdateRepository();
         transactions = new TestTransactions();
+        eventHandler = new TestEventHandler<>();
 
         service = new UserActivationService(
                 new ActivationTokenConsumer(activationTokenRepository, transactions),
-                userUpdateRepository);
+                userUpdateRepository, eventHandler);
 
         activationTokenFactory = new ActivationTokenFactory(Clock.systemUTC());
     }
@@ -49,7 +53,7 @@ public class UserActivationServiceTest {
     }
 
     @Test
-    void shouldUpdateUserStateAndDeleteActivationTokenInTransaction() {
+    void shouldUpdateUserStatePublishEventAndDeleteActivationTokenInTransaction() {
         var userId = UUID.randomUUID();
 
         var activationToken = activationTokenFactory.newUser(userId);
@@ -60,11 +64,16 @@ public class UserActivationServiceTest {
                 .before(() -> {
                     Assertions.assertThat(activationTokenRepository.ofId(activationTokenId)).isPresent();
                     Assertions.assertThat(userUpdateRepository.updatedState).isNull();
+                    Assertions.assertThat(eventHandler.handledEvent).isNull();
                 })
                 .after(() -> {
                     Assertions.assertThat(activationTokenRepository.ofId(activationTokenId)).isEmpty();
+
                     Assertions.assertThat(userUpdateRepository.updatedState)
                             .isEqualTo(new Pair<>(userId, UserState.ACTIVATED));
+
+                    Assertions.assertThat(eventHandler.handledEvent)
+                            .isEqualTo(new UserStateChangedEvent(userId, UserState.ACTIVATED));
                 })
                 .execute(() -> service.activate(activationToken.token()));
     }

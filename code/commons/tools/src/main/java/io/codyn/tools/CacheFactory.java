@@ -7,13 +7,13 @@ import java.util.concurrent.TimeUnit;
 
 public class CacheFactory {
 
-    public static <K, V> Cache<K, V> newCache(int maxEntries, Long ttl) {
+    public static <K, V> Cache<K, V> newCache(int maxEntries, Long timeToLive) {
         //records stats, when needed
         var caffeine = Caffeine.newBuilder()
                 .maximumSize(maxEntries);
 
-        if (ttl != null) {
-            caffeine.expireAfterWrite(ttl, TimeUnit.SECONDS);
+        if (timeToLive != null) {
+            caffeine.expireAfterWrite(timeToLive, TimeUnit.SECONDS);
         }
 
         return new CaffeineCache<>(caffeine.build());

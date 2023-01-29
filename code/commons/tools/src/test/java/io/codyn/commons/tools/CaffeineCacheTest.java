@@ -89,7 +89,7 @@ public class CaffeineCacheTest {
     }
 
     @Test
-    void shouldRemoveValuesAfterExpiredTtl() throws Exception {
+    void shouldRemoveValuesAfterExpiredTimeToLive() throws Exception {
         Cache<Long, String> cache = CacheFactory.newCache(100, 1L);
 
         var key = 44L;

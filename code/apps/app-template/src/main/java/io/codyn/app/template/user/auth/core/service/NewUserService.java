@@ -19,6 +19,7 @@ public class NewUserService {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
     private final Transactions transactions;
+    //TODO: publisher is better?
     private final EventHandler<UserCreatedEvent> userCreatedEventHandler;
 
     public NewUserService(UserRepository userRepository,

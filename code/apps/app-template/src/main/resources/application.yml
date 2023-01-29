@@ -45,3 +45,7 @@ app:
       email-change-confirmation-url: "user-account"
       password-reset-url: "forgot-password"
       new-password-url: "new-password"
+  cache:
+    user-auth:
+      time-to-live: 600
+      max-entries: 1000

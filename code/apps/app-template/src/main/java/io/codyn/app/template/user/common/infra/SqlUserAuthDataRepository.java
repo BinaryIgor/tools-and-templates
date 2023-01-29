@@ -6,7 +6,6 @@ import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.sqldb.core.SqlMapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -15,7 +14,6 @@ import static io.codyn.sqldb.schema.user.Tables.ROLE;
 import static io.codyn.sqldb.schema.user.Tables.USER;
 
 //TODO: test, cacheable version!
-@Repository
 public class SqlUserAuthDataRepository implements UserAuthDataRepository {
 
     private final DSLContextProvider contextProvider;
