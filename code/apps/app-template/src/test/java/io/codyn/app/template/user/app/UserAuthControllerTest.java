@@ -50,8 +50,8 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
 
     private void expectBadRequestExceptionResponse(TestHttpClient.TestBuilder builder) {
         builder.execute()
-                .expectBadRequestStatus()
-                .expectObjectBody(ApiExceptionResponse.class);
+                .expectStatusBadRequest()
+                .expectBodyOfObject(ApiExceptionResponse.class);
     }
 
     @Test
@@ -110,8 +110,8 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .POST()
                 .body(new RefreshToken(tokens.refresh().value()))
                 .execute()
-                .expectOkStatus()
-                .expectObjectBody(AuthTokens.class);
+                .expectStatusOk()
+                .expectBodyOfObject(AuthTokens.class);
 
         Assertions.assertThat(refreshedTokens).isNotEqualTo(tokens);
     }
@@ -124,7 +124,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .body(new RefreshToken("invalid-token"))
                 .execute()
                 .expectStatus(401)
-                .expectObjectBody(ApiExceptionResponse.class);
+                .expectBodyOfObject(ApiExceptionResponse.class);
     }
 
     private void shouldSignUp(ApiNewUserRequest request) {
@@ -133,7 +133,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .POST()
                 .body(request)
                 .execute()
-                .expectCreatedStatus();
+                .expectStatusCreated();
     }
 
     private String userAuthPath(String path) {
@@ -167,8 +167,8 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .POST()
                 .body(new UserSignInRequest(email, password))
                 .execute()
-                .expectOkStatus()
-                .expectObjectBody(SignedInUserStep.class);
+                .expectStatusOk()
+                .expectBodyOfObject(SignedInUserStep.class);
 
         var expectedCurrentData = new CurrentUserData(id, email, name, UserState.ACTIVATED, List.of());
 

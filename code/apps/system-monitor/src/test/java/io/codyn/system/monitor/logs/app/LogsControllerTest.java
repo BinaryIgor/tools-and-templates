@@ -32,14 +32,16 @@ public class LogsControllerTest extends IntegrationTest {
                 .path("/logs")
                 .POST()
                 .body(testCase.logsToSend)
-                .execute();
+                .execute()
+                .expectStatusOk();
 
-        var txtMetrics = testHttpClient.test()
+        var actualMetrics = testHttpClient.test()
                 .path("/actuator/prometheus")
                 .GET()
-                .execute();
+                .execute()
+                .expectStatusOk()
+                .expectBody(TestMetrics::parseMetrics);
 
-        var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
         Assertions.assertThat(actualMetrics)
                 .containsAll(testCase.expectedMetrics);
 

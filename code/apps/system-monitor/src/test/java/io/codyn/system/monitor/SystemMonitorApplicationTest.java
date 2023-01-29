@@ -17,8 +17,9 @@ public class SystemMonitorApplicationTest extends IntegrationTest {
         var response = testHttpClient.test()
                 .path("/logs")
                 .POST()
-                .expectStatus(400)
-                .executeReturningObject(ExceptionResponse.class);
+                .execute()
+                .expectStatusBadRequest()
+                .expectBodyOfObject(ExceptionResponse.class);
 
         Assertions.assertThat(response.error())
                 .isEqualTo(HttpMessageNotReadableException.class.getSimpleName());

@@ -31,14 +31,16 @@ public class MetricsControllerTest extends IntegrationTest {
                 .path("/metrics")
                 .POST()
                 .body(testCase.metricsToSend)
-                .execute();
+                .execute()
+                .expectStatusOk();
 
-        var txtMetrics = testHttpClient.test()
+        var actualMetrics = testHttpClient.test()
                 .path("/actuator/prometheus")
                 .GET()
-                .execute();
+                .execute()
+                .expectStatusOk()
+                .expectBody(TestMetrics::parseMetrics);
 
-        var actualMetrics = TestMetrics.parseMetrics(txtMetrics);
         Assertions.assertThat(actualMetrics)
                 .containsAll(testCase.expectedMetrics);
     }

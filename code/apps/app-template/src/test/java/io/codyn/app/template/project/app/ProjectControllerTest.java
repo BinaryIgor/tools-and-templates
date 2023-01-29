@@ -35,7 +35,7 @@ public class ProjectControllerTest extends SpringIntegrationTest {
         var projectUpdate = new ApiUpdateProject(project.name() + "-new-name", project.version());
 
         updateRequest(project.id(), projectUpdate)
-                .expectOkStatus();
+                .expectStatusOk();
 
         var expectedProject = new Project(project.id(), project.ownerId(), projectUpdate.name(),
                 project.version() + 1);
@@ -59,14 +59,14 @@ public class ProjectControllerTest extends SpringIntegrationTest {
                 .POST()
                 .body(toAddUsers)
                 .execute()
-                .expectOkStatus();
+                .expectStatusOk();
 
         testHttpClient.test()
                 .path(projectsPath("%s/users".formatted(project.id())))
                 .DELETE()
                 .body(toRemoveUsers)
                 .execute()
-                .expectOkStatus();
+                .expectStatusOk();
 
         var expectedFirstUsers = new ArrayList<>(toAddUsers.subList(2, toAddUsers.size()));
         var expectedProjectWithUsers = new ProjectWithUsers(project, expectedFirstUsers);
@@ -85,19 +85,19 @@ public class ProjectControllerTest extends SpringIntegrationTest {
                 .path(projectPath(project.id()))
                 .GET()
                 .execute()
-                .expectOkStatus();
+                .expectStatusOk();
 
         testHttpClient.test()
                 .path(projectPath(project.id()))
                 .DELETE()
                 .execute()
-                .expectOkStatus();
+                .expectStatusOk();
 
         testHttpClient.test()
                 .path(projectPath(project.id()))
                 .GET()
                 .execute()
-                .expectNotFoundStatus();
+                .expectStatusNotFound();
     }
 
     private Project createNewProject(UUID ownerId, ApiNewProject project) {
@@ -108,8 +108,8 @@ public class ProjectControllerTest extends SpringIntegrationTest {
                 .POST()
                 .body(project)
                 .execute()
-                .expectCreatedStatus()
-                .expectObjectBody(IdResponse.class)
+                .expectStatusCreated()
+                .expectBodyOfObject(IdResponse.class)
                 .id();
 
         return new Project(projectId, ownerId, project.name(), 1);
@@ -120,8 +120,8 @@ public class ProjectControllerTest extends SpringIntegrationTest {
                 .path(projectPath(projectId))
                 .GET()
                 .execute()
-                .expectOkStatus()
-                .expectObjectBody(ProjectWithUsers.class);
+                .expectStatusOk()
+                .expectBodyOfObject(ProjectWithUsers.class);
     }
 
     private Project fetchProject(UUID projectId) {

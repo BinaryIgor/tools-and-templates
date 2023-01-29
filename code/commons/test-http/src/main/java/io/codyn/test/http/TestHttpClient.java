@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 
@@ -45,6 +46,44 @@ public class TestHttpClient {
 
     public TestBuilder test() {
         return new TestBuilder();
+    }
+
+    public record Response(int statusCode, String body) {
+
+        public Response expectStatus(int expectedStatus) {
+            Assertions.assertEquals(expectedStatus, statusCode,
+                    "Expected status: %d, but was %d. Response body: %s"
+                            .formatted(expectedStatus, statusCode, body));
+            return this;
+        }
+
+        public Response expectStatusOk() {
+            return expectStatus(200);
+        }
+
+        public Response expectStatusCreated() {
+            return expectStatus(201);
+        }
+
+        public Response expectStatusBadRequest() {
+            return expectStatus(400);
+        }
+
+        public Response expectStatusNotFound() {
+            return expectStatus(404);
+        }
+
+        public <T> T expectBodyOfObject(Class<T> type) {
+            return JsonMapper.object(body, type);
+        }
+
+        public <T> List<T> expectBodyOfObjects(Class<T> type) {
+            return JsonMapper.objects(body, type);
+        }
+
+        public <T> T expectBody(Function<String, T> mapper) {
+            return mapper.apply(body);
+        }
     }
 
     public class TestBuilder {
@@ -139,47 +178,6 @@ public class TestHttpClient {
                 return HttpRequest.BodyPublishers.noBody();
             }
             return HttpRequest.BodyPublishers.ofString(JsonMapper.json(body));
-        }
-    }
-
-    public static class Response {
-        final int statusCode;
-        final String body;
-
-        public Response(int statusCode, String body) {
-            this.statusCode = statusCode;
-            this.body = body;
-        }
-
-        public Response expectStatus(int expectedStatus) {
-            Assertions.assertEquals(expectedStatus, statusCode,
-                    "Expected status: %d, but was %d. Response body: %s"
-                            .formatted(expectedStatus, statusCode, body));
-            return this;
-        }
-
-        public Response expectOkStatus() {
-            return expectStatus(200);
-        }
-
-        public Response expectCreatedStatus() {
-            return expectStatus(201);
-        }
-
-        public Response expectBadRequestStatus() {
-            return expectStatus(400);
-        }
-
-        public Response expectNotFoundStatus() {
-            return expectStatus(404);
-        }
-
-        public <T> T expectObjectBody(Class<T> type) {
-            return JsonMapper.object(body, type);
-        }
-
-        public <T> List<T> expectObjectsBody(Class<T> type) {
-            return JsonMapper.objects(body, type);
         }
     }
 

@@ -11,11 +11,6 @@ public class TestMetrics {
     private static final Pattern NO_LABELS_METRIC_PATTERN = Pattern.compile("(.+?) (.+?)");
     private static final Pattern WITH_LABELS_METRIC_PATTERN = Pattern.compile("(.+?)\\{(.+?)}(.+)");
 
-    public static void main(String[] args) {
-        var metric = "net_conntrack_dialer_conn_attempted_total{dialer_name=\"prometheus-alertmanager\"} 1";
-        System.out.println(TestMetrics.parseMetric(metric));
-    }
-
     public static String expectedMetric(String metric, List<String> labelsValues, String value) {
         if (labelsValues.isEmpty()) {
             return "%s %s".formatted(metric, value);

@@ -41,6 +41,11 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--TODO: some strange conflicts during integration tests, find the root cause-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
         <dependency>
             <groupId>io.codyn</groupId>
             <artifactId>test-http</artifactId>
