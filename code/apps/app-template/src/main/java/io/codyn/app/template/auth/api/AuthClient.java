@@ -9,6 +9,4 @@ public interface AuthClient {
     AuthTokens ofUser(UUID id);
 
     AuthTokens refresh(String refreshToken);
-
-    AuthenticatedUser currentUser();
 }

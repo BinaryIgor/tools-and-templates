@@ -2,7 +2,6 @@ package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._common.app.PropertiesConverter;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
-import io.codyn.app.template.auth.core.AuthTokenCreator;
 import io.codyn.app.template.auth.core.JwtAuthTokens;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,9 +22,9 @@ public class AuthModuleConfig {
     }
 
     @Bean
-    public AuthTokenCreator authTokenComponent(UserAuthDataRepository authDataRepository,
-                                               JwtConfig config,
-                                               Clock clock) {
+    public JwtAuthTokens jwtAuthTokens(UserAuthDataRepository authDataRepository,
+                                            JwtConfig config,
+                                            Clock clock) {
         var readTokenKey = PropertiesConverter.valueOrFromFile(config.tokenKey());
         var bytesTokenKey = PropertiesConverter.bytesFromString(readTokenKey);
 

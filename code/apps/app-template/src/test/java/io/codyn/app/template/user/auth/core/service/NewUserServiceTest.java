@@ -6,7 +6,7 @@ import io.codyn.app.template._common.core.exception.ValidationException;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template._common.test.TestEventHandler;
 import io.codyn.app.template._common.test.TestPasswordHasher;
-import io.codyn.app.template.user.api.event.UserCreatedEvent;
+import io.codyn.app.template.user.auth.core.event.UserCreatedEvent;
 import io.codyn.app.template.user.auth.core.model.NewUserRequest;
 import io.codyn.app.template.user.auth.core.model.User;
 import io.codyn.app.template.user.auth.test.TestUserRepository;

@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.api.event;
+package io.codyn.app.template.user.auth.core.event;
 
 import java.util.UUID;
 

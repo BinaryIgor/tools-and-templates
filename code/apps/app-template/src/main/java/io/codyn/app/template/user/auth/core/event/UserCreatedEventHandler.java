@@ -1,6 +1,5 @@
 package io.codyn.app.template.user.auth.core.event;
 
-import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.common.core.ActivationTokens;
 import io.codyn.app.template.user.common.core.UserEmailSender;
 import io.codyn.app.template.user.common.core.model.EmailUser;

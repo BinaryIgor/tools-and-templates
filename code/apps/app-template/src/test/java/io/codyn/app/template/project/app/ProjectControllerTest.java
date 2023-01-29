@@ -94,8 +94,7 @@ public class ProjectControllerTest extends SpringIntegrationTest {
     }
 
     private Project createNewProject(UUID ownerId, ApiNewProject project) {
-        userClient.createRandomUser(ownerId);
-        setCurrentUser(ownerId);
+        createUserAndSetAuthToken(ownerId);
 
         var projectId = testHttpClient.test()
                 .path("/projects")

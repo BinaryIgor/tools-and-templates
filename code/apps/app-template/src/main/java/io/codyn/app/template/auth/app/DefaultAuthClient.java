@@ -2,6 +2,7 @@ package io.codyn.app.template.auth.app;
 
 import io.codyn.app.template._common.core.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthClient;
+import io.codyn.app.template.auth.api.AuthUserClient;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.core.AuthTokenCreator;
 import io.codyn.app.template.auth.core.AuthTokens;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class DefaultAuthClient implements AuthClient {
+public class DefaultAuthClient implements AuthClient, AuthUserClient {
 
     private final AuthTokenCreator authTokenCreator;
 
@@ -28,10 +29,14 @@ public class DefaultAuthClient implements AuthClient {
         return authTokenCreator.refresh(refreshToken);
     }
 
-    //TODO: holder public
     @Override
-    public AuthenticatedUser currentUser() {
+    public AuthenticatedUser current() {
         return AuthenticatedUserRequestHolder.get()
                 .orElseThrow(UnauthenticatedException::new);
+    }
+
+    @Override
+    public UUID currentId() {
+        return current().id();
     }
 }

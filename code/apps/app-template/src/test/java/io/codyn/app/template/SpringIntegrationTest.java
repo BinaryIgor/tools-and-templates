@@ -36,12 +36,14 @@ public abstract class SpringIntegrationTest {
     @Autowired
     protected TestEmailServer emailServer;
 
-    protected void setCurrentUser(UUID id) {
-        userClient.setCurrentUser(id);
-
+    protected void setUserAuthToken(UUID id) {
         var token = authClient.ofUser(id).access().value();
-
         testHttpClient.addBearerAuthorizationHeader(token);
+    }
+
+    protected void createUserAndSetAuthToken(UUID id) {
+        userClient.createRandomUser(id);
+        setUserAuthToken(id);
     }
 
 //    @DynamicPropertySource

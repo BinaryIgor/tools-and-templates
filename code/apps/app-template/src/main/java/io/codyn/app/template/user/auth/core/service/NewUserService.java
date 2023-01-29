@@ -4,7 +4,7 @@ import io.codyn.app.template._common.core.email.Emails;
 import io.codyn.app.template._common.core.exception.EmailNotReachableException;
 import io.codyn.app.template._common.core.exception.EmailTakenException;
 import io.codyn.app.template._common.core.validator.FieldValidator;
-import io.codyn.app.template.user.api.event.UserCreatedEvent;
+import io.codyn.app.template.user.auth.core.event.UserCreatedEvent;
 import io.codyn.app.template.user.auth.core.model.NewUserRequest;
 import io.codyn.app.template.user.auth.core.model.User;
 import io.codyn.app.template.user.auth.core.repository.UserRepository;

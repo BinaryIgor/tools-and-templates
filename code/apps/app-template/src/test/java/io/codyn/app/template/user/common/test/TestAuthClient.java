@@ -1,6 +1,7 @@
 package io.codyn.app.template.user.common.test;
 
 import io.codyn.app.template.auth.api.AuthClient;
+import io.codyn.app.template.auth.api.AuthUserClient;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.core.AuthToken;
 import io.codyn.app.template.auth.core.AuthTokenType;
@@ -10,7 +11,7 @@ import io.codyn.test.TestClock;
 import java.time.Clock;
 import java.util.UUID;
 
-public class TestAuthClient implements AuthClient {
+public class TestAuthClient implements AuthClient, AuthUserClient {
 
     private final Clock clock;
     public AuthenticatedUser currentUser;
@@ -42,7 +43,12 @@ public class TestAuthClient implements AuthClient {
     }
 
     @Override
-    public AuthenticatedUser currentUser() {
+    public AuthenticatedUser current() {
         return currentUser;
+    }
+
+    @Override
+    public UUID currentId() {
+        return current().id();
     }
 }

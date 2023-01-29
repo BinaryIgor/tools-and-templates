@@ -1,8 +1,8 @@
 package io.codyn.app.template.user.account.app;
 
+import io.codyn.app.template.auth.api.AuthUserClient;
 import io.codyn.app.template.user.account.core.UpdatePasswordRequest;
 import io.codyn.app.template.user.account.core.UserAccountService;
-import io.codyn.app.template.user.api.UserClient;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,29 +15,29 @@ import org.springframework.web.bind.annotation.*;
 public class UserAccountController {
 
     private final UserAccountService service;
-    private final UserClient userClient;
+    private final AuthUserClient authUserClient;
 
     public UserAccountController(UserAccountService service,
-                                 UserClient userClient) {
+                                 AuthUserClient authUserClient) {
         this.service = service;
-        this.userClient = userClient;
+        this.authUserClient = authUserClient;
     }
 
     @PatchMapping("/email/{email}")
     public void changeEmail(@PathVariable("email") String email) {
-        var userId = userClient.currentUserId();
+        var userId = authUserClient.currentId();
         service.changeEmail(userId, email);
     }
 
     @PostMapping("/email-change-confirmation/{token}")
     public void confirmEmailChange(@PathVariable("token") String token) {
-        var userId = userClient.currentUserId();
+        var userId = authUserClient.currentId();
         service.confirmEmailChange(userId, token);
     }
 
     @PatchMapping("/password")
     public void updatePassword(@RequestBody UpdatePasswordRequest request) {
-        var userId = userClient.currentUserId();
+        var userId = authUserClient.currentId();
         service.updatePassword(userId, request);
     }
 }
