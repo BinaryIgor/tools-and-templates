@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.auth.app;
 
 import io.codyn.app.template.EmailConfig;
-import io.codyn.app.template.user.common.core.UserEmailComponent;
+import io.codyn.app.template.user.common.core.UserEmailSender;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.server.EmailServer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 public class UserModuleConfig {
 
     @Bean
-    public UserEmailComponent userEmailComponent(EmailFactory emailFactory,
-                                                 EmailServer emailServer,
-                                                 EmailConfig emailConfig,
-                                                 UserEmailConfig userEmailConfig) {
-        return new UserEmailComponent(emailFactory, emailServer,
-                new UserEmailComponent.Config(emailConfig.frontendDomain(),
+    public UserEmailSender userEmailSender(EmailFactory emailFactory,
+                                           EmailServer emailServer,
+                                           EmailConfig emailConfig,
+                                           UserEmailConfig userEmailConfig) {
+        return new UserEmailSender(emailFactory, emailServer,
+                new UserEmailSender.Config(emailConfig.frontendDomain(),
                         emailConfig.fromEmail(),
                         userEmailConfig.userActivationUrl(),
                         userEmailConfig.signUpUrl(),

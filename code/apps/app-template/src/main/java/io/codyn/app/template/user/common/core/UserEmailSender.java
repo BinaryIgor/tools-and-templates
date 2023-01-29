@@ -11,13 +11,13 @@ import io.codyn.email.server.EmailServer;
 import java.util.Map;
 
 //TODO: test, config
-public class UserEmailComponent {
+public class UserEmailSender {
 
     private final EmailFactory factory;
     private final EmailServer server;
     private final Config config;
 
-    public UserEmailComponent(EmailFactory factory, EmailServer server, Config config) {
+    public UserEmailSender(EmailFactory factory, EmailServer server, Config config) {
         this.factory = factory;
         this.server = server;
         this.config = config;

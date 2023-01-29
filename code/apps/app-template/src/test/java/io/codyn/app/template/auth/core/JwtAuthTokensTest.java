@@ -23,24 +23,24 @@ import java.util.Base64;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public class JwtAuthTokenComponentTest {
+public class JwtAuthTokensTest {
 
     private static final String ISSUER = "issuer-" + UUID.randomUUID();
     private static final byte[] TOKEN_KEY = TestRandom.bytes();
     private static final Duration ACCESS_TOKEN_DURATION = Duration.ofMinutes(15);
     private static final Duration REFRESH_TOKEN_DURATION = Duration.ofHours(1);
     private static final TestClock CLOCK = new TestClock();
-    private JwtAuthTokenComponent component;
+    private JwtAuthTokens component;
     private TestUserAuthDataRepository authDataRepository;
 
     @BeforeEach
     void setup() {
         authDataRepository = new TestUserAuthDataRepository();
 
-        var componentConfig = new JwtAuthTokenComponent.Config(ISSUER, TOKEN_KEY, ACCESS_TOKEN_DURATION,
+        var componentConfig = new JwtAuthTokens.Config(ISSUER, TOKEN_KEY, ACCESS_TOKEN_DURATION,
                 REFRESH_TOKEN_DURATION, CLOCK);
 
-        component = new JwtAuthTokenComponent(authDataRepository, componentConfig);
+        component = new JwtAuthTokens(authDataRepository, componentConfig);
     }
 
     @AfterEach
@@ -181,7 +181,7 @@ public class JwtAuthTokenComponentTest {
     }
 
     private static String newJwtToken(String issuer, AuthTokenType type, byte[] key) {
-        return JwtAuthTokenComponent.newToken(issuer,
+        return JwtAuthTokens.newToken(issuer,
                 UUID.randomUUID(),
                 type,
                 CLOCK.instant(),

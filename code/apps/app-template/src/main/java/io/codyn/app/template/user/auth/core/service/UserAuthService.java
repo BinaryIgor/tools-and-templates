@@ -1,6 +1,5 @@
 package io.codyn.app.template.user.auth.core.service;
 
-import io.codyn.app.template._common.core.exception.NotFoundException;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.auth.core.AuthTokens;

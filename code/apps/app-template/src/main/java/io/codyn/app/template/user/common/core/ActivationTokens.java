@@ -1,0 +1,37 @@
+package io.codyn.app.template.user.common.core;
+
+import io.codyn.app.template.user.common.core.model.ActivationToken;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component
+public class ActivationTokens {
+
+    private final ActivationTokenRepository tokenRepository;
+    private final ActivationTokenFactory tokenFactory;
+
+    public ActivationTokens(ActivationTokenRepository tokenRepository,
+                            ActivationTokenFactory tokenFactory) {
+        this.tokenRepository = tokenRepository;
+        this.tokenFactory = tokenFactory;
+    }
+
+    public ActivationToken saveNewUser(UUID userId) {
+        var token = tokenFactory.newUser(userId);
+        tokenRepository.save(token);
+        return token;
+    }
+
+    public ActivationToken saveNewEmail(UUID userId, String newEmail) {
+        var token = tokenFactory.newEmail(userId, newEmail);
+        tokenRepository.save(token);
+        return token;
+    }
+
+    public ActivationToken savePasswordReset(UUID userId) {
+        var token = tokenFactory.passwordReset(userId);
+        tokenRepository.save(token);
+        return token;
+    }
+}

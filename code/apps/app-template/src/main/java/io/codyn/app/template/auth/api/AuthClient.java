@@ -10,7 +10,5 @@ public interface AuthClient {
 
     AuthTokens refresh(String refreshToken);
 
-    AuthenticatedUser authenticate(String accessToken);
-
     AuthenticatedUser currentUser();
 }

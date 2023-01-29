@@ -5,7 +5,7 @@ import io.codyn.app.template._common.core.exception.AccessForbiddenException;
 import io.codyn.app.template._common.core.exception.InvalidAuthTokenException;
 import io.codyn.app.template._common.core.exception.UnauthenticatedException;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
-import io.codyn.app.template.auth.core.AuthTokenComponent;
+import io.codyn.app.template.auth.core.AuthTokenAuthenticator;
 import io.codyn.json.JsonMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -27,12 +27,12 @@ public class SecurityFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(SecurityFilter.class);
 
     private final SecurityRules securityRules;
-    private final AuthTokenComponent authTokenComponent;
+    private final AuthTokenAuthenticator authTokenAuthenticator;
 
     public SecurityFilter(SecurityRules securityRules,
-                          AuthTokenComponent authTokenComponent) {
+                          AuthTokenAuthenticator authTokenAuthenticator) {
         this.securityRules = securityRules;
-        this.authTokenComponent = authTokenComponent;
+        this.authTokenAuthenticator = authTokenAuthenticator;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SecurityFilter implements Filter {
                 .flatMap(a -> {
                     if (a.startsWith(TOKEN_PREFIX)) {
                         var token = a.substring(TOKEN_PREFIX.length()).strip();
-                        return Optional.of(authTokenComponent.authenticate(token));
+                        return Optional.of(authTokenAuthenticator.authenticate(token));
                     }
                     return Optional.empty();
                 });

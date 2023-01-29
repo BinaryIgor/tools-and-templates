@@ -4,14 +4,15 @@ import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.user.api.event.UserCreatedEvent;
 import io.codyn.app.template.user.common.core.ActivationTokenData;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
-import io.codyn.app.template.user.common.core.UserEmailComponent;
+import io.codyn.app.template.user.common.core.ActivationTokens;
+import io.codyn.app.template.user.common.core.UserEmailSender;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.model.EmailUser;
 import io.codyn.app.template.user.common.test.TestActivationTokenRepository;
 import io.codyn.app.template.user.common.test.TestTokenFactory;
-import io.codyn.app.template.user.common.test.TestUserEmailComponentProvider;
+import io.codyn.app.template.user.common.test.TestUserEmailsProvider;
 import io.codyn.email.model.Email;
 import io.codyn.test.TestClock;
 import io.codyn.test.TestRandom;
@@ -26,7 +27,7 @@ public class UserCreatedEventHandlerTest {
 
     private UserCreatedEventHandler eventHandler;
     private TestEmailServer emailServer;
-    private UserEmailComponent userEmailComponent;
+    private UserEmailSender userEmailSender;
     private TestActivationTokenRepository activationTokenRepository;
     private TestTokenFactory tokenFactory;
     private TestClock clock;
@@ -34,15 +35,17 @@ public class UserCreatedEventHandlerTest {
     @BeforeEach
     void setup() {
         emailServer = new TestEmailServer();
-        userEmailComponent = TestUserEmailComponentProvider.component(emailServer);
+        userEmailSender = TestUserEmailsProvider.sender(emailServer);
 
         activationTokenRepository = new TestActivationTokenRepository();
 
         tokenFactory = new TestTokenFactory();
         clock = new TestClock();
 
-        eventHandler = new UserCreatedEventHandler(userEmailComponent, activationTokenRepository,
+        var activationTokens = new ActivationTokens(activationTokenRepository,
                 new ActivationTokenFactory(tokenFactory, clock));
+
+        eventHandler = new UserCreatedEventHandler(activationTokens, userEmailSender);
     }
 
     @Test
@@ -77,7 +80,7 @@ public class UserCreatedEventHandlerTest {
         var expectedActivationToken = new ActivationToken(userId, ActivationTokenType.NEW_USER, token,
                 clock.instant().plus(Duration.ofMinutes(15)));
 
-        userEmailComponent.sendAccountActivation(new EmailUser(event.name(), event.email()), token);
+        userEmailSender.sendAccountActivation(new EmailUser(event.name(), event.email()), token);
         var expectedEmail = emailServer.sentEmail;
         emailServer.clear();
 

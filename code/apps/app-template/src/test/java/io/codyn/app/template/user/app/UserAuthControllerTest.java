@@ -77,7 +77,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
 
         var token = shouldSendResetPasswordToken(user.id(), user.email());
 
-        var newPassword = "SomeComplicatedPassword";
+        var newPassword = "SomeComplicatedPassword123";
         shouldSetNewPasswordUsingToken(newPassword, token);
 
         shouldSignInReturningCurrentUserDataAndTokens(user.id(), user.email(), user.name(), newPassword);

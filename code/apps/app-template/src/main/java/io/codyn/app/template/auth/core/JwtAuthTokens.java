@@ -16,11 +16,10 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
-public class JwtAuthTokenComponent implements AuthTokenComponent {
+public class JwtAuthTokens implements AuthTokenCreator, AuthTokenAuthenticator {
 
     private static final String TOKEN_TYPE_CLAIM = "typ";
-    private static final Logger log = LoggerFactory.getLogger(JwtAuthTokenComponent.class);
-
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthTokens.class);
     private final UserAuthDataRepository authDataRepository;
     private final Clock clock;
     private final String issuer;
@@ -28,7 +27,7 @@ public class JwtAuthTokenComponent implements AuthTokenComponent {
     private final Duration accessTokenDuration;
     private final Duration refreshTokenDuration;
 
-    public JwtAuthTokenComponent(UserAuthDataRepository authDataRepository, Config config) {
+    public JwtAuthTokens(UserAuthDataRepository authDataRepository, Config config) {
         this.authDataRepository = authDataRepository;
         this.clock = config.clock;
         this.issuer = config.issuer;

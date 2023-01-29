@@ -34,7 +34,6 @@ public class SqlActivationTokenRepository implements ActivationTokenRepository {
                 .set(ACTIVATION_TOKEN.TOKEN, token.token())
                 .set(ACTIVATION_TOKEN.EXPIRES_AT, token.expiresAt())
                 .execute();
-
     }
 
     @Override
