@@ -6,7 +6,6 @@ import io.codyn.app.template.user.common.core.model.EmailUser;
 import io.codyn.types.EventHandler;
 import org.springframework.stereotype.Component;
 
-
 @Component
 public class UserCreatedEventHandler implements EventHandler<UserCreatedEvent> {
 

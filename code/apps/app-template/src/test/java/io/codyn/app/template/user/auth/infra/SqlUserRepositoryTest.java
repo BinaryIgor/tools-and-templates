@@ -2,7 +2,7 @@ package io.codyn.app.template.user.auth.infra;
 
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template.user.auth.core.model.User;
+import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.sqldb.test.DbIntegrationTest;
 import io.codyn.test.TestRandom;

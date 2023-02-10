@@ -1,15 +1,13 @@
 package io.codyn.app.template.user.auth.core.service;
 
-import io.codyn.app.template._common.core.exception.EmailNotReachableException;
-import io.codyn.app.template._common.core.exception.EmailTakenException;
-import io.codyn.app.template._common.core.exception.ValidationException;
+import io.codyn.app.template._common.core.exception.*;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template._common.test.TestEventHandler;
 import io.codyn.app.template._common.test.TestPasswordHasher;
 import io.codyn.app.template.user.auth.core.event.UserCreatedEvent;
 import io.codyn.app.template.user.auth.core.model.NewUserRequest;
-import io.codyn.app.template.user.auth.core.model.User;
 import io.codyn.app.template.user.auth.test.TestUserRepository;
+import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.test.TestUserMapper;
 import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.test.TestTransactions;
@@ -44,7 +42,7 @@ public class NewUserServiceTest {
     @ParameterizedTest
     @MethodSource("invalidUserCases")
     void shouldThrowExceptionGivenInvalidUser(NewUserRequest user,
-                                              ValidationException exception) {
+                                              AppException exception) {
         Assertions.assertThatThrownBy(() -> service.create(user))
                 .isEqualTo(exception);
     }
@@ -98,7 +96,7 @@ public class NewUserServiceTest {
         return Stream.of(" ", null, "", "a", "_*", tooLongName)
                 .map(n -> {
                     var u = new NewUserRequest(n, "email@email.com", "complicated-password");
-                    return Arguments.of(u, FieldValidator.nameException(n));
+                    return Arguments.of(u, new InvalidNameException(n));
                 });
     }
 
@@ -109,7 +107,7 @@ public class NewUserServiceTest {
         return Stream.of("", null, "_@gmail.com", "@gmail.com", "email@e.", "email@exx", tooLongEmail)
                 .map(e -> {
                     var u = new NewUserRequest("some-name", e, "password");
-                    return Arguments.of(u, FieldValidator.emailException(e));
+                    return Arguments.of(u, new InvalidEmailException(e));
                 });
     }
 
@@ -119,7 +117,7 @@ public class NewUserServiceTest {
         return Stream.of("", null, " ", "onlycharacters", "123456789", "Short1", tooLongPassword)
                 .map(p -> {
                     var u = new NewUserRequest("some-name", "some-email@gmail.com", p);
-                    return Arguments.of(u, FieldValidator.passwordException(p));
+                    return Arguments.of(u, new InvalidPasswordException());
                 });
     }
 }

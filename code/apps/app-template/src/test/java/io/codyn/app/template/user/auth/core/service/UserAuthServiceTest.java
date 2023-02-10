@@ -1,9 +1,9 @@
 package io.codyn.app.template.user.auth.core.service;
 
-import io.codyn.app.template._common.core.exception.ValidationException;
+import io.codyn.app.template._common.core.exception.AppException;
+import io.codyn.app.template._common.core.exception.InvalidEmailException;
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template._common.test.TestEventHandler;
 import io.codyn.app.template.user.auth.core.model.CurrentUserData;
 import io.codyn.app.template.user.auth.core.model.SignedInUser;
@@ -50,7 +50,7 @@ public class UserAuthServiceTest {
     @ParameterizedTest
     @MethodSource("invalidSignInCases")
     void shouldThrowExceptionGivenInvalidSignInRequest(UserSignInRequest request,
-                                                       ValidationException exception) {
+                                                       AppException exception) {
         Assertions.assertThatThrownBy(() -> service.authenticate(request))
                 .isEqualTo(exception);
     }
@@ -88,7 +88,7 @@ public class UserAuthServiceTest {
     static Stream<Arguments> invalidSignInCases() {
         return Stream.of(
                 Arguments.of(new UserSignInRequest(null, null),
-                        FieldValidator.emailException(null)));
+                        new InvalidEmailException(null)));
     }
 
     static Stream<Arguments> userStateRolesCases() {

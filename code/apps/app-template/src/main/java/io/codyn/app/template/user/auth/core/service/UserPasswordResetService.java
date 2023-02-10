@@ -1,10 +1,10 @@
 package io.codyn.app.template.user.auth.core.service;
 
 import io.codyn.app.template._common.core.validator.FieldValidator;
-import io.codyn.app.template.user.auth.core.exception.UserExceptions;
+import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.auth.core.model.NewPasswordRequest;
-import io.codyn.app.template.user.auth.core.repository.UserRepository;
-import io.codyn.app.template.user.auth.core.repository.UserUpdateRepository;
+import io.codyn.app.template.user.common.core.repository.UserRepository;
+import io.codyn.app.template.user.common.core.repository.UserUpdateRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenConsumer;
 import io.codyn.app.template.user.common.core.ActivationTokens;
 import io.codyn.app.template.user.common.core.PasswordHasher;

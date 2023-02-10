@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.auth.core.model;
+package io.codyn.app.template.user.common.core.model;
 
 import io.codyn.app.template._common.core.model.UserState;
 

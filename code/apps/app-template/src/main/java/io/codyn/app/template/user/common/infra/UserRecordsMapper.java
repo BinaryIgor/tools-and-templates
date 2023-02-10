@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.common.infra;
 
 import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template.user.auth.core.model.User;
+import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.sqldb.schema.user.tables.records.UserRecord;
 
 public class UserRecordsMapper {

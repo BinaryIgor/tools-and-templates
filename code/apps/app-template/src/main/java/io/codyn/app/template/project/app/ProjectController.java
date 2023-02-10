@@ -2,7 +2,7 @@ package io.codyn.app.template.project.app;
 
 import io.codyn.app.template._common.app.IdResponse;
 import io.codyn.app.template._common.app.JwtSecurityRequirement;
-import io.codyn.app.template._common.app.exception.ApiExceptionResponse;
+import io.codyn.app.template._common.app.exception.ExceptionResponse;
 import io.codyn.app.template.auth.api.AuthUserClient;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
@@ -40,7 +40,7 @@ public class ProjectController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Created"),
             @ApiResponse(responseCode = "400", description = "Bad request",
-                    content = @Content(schema = @Schema(implementation = ApiExceptionResponse.class)))
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class)))
     })
     @Operation(description = """
             Some nice description of create project endpoint

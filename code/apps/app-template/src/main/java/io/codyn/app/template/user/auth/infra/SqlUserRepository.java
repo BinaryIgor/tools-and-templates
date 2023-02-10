@@ -2,10 +2,10 @@ package io.codyn.app.template.user.auth.infra;
 
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template.user.auth.core.model.User;
-import io.codyn.app.template.user.auth.core.repository.UserAuthRepository;
-import io.codyn.app.template.user.auth.core.repository.UserRepository;
-import io.codyn.app.template.user.auth.core.repository.UserUpdateRepository;
+import io.codyn.app.template.user.common.core.model.User;
+import io.codyn.app.template.user.common.core.repository.UserAuthRepository;
+import io.codyn.app.template.user.common.core.repository.UserRepository;
+import io.codyn.app.template.user.common.core.repository.UserUpdateRepository;
 import io.codyn.app.template.user.common.infra.UserRecordsMapper;
 import io.codyn.sqldb.core.DSLContextProvider;
 import org.springframework.stereotype.Repository;
@@ -18,6 +18,7 @@ import static io.codyn.sqldb.schema.user.tables.Role.ROLE;
 import static io.codyn.sqldb.schema.user.tables.User.USER;
 
 @Repository
+//TODO: lacking tests!
 public class SqlUserRepository implements UserRepository, UserUpdateRepository, UserAuthRepository {
 
     private final DSLContextProvider contextProvider;
@@ -38,6 +39,14 @@ public class SqlUserRepository implements UserRepository, UserUpdateRepository, 
         return contextProvider.context()
                 .selectFrom(USER)
                 .where(USER.EMAIL.eq(email))
+                .fetchOptional(UserRecordsMapper::fromUserRecord);
+    }
+
+    @Override
+    public Optional<User> ofId(UUID id) {
+        return contextProvider.context()
+                .selectFrom(USER)
+                .where(USER.ID.eq(id))
                 .fetchOptional(UserRecordsMapper::fromUserRecord);
     }
 

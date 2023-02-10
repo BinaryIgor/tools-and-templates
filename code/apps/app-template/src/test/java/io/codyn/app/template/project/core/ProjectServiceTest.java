@@ -1,7 +1,7 @@
 package io.codyn.app.template.project.core;
 
 import io.codyn.app.template._common.core.exception.AccessForbiddenException;
-import io.codyn.app.template._common.core.exception.ValidationException;
+import io.codyn.app.template._common.core.exception.InvalidNameException;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.app.template.project.core.model.ProjectWithUsers;
@@ -36,7 +36,7 @@ public class ProjectServiceTest {
     @MethodSource("invalidProjectCases")
     void shouldValidateProjectWhileSaving(Project project) {
         Assertions.assertThatThrownBy(() -> service.save(project))
-                .isEqualTo(ValidationException.ofField("name", project.name()));
+                .isEqualTo(new InvalidNameException(project.name()));
     }
 
     @Test

@@ -3,11 +3,12 @@ package io.codyn.app.template.user.auth.core.service;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.auth.api.AuthClient;
 import io.codyn.app.template.auth.core.AuthTokens;
-import io.codyn.app.template.user.auth.core.exception.InvalidPasswordException;
-import io.codyn.app.template.user.auth.core.exception.UserExceptions;
+import io.codyn.app.template.user.auth.core.exception.NotMatchedPasswordException;
+import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.auth.core.model.*;
-import io.codyn.app.template.user.auth.core.repository.UserAuthRepository;
-import io.codyn.app.template.user.auth.core.repository.UserRepository;
+import io.codyn.app.template.user.common.core.model.User;
+import io.codyn.app.template.user.common.core.repository.UserAuthRepository;
+import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.app.template.user.common.core.PasswordHasher;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +54,7 @@ public class UserAuthService {
             return user;
         }
 
-        throw new InvalidPasswordException();
+        throw new NotMatchedPasswordException();
     }
 
     private SignedInUser toSignedInUser(User user) {

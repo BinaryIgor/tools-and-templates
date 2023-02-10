@@ -1,7 +1,7 @@
 package io.codyn.app.template._docs;
 
 import io.codyn.app.template._common.core.exception.*;
-import io.codyn.app.template.user.auth.core.exception.InvalidPasswordException;
+import io.codyn.app.template.user.auth.core.exception.NotMatchedPasswordException;
 import io.codyn.app.template.user.common.core.exception.InvalidActivationTokenException;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.context.annotation.Profile;
@@ -26,13 +26,15 @@ public class DocsController {
                 .add(NotFoundException.class)
                 .add(OptimisticLockException.class)
                 .add(UnauthenticatedException.class)
-                .add(ValidationException.class)
-                .add(InvalidActivationTokenException.class)
+                .add(InvalidNameException.class)
+                .add(InvalidEmailException.class)
                 .add(InvalidPasswordException.class)
+                .add(InvalidActivationTokenException.class)
+                .add(NotMatchedPasswordException.class)
                 //From Nginx errors
-                .add("BodyTooLargeException")
-                .add("ApiUnavailableException")
-                .add("TooManyRequestsException")
+                .add("BodyTooLarge")
+                .add("ApiUnavailable")
+                .add("TooManyRequests")
                 .build();
     }
 }

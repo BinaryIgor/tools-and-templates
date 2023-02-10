@@ -1,14 +1,14 @@
 package io.codyn.app.template.user.app;
 
 import io.codyn.app.template.SpringIntegrationTest;
-import io.codyn.app.template._common.app.exception.ApiExceptionResponse;
+import io.codyn.app.template._common.app.exception.ExceptionResponse;
 import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.app.template.user.auth.app.model.ActivationToken;
 import io.codyn.app.template.user.auth.app.model.ApiNewUserRequest;
 import io.codyn.app.template.user.auth.app.model.RefreshToken;
 import io.codyn.app.template.user.auth.core.model.*;
-import io.codyn.app.template.user.auth.core.repository.UserRepository;
+import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenRepository;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.test.http.TestHttpClient;
@@ -51,7 +51,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
     private void expectBadRequestExceptionResponse(TestHttpClient.TestBuilder builder) {
         builder.execute()
                 .expectStatusBadRequest()
-                .expectBodyOfObject(ApiExceptionResponse.class);
+                .expectBodyOfObject(ExceptionResponse.class);
     }
 
     @Test
@@ -124,7 +124,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .body(new RefreshToken("invalid-token"))
                 .execute()
                 .expectStatus(401)
-                .expectBodyOfObject(ApiExceptionResponse.class);
+                .expectBodyOfObject(ExceptionResponse.class);
     }
 
     private void shouldSignUp(ApiNewUserRequest request) {

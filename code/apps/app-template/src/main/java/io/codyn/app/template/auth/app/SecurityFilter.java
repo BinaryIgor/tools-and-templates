@@ -1,6 +1,6 @@
 package io.codyn.app.template.auth.app;
 
-import io.codyn.app.template._common.app.exception.ApiExceptionResponse;
+import io.codyn.app.template._common.app.exception.ExceptionResponse;
 import io.codyn.app.template._common.core.exception.AccessForbiddenException;
 import io.codyn.app.template._common.core.exception.InvalidAuthTokenException;
 import io.codyn.app.template._common.core.exception.UnauthenticatedException;
@@ -77,7 +77,7 @@ public class SecurityFilter implements Filter {
         try {
             response.setHeader("content-type", "application/json");
             response.getWriter()
-                    .write(JsonMapper.json(new ApiExceptionResponse(exception)));
+                    .write(JsonMapper.json(new ExceptionResponse(exception)));
         } catch (Exception e) {
             log.error("Problem while writing response body to HttpServletResponse", e);
         }

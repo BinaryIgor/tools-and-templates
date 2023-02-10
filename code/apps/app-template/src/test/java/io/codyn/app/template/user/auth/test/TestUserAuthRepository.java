@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.auth.test;
 
 import io.codyn.app.template._common.core.model.UserRole;
-import io.codyn.app.template.user.auth.core.repository.UserAuthRepository;
+import io.codyn.app.template.user.common.core.repository.UserAuthRepository;
 
 import java.util.*;
 

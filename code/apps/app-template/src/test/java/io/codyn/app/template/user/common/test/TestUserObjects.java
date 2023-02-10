@@ -2,7 +2,7 @@ package io.codyn.app.template.user.common.test;
 
 import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template.user.auth.core.model.NewUserRequest;
-import io.codyn.app.template.user.auth.core.model.User;
+import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenType;
 import io.codyn.test.TestRandom;

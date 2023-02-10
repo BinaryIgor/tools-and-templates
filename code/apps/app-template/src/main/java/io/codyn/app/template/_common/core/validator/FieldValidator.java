@@ -1,6 +1,8 @@
 package io.codyn.app.template._common.core.validator;
 
-import io.codyn.app.template._common.core.exception.ValidationException;
+import io.codyn.app.template._common.core.exception.InvalidEmailException;
+import io.codyn.app.template._common.core.exception.InvalidNameException;
+import io.codyn.app.template._common.core.exception.InvalidPasswordException;
 
 import java.util.regex.Pattern;
 
@@ -49,12 +51,8 @@ public class FieldValidator {
 
     public static void validateEmail(String email) {
         if (!isEmailValid(email)) {
-            throw emailException(email);
+            throw new InvalidEmailException(email);
         }
-    }
-
-    public static ValidationException emailException(String email) {
-        return ValidationException.ofField("email", email);
     }
 
     public static boolean isNameValid(String name) {
@@ -70,12 +68,8 @@ public class FieldValidator {
 
     public static void validateName(String name) {
         if (!isNameValid(name)) {
-            throw nameException(name);
+            throw new InvalidNameException(name);
         }
-    }
-
-    public static ValidationException nameException(String name) {
-        return ValidationException.ofField("name", name);
     }
 
     private static boolean hasAtLeastOneLetter(String string) {
@@ -117,12 +111,8 @@ public class FieldValidator {
 
     public static void validatePassword(String password) {
         if (!isPasswordValid(password)) {
-            throw passwordException(password);
+            throw new InvalidPasswordException();
         }
-    }
-
-    public static ValidationException passwordException(String password) {
-        return ValidationException.ofField("password", password);
     }
 
     public static boolean hasAnyContent(String string) {

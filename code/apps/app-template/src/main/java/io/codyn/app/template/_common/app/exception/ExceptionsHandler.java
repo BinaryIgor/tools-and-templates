@@ -20,62 +20,64 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
                 @ApiResponse(responseCode = "409", description = "Given resource exist or there was an optimist lock exception")
         }
 )
-public class ApiExceptionsHandler {
+public class ExceptionsHandler {
 
 
     @ExceptionHandler(UnauthenticatedException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(UnauthenticatedException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(UnauthenticatedException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(InvalidAuthTokenException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(InvalidAuthTokenException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(InvalidAuthTokenException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(ConflictException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(ConflictException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(OptimisticLockException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(OptimisticLockException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(OptimisticLockException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(NotFoundException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(NotFoundException exception) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(AccessForbiddenException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(AccessForbiddenException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(AccessForbiddenException exception) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(AppException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(AppException exception) {
-        return badRequestResponse(exception);
-    }
-
-    private ResponseEntity<ApiExceptionResponse> badRequestResponse(Throwable exception) {
+    public ResponseEntity<ExceptionResponse> handleException(AppException exception) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ApiExceptionResponse(exception));
+                .body(new ExceptionResponse(exception));
     }
 
     @ExceptionHandler(MissingRequestValueException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(MissingRequestValueException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(MissingRequestValueException exception) {
         return badRequestResponse(exception);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiExceptionResponse> handleException(HttpMessageNotReadableException exception) {
+    public ResponseEntity<ExceptionResponse> handleException(HttpMessageNotReadableException exception) {
         return badRequestResponse(exception);
     }
+
+    private ResponseEntity<ExceptionResponse> badRequestResponse(Throwable exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponse(exception));
+    }
+
 }

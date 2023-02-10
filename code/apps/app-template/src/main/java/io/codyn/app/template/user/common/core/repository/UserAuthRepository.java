@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.auth.core.repository;
+package io.codyn.app.template.user.common.core.repository;
 
 import io.codyn.app.template._common.core.model.UserRole;
 

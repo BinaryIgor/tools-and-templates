@@ -1,47 +1,37 @@
 package io.codyn.app.template._docs;
 
-import java.util.ArrayList;
+import io.codyn.app.template._common.core.exception.AppException;
+
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-public record ErrorDocs(List<String> description, List<ErrorDoc> errors) {
-
-    public record ErrorDoc(String error,
-                           List<String> reasons,
-                           String message) {
-
-        public ErrorDoc(String error, List<String> reasons) {
-            this(error, reasons, "Any optional string");
-        }
-
-        public ErrorDoc(Class<? extends Throwable> exception,
-                        List<String> reasons) {
-            this(exception.getSimpleName(), reasons);
-        }
-
-        public ErrorDoc(Class<? extends Throwable> exception) {
-            this(exception, List.of());
-        }
-    }
+public record ErrorDocs(Collection<String> description, Collection<String> errors) {
 
     public static class Builder {
-        private final List<ErrorDoc> errorDocs = new ArrayList<>();
+        private final Set<String> errors = new LinkedHashSet<>();
 
-        public Builder add(Class<? extends Throwable> exception, String... reasons) {
-            errorDocs.add(new ErrorDoc(exception, List.of(reasons)));
+        public Builder add(List<String> errors) {
+            this.errors.addAll(errors);
             return this;
         }
 
-        public Builder add(String exception) {
-            errorDocs.add(new ErrorDoc(exception, List.of()));
+        public Builder add(String error) {
+            errors.add(error);
             return this;
+        }
+
+        public Builder add(Class<? extends Throwable> exception) {
+            return add(AppException.defaultErrors(exception));
         }
 
         public ErrorDocs build() {
             return new ErrorDocs(
                     List.of("List of all possible errors that client should handle.",
-                            "Reasons are specific to concrete error type and are mostly optional.",
+                            "In most cases, single error is returned but there could also be a list of them.",
                             "In message there can be details helping with troubleshooting issues."),
-                    errorDocs);
+                    errors);
         }
     }
 }
