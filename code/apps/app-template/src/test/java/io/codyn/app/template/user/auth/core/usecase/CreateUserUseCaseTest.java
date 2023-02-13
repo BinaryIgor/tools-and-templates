@@ -129,10 +129,7 @@ public class CreateUserUseCaseTest {
     }
 
     static Stream<Arguments> invalidUserEmailCases() {
-        var tooLongEmailHandle = "x".repeat(FieldValidator.MAX_EMAIL_LENGTH);
-        var tooLongEmail = "%s@gmail.com".formatted(tooLongEmailHandle);
-
-        return Stream.of("", null, "_@gmail.com", "@gmail.com", "email@e.", "email@exx", tooLongEmail)
+        return TestUserObjects.invalidEmails().stream()
                 .map(e -> {
                     var u = new CreateUserCommand("some-name", e, "password");
                     return Arguments.of(u, new InvalidEmailException(e));
@@ -140,9 +137,7 @@ public class CreateUserUseCaseTest {
     }
 
     static Stream<Arguments> invalidUserPasswordCases() {
-        var tooLongPassword = "x1A".repeat(FieldValidator.MAX_PASSWORD_LENGTH / 3 + 1);
-
-        return Stream.of("", null, " ", "onlycharacters", "123456789", "Short1", tooLongPassword)
+        return TestUserObjects.invalidPasswords().stream()
                 .map(p -> {
                     var u = new CreateUserCommand("some-name", "some-email@gmail.com", p);
                     return Arguments.of(u, new InvalidPasswordException());

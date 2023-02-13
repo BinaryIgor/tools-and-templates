@@ -33,7 +33,12 @@ public class UserEmailSender {
     }
 
     public void sendPasswordReset(EmailUser user, String resetToken) {
-        //TODO: impl
+        var variables = Map.of(Emails.Variables.USER, user.name(),
+                Emails.Variables.PASSWORD_RESET_URL,
+                fullTokenUrl(config.passwordResetUrl(), resetToken, ActivationTokenType.PASSWORD_RESET),
+                Emails.Variables.NEW_PASSWORD_URL, fullUrl(config.newPasswordUrl()));
+
+        sendEmail(user, Emails.Types.PASSWORD_RESET, variables);
     }
 
     private String fullTokenUrl(String endpoint, String token, ActivationTokenType type) {

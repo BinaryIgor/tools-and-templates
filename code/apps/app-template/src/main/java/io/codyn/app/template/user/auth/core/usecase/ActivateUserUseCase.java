@@ -13,21 +13,21 @@ public class ActivateUserUseCase {
 
     private final ActivationTokenConsumer activationTokenConsumer;
     private final UserUpdateRepository userUpdateRepository;
-    private final EventHandler<UserStateChangedEvent> userStateChangedEventEventHandler;
+    private final EventHandler<UserStateChangedEvent> userStateChangedEventHandler;
 
     public ActivateUserUseCase(ActivationTokenConsumer activationTokenConsumer,
                                UserUpdateRepository userUpdateRepository,
-                               EventHandler<UserStateChangedEvent> userStateChangedEventEventHandler) {
+                               EventHandler<UserStateChangedEvent> userStateChangedEventHandler) {
         this.activationTokenConsumer = activationTokenConsumer;
         this.userUpdateRepository = userUpdateRepository;
-        this.userStateChangedEventEventHandler = userStateChangedEventEventHandler;
+        this.userStateChangedEventHandler = userStateChangedEventHandler;
     }
 
     public void handle(String activationToken) {
         activationTokenConsumer.consume(activationToken, ActivationTokenType.NEW_USER,
                 userId -> {
                     userUpdateRepository.updateState(userId, UserState.ACTIVATED);
-                    userStateChangedEventEventHandler.handle(new UserStateChangedEvent(userId, UserState.ACTIVATED));
+                    userStateChangedEventHandler.handle(new UserStateChangedEvent(userId, UserState.ACTIVATED));
                 });
     }
 }

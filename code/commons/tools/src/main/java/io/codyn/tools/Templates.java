@@ -32,9 +32,9 @@ public class Templates {
             var componentName = matcher.group(1);
 
             var component = Optional.ofNullable(components.get(componentName))
-                    .orElseThrow(() -> new RuntimeException("No service of %s name".formatted(componentName)));
+                    .orElseThrow(() -> new RuntimeException("No component of %s name".formatted(componentName)));
 
-            replacedTemplate = template.replace(toReplace, component);
+            replacedTemplate = replacedTemplate.replace(toReplace, component);
         }
 
         return replacedTemplate;

@@ -170,7 +170,7 @@ public class EmailTemplatesSource {
                 var component = Files.readString(path);
                 components.put(name, component);
             } catch (Exception e) {
-                throw new RuntimeException("Can't load %s service".formatted(name));
+                throw new RuntimeException("Can't load %s component".formatted(name));
             }
         }
     }

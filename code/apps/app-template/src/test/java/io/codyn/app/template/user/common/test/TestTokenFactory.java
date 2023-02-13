@@ -2,6 +2,7 @@ package io.codyn.app.template.user.common.test;
 
 import io.codyn.app.template.user.common.core.ActivationTokenData;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
+import io.codyn.test.TestRandom;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,5 +20,9 @@ public class TestTokenFactory implements ActivationTokenFactory.TokenFactory {
     public String addNextToken(ActivationTokenData data, String token) {
         nextTokens.put(data, token);
         return token;
+    }
+
+    public String addNextToken(ActivationTokenData data) {
+        return addNextToken(data, TestRandom.string());
     }
 }

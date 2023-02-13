@@ -1,6 +1,7 @@
 package io.codyn.app.template.user.common.test;
 
 import io.codyn.app.template._common.app.EmailModuleProvider;
+import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.user.common.core.UserEmailSender;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.model.EmailAddress;
@@ -22,5 +23,9 @@ public class TestUserEmailsProvider {
 
     public static UserEmailSender sender(EmailServer server) {
         return sender(EmailModuleProvider.factory(), server);
+    }
+
+    public static UserEmailSender sender() {
+        return sender(EmailModuleProvider.factory(), new TestEmailServer());
     }
 }

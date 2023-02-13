@@ -67,7 +67,7 @@ public class UserAuthService {
     }
 
     //TODO: impl
-    public SignedInUser authenticateSecondStep(UserSignInSecondStepRequest request) {
+    public SignedInUser authenticateSecondStep(SignInSecondStepRequest request) {
         return null;
     }
 

@@ -1,14 +1,15 @@
-package io.codyn.app.template.user.auth.core.service;
+package io.codyn.app.template.user.auth.core.usecase;
 
-import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template._common.test.TestEventHandler;
-import io.codyn.app.template.user.api.UserStateChangedEvent;
+import io.codyn.app.template._common.core.exception.InvalidPasswordException;
+import io.codyn.app.template._common.test.TestPasswordHasher;
+import io.codyn.app.template.user.auth.core.model.SetNewPasswordCommand;
 import io.codyn.app.template.user.auth.test.TestUserUpdateRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenConsumer;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
 import io.codyn.app.template.user.common.core.exception.InvalidActivationTokenException;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.test.TestActivationTokenRepository;
+import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.test.TestRandom;
 import io.codyn.test.TestTransactions;
 import io.codyn.types.Pair;
@@ -19,66 +20,83 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Clock;
+import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
-public class UserActivationServiceTest {
+public class SetNewUserPasswordUseCaseTest {
 
-    private UserActivationService service;
+    private SetNewUserPasswordUseCase useCase;
+    private TestPasswordHasher passwordHasher;
     private TestActivationTokenRepository activationTokenRepository;
     private TestUserUpdateRepository userUpdateRepository;
     private TestTransactions transactions;
     private ActivationTokenFactory activationTokenFactory;
-    private TestEventHandler<UserStateChangedEvent> eventHandler;
 
     @BeforeEach
     void setup() {
+        passwordHasher = new TestPasswordHasher();
+
         activationTokenRepository = new TestActivationTokenRepository();
         userUpdateRepository = new TestUserUpdateRepository();
         transactions = new TestTransactions();
-        eventHandler = new TestEventHandler<>();
 
-        service = new UserActivationService(
+        useCase = new SetNewUserPasswordUseCase(
                 new ActivationTokenConsumer(activationTokenRepository, transactions),
-                userUpdateRepository, eventHandler);
+                userUpdateRepository,
+                passwordHasher);
 
         activationTokenFactory = new ActivationTokenFactory(Clock.systemUTC());
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("invalidPasswordCases")
+    void shouldThrowExceptionGivenInvalidPassword(String password) {
+        var command = new SetNewPasswordCommand(password, TestRandom.string());
+
+        Assertions.assertThatThrownBy(() -> useCase.handle(command))
+                .isEqualTo(new InvalidPasswordException());
     }
 
     @ParameterizedTest
     @MethodSource("invalidActivationTokens")
     void shouldThrowExceptionGivenInvalidActivationToken(String activationToken) {
-        Assertions.assertThatThrownBy(() -> service.activate(activationToken))
+        var command = new SetNewPasswordCommand("ComplexPassword134", activationToken);
+
+        Assertions.assertThatThrownBy(() -> useCase.handle(command))
                 .isInstanceOf(InvalidActivationTokenException.class);
     }
 
     @Test
-    void shouldUpdateUserStatePublishEventAndDeleteActivationTokenInTransaction() {
+    void shouldSetUserPasswordAndDeleteActivationTokenInTransaction() {
         var userId = UUID.randomUUID();
 
-        var activationToken = activationTokenFactory.newUser(userId);
+        var activationToken = activationTokenFactory.passwordReset(userId);
         activationTokenRepository.save(activationToken);
-        var activationTokenId = ActivationTokenId.ofNewUser(userId);
+        var activationTokenId = ActivationTokenId.ofPasswordReset(userId);
+
+        var command = new SetNewPasswordCommand("ComplexPassword55", activationToken.token());
+        var expectedPassword = passwordHasher.hash(command.password());
 
         transactions.test()
                 .before(() -> {
                     Assertions.assertThat(activationTokenRepository.ofId(activationTokenId)).isPresent();
-                    Assertions.assertThat(userUpdateRepository.updatedState).isNull();
-                    Assertions.assertThat(eventHandler.handledEvent).isNull();
+                    Assertions.assertThat(userUpdateRepository.updatedPassword).isNull();
                 })
                 .after(() -> {
                     Assertions.assertThat(activationTokenRepository.ofId(activationTokenId)).isEmpty();
 
-                    Assertions.assertThat(userUpdateRepository.updatedState)
-                            .isEqualTo(new Pair<>(userId, UserState.ACTIVATED));
-
-                    Assertions.assertThat(eventHandler.handledEvent)
-                            .isEqualTo(new UserStateChangedEvent(userId, UserState.ACTIVATED));
+                    Assertions.assertThat(userUpdateRepository.updatedPassword)
+                            .isEqualTo(new Pair<>(userId, expectedPassword));
                 })
-                .execute(() -> service.activate(activationToken.token()));
+                .execute(() -> useCase.handle(command));
     }
 
-    static Stream<String> invalidActivationTokens() {
-        return Stream.of(" ", null, TestRandom.string());
+    static List<String> invalidActivationTokens() {
+        return TestUserObjects.invalidActivationTokens();
+    }
+
+    static List<String> invalidPasswordCases() {
+        return TestUserObjects.invalidPasswords();
     }
 }

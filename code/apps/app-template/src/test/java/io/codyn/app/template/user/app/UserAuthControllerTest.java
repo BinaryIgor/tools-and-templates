@@ -5,7 +5,7 @@ import io.codyn.app.template._common.app.exception.ExceptionResponse;
 import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.app.template.user.auth.app.model.ActivationToken;
-import io.codyn.app.template.user.auth.app.model.ApiNewUserRequest;
+import io.codyn.app.template.user.auth.app.model.CreateUserRequest;
 import io.codyn.app.template.user.auth.app.model.RefreshToken;
 import io.codyn.app.template.user.auth.core.model.*;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
@@ -32,7 +32,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
     }
 
     private SignedInUser shouldAllowToSignUpAndThenSignIn() {
-        var user = new ApiNewUserRequest("some-user", "some-email@gmail.com",
+        var user = new CreateUserRequest("some-user", "some-email@gmail.com",
                 "Some-complex-password12");
         shouldSignUp(user);
         var userId = shouldActivateUser(user.email());
@@ -45,7 +45,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 testHttpClient.test()
                         .path(userAuthPath("sign-up"))
                         .POST()
-                        .body(new ApiNewUserRequest(null, null, null)));
+                        .body(new CreateUserRequest(null, null, null)));
     }
 
     private void expectBadRequestExceptionResponse(TestHttpClient.TestBuilder builder) {
@@ -127,7 +127,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 .expectBodyOfObject(ExceptionResponse.class);
     }
 
-    private void shouldSignUp(ApiNewUserRequest request) {
+    private void shouldSignUp(CreateUserRequest request) {
         testHttpClient.test()
                 .path(userAuthPath("sign-up"))
                 .POST()

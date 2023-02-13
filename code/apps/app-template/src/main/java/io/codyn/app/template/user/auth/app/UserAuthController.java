@@ -3,13 +3,14 @@ package io.codyn.app.template.user.auth.app;
 import io.codyn.app.template.auth.app.SecurityEndpoints;
 import io.codyn.app.template.auth.core.AuthTokens;
 import io.codyn.app.template.user.auth.app.model.ActivationToken;
-import io.codyn.app.template.user.auth.app.model.ApiNewUserRequest;
+import io.codyn.app.template.user.auth.app.model.CreateUserRequest;
 import io.codyn.app.template.user.auth.app.model.RefreshToken;
 import io.codyn.app.template.user.auth.core.model.*;
-import io.codyn.app.template.user.auth.core.service.NewUserService;
-import io.codyn.app.template.user.auth.core.service.UserActivationService;
 import io.codyn.app.template.user.auth.core.service.UserAuthService;
-import io.codyn.app.template.user.auth.core.service.UserPasswordResetService;
+import io.codyn.app.template.user.auth.core.usecase.ActivateUserUseCase;
+import io.codyn.app.template.user.auth.core.usecase.CreateUserUseCase;
+import io.codyn.app.template.user.auth.core.usecase.ResetUserPasswordUseCase;
+import io.codyn.app.template.user.auth.core.usecase.SetNewUserPasswordUseCase;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,51 +24,53 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(SecurityEndpoints.USER_AUTH)
 public class UserAuthController {
 
-    private final NewUserService newUserService;
-    private final UserActivationService userActivationService;
+    private final CreateUserUseCase createUserUseCase;
+    private final ActivateUserUseCase activateUserUseCase;
     private final UserAuthService userAuthService;
-    private final UserPasswordResetService userPasswordService;
+    private final ResetUserPasswordUseCase resetUserPasswordUseCase;
+    private final SetNewUserPasswordUseCase setNewUserPasswordUseCase;
 
-    public UserAuthController(NewUserService newUserService,
-                              UserActivationService userActivationService,
+    public UserAuthController(CreateUserUseCase createUserUseCase,
+                              ActivateUserUseCase activateUserUseCase,
                               UserAuthService userAuthService,
-                              UserPasswordResetService userPasswordService) {
-        this.newUserService = newUserService;
-        this.userActivationService = userActivationService;
+                              ResetUserPasswordUseCase resetUserPasswordUseCase,
+                              SetNewUserPasswordUseCase setNewUserPasswordUseCase) {
+        this.createUserUseCase = createUserUseCase;
+        this.activateUserUseCase = activateUserUseCase;
         this.userAuthService = userAuthService;
-        this.userPasswordService = userPasswordService;
+        this.resetUserPasswordUseCase = resetUserPasswordUseCase;
+        this.setNewUserPasswordUseCase = setNewUserPasswordUseCase;
     }
 
     @PostMapping("/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signUp(@RequestBody ApiNewUserRequest user) {
-        newUserService.create(user.toRequest());
+    public void signUp(@RequestBody CreateUserRequest request) {
+        createUserUseCase.handle(request.toCommand());
     }
 
     @PostMapping("/activate-account")
     public void activate(@RequestBody ActivationToken activationToken) {
-        userActivationService.activate(activationToken.activationToken());
+        activateUserUseCase.handle(activationToken.activationToken());
     }
 
-    //TODO: impl lacking services
     @PostMapping("/sign-in")
     public SignedInUserStep signIn(@RequestBody UserSignInRequest request) {
         return userAuthService.authenticate(request);
     }
 
     @PostMapping("/sign-in-second-step")
-    public SignedInUser signInSecondStep(@RequestBody UserSignInSecondStepRequest request) {
-        return userAuthService.authenticateSecondStep(request);
+    public SignedInUser signInSecondStep(@RequestBody SignInSecondStepRequest request) {
+        throw new UnsupportedOperationException("Not implemented yet!");
     }
 
     @PostMapping("/reset-password/{email}")
     public void resetPassword(@PathVariable("email") String email) {
-        userPasswordService.resetPassword(email);
+        resetUserPasswordUseCase.handle(email);
     }
 
     @PostMapping("/set-new-password")
-    public void setNewPassword(@RequestBody NewPasswordRequest request) {
-        userPasswordService.setNewPassword(request);
+    public void setNewPassword(@RequestBody SetNewPasswordCommand command) {
+        setNewUserPasswordUseCase.handle(command);
     }
 
     @PostMapping("/refresh-tokens")

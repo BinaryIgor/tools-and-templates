@@ -5,8 +5,8 @@ import org.assertj.core.api.Assertions;
 
 public class EmailAssertions {
 
-    public static void messageContains(Email email, String text) {
-        Assertions.assertThat(email.textMessage()).contains(text);
-        Assertions.assertThat(email.htmlMessage()).contains(text);
+    public static void messageContains(Email email, String... texts) {
+        Assertions.assertThat(email.textMessage()).contains(texts);
+        Assertions.assertThat(email.htmlMessage()).contains(texts);
     }
 }

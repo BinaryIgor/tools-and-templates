@@ -1,15 +1,13 @@
-package io.codyn.app.template.user.auth.core.service;
+package io.codyn.app.template.user.auth.core.usecase;
 
-import io.codyn.app.template._common.core.exception.AppException;
 import io.codyn.app.template._common.core.exception.InvalidEmailException;
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.user.auth.core.model.CurrentUserData;
+import io.codyn.app.template.user.auth.core.model.SignInFirstStepCommand;
 import io.codyn.app.template.user.auth.core.model.SignedInUser;
 import io.codyn.app.template.user.auth.core.model.SignedInUserStep;
-import io.codyn.app.template.user.auth.core.model.UserSignInRequest;
-import io.codyn.app.template.user.auth.core.usecase.CreateUserUseCase;
 import io.codyn.app.template.user.auth.test.TestUserAuthRepository;
 import io.codyn.app.template.user.auth.test.TestUserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
@@ -32,9 +30,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
-public class UserAuthServiceTest {
+public class SignInFirstStepUseCaseTest {
 
-    private UserAuthService service;
+    private SignInFirstStepUseCase useCase;
     private TestAuthClient authClient;
     private TestUserRepository userRepository;
     private TestUserAuthRepository userAuthRepository;
@@ -47,7 +45,7 @@ public class UserAuthServiceTest {
         userAuthRepository = new TestUserAuthRepository();
 
         var passwordHasher = new BcryptPasswordHasher();
-        service = new UserAuthService(authClient, userRepository, userAuthRepository, passwordHasher);
+        useCase = new SignInFirstStepUseCase(authClient, userRepository, userAuthRepository, passwordHasher);
 
         createUserUseCase = new CreateUserUseCase(userRepository, passwordHasher,
                 new ActivationTokens(new TestActivationTokenRepository(),
@@ -58,45 +56,46 @@ public class UserAuthServiceTest {
 
     @ParameterizedTest
     @MethodSource("invalidSignInCases")
-    void shouldThrowExceptionGivenInvalidSignInRequest(UserSignInRequest request,
-                                                       AppException exception) {
-        Assertions.assertThatThrownBy(() -> service.authenticate(request))
+    void shouldThrowExceptionGivenInvalidSignInCommand(SignInFirstStepCommand command,
+                                                       Exception exception) {
+        Assertions.assertThatThrownBy(() -> useCase.handle(command))
                 .isEqualTo(exception);
     }
 
     @ParameterizedTest
     @MethodSource("userStateRolesCases")
-    void shouldAuthenticateReturningUserDataAndTokens(UserState state, Collection<UserRole> roles) {
-        var testCase = prepareAuthenticateTestCase(state, roles);
-        var request = testCase.first();
+    void shouldSignInReturningUserDataAndTokens(UserState state, Collection<UserRole> roles) {
+        var testCase = prepareSignsInTestCase(state, roles);
+        var command = testCase.first();
         var expected = testCase.second();
 
-        Assertions.assertThat(service.authenticate(request))
+        Assertions.assertThat(useCase.handle(command))
                 .isEqualTo(expected);
     }
 
-    private Pair<UserSignInRequest, SignedInUserStep> prepareAuthenticateTestCase(UserState state,
+    private Pair<SignInFirstStepCommand, SignedInUserStep> prepareSignsInTestCase(UserState state,
                                                                                   Collection<UserRole> roles) {
-        var command = TestUserObjects.createUserCommand1();
+        var createUserCommand = TestUserObjects.createUserCommand1();
 
-        createUserUseCase.handle(command);
+        createUserUseCase.handle(createUserCommand);
 
-        var request = new UserSignInRequest(command.email(), command.password());
+        var command = new SignInFirstStepCommand(createUserCommand.email(), createUserCommand.password());
 
         userRepository.changeUserState(command.email(), state);
-        userAuthRepository.addUserRoles(command.id(), roles);
+        userAuthRepository.addUserRoles(createUserCommand.id(), roles);
 
-        var tokens = authClient.ofUser(command.id());
+        var tokens = authClient.ofUser(createUserCommand.id());
 
-        var response = new SignedInUser(new CurrentUserData(command.id(), command.email(), command.name(),
-                state, roles), tokens);
+        var response = new SignedInUser(
+                new CurrentUserData(createUserCommand.id(), command.email(), createUserCommand.name(),
+                        state, roles), tokens);
 
-        return new Pair<>(request, SignedInUserStep.onlyStep(response));
+        return new Pair<>(command, SignedInUserStep.onlyStep(response));
     }
 
     static Stream<Arguments> invalidSignInCases() {
         return Stream.of(
-                Arguments.of(new UserSignInRequest(null, null),
+                Arguments.of(new SignInFirstStepCommand(null, null),
                         new InvalidEmailException(null)));
     }
 
