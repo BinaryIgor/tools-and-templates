@@ -1,6 +1,7 @@
 package io.codyn.app.template.user.account.core;
 
 import io.codyn.app.template._common.core.validator.FieldValidator;
+import io.codyn.app.template.user.account.core.model.UpdatePasswordRequest;
 import io.codyn.app.template.user.auth.core.exception.NotMatchedPasswordException;
 import io.codyn.app.template.user.common.core.PasswordHasher;
 import io.codyn.app.template.user.common.core.UserExceptions;

@@ -1,10 +1,11 @@
 package io.codyn.app.template.user.common.test;
 
 import io.codyn.app.template._common.core.model.UserState;
+import io.codyn.app.template.user.auth.core.model.CreateUserCommand;
 import io.codyn.app.template.user.auth.core.model.NewUserRequest;
-import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.test.TestRandom;
 
 import java.util.List;
@@ -42,6 +43,10 @@ public class TestUserObjects {
 
     public static NewUserRequest newUserRequest() {
         return TestUserMapper.toNewUserRequest(user());
+    }
+
+    public static CreateUserCommand createUserCommand() {
+        return TestUserMapper.toCreateUserCommand(user());
     }
 
     public static NewUserRequest newUserRequest1() {

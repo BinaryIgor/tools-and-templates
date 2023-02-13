@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.account.app;
 
 import io.codyn.app.template.auth.api.AuthUserClient;
-import io.codyn.app.template.user.account.core.UpdatePasswordRequest;
+import io.codyn.app.template.user.account.core.model.UpdatePasswordRequest;
 import io.codyn.app.template.user.account.core.UserAccountService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
