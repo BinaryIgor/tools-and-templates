@@ -2,7 +2,7 @@ package io.codyn.app.template.user.common.core.cache;
 
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
-import io.codyn.app.template.user.api.UserStateChangedEvent;
+import io.codyn.app.template.user.common.core.UserStateChangedEvent;
 import io.codyn.types.Cache;
 import io.codyn.types.EventHandler;
 

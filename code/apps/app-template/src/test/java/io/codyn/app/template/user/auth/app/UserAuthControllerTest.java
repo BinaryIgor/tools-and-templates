@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.app;
+package io.codyn.app.template.user.auth.app;
 
 import io.codyn.app.template.SpringIntegrationTest;
 import io.codyn.app.template._common.app.exception.ExceptionResponse;
@@ -8,9 +8,9 @@ import io.codyn.app.template.user.auth.app.model.ActivationToken;
 import io.codyn.app.template.user.auth.app.model.CreateUserRequest;
 import io.codyn.app.template.user.auth.app.model.RefreshToken;
 import io.codyn.app.template.user.auth.core.model.*;
-import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenRepository;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
+import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.test.http.TestHttpClient;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -90,7 +90,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
                 testHttpClient.test()
                         .path(userAuthPath("set-new-password"))
                         .POST()
-                        .body(new NewPasswordRequest("pass33", null)));
+                        .body(new SetNewPasswordCommand("pass33", null)));
     }
 
     @Test
@@ -196,7 +196,7 @@ public class UserAuthControllerTest extends SpringIntegrationTest {
         testHttpClient.test()
                 .path(userAuthPath("set-new-password"))
                 .POST()
-                .body(new NewPasswordRequest(password, token))
+                .body(new SetNewPasswordCommand(password, token))
                 .execute();
     }
 }

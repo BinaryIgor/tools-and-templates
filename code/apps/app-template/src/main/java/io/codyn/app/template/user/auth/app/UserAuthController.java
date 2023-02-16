@@ -6,11 +6,7 @@ import io.codyn.app.template.user.auth.app.model.ActivationToken;
 import io.codyn.app.template.user.auth.app.model.CreateUserRequest;
 import io.codyn.app.template.user.auth.app.model.RefreshToken;
 import io.codyn.app.template.user.auth.core.model.*;
-import io.codyn.app.template.user.auth.core.service.UserAuthService;
-import io.codyn.app.template.user.auth.core.usecase.ActivateUserUseCase;
-import io.codyn.app.template.user.auth.core.usecase.CreateUserUseCase;
-import io.codyn.app.template.user.auth.core.usecase.ResetUserPasswordUseCase;
-import io.codyn.app.template.user.auth.core.usecase.SetNewUserPasswordUseCase;
+import io.codyn.app.template.user.auth.core.usecase.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -26,20 +22,23 @@ public class UserAuthController {
 
     private final CreateUserUseCase createUserUseCase;
     private final ActivateUserUseCase activateUserUseCase;
-    private final UserAuthService userAuthService;
+    private final SignInFirstStepUseCase signInFirstStepUseCase;
     private final ResetUserPasswordUseCase resetUserPasswordUseCase;
     private final SetNewUserPasswordUseCase setNewUserPasswordUseCase;
+    private final RefreshUserAuthTokensUseCase refreshUserAuthTokensUseCase;
 
     public UserAuthController(CreateUserUseCase createUserUseCase,
                               ActivateUserUseCase activateUserUseCase,
-                              UserAuthService userAuthService,
+                              SignInFirstStepUseCase signInFirstStepUseCase,
                               ResetUserPasswordUseCase resetUserPasswordUseCase,
-                              SetNewUserPasswordUseCase setNewUserPasswordUseCase) {
+                              SetNewUserPasswordUseCase setNewUserPasswordUseCase,
+                              RefreshUserAuthTokensUseCase refreshUserAuthTokensUseCase) {
         this.createUserUseCase = createUserUseCase;
         this.activateUserUseCase = activateUserUseCase;
-        this.userAuthService = userAuthService;
+        this.signInFirstStepUseCase = signInFirstStepUseCase;
         this.resetUserPasswordUseCase = resetUserPasswordUseCase;
         this.setNewUserPasswordUseCase = setNewUserPasswordUseCase;
+        this.refreshUserAuthTokensUseCase = refreshUserAuthTokensUseCase;
     }
 
     @PostMapping("/sign-up")
@@ -54,8 +53,8 @@ public class UserAuthController {
     }
 
     @PostMapping("/sign-in")
-    public SignedInUserStep signIn(@RequestBody UserSignInRequest request) {
-        return userAuthService.authenticate(request);
+    public SignedInUserStep signIn(@RequestBody SignInFirstStepCommand command) {
+        return signInFirstStepUseCase.handle(command);
     }
 
     @PostMapping("/sign-in-second-step")
@@ -75,7 +74,7 @@ public class UserAuthController {
 
     @PostMapping("/refresh-tokens")
     public AuthTokens refreshTokens(@RequestBody RefreshToken token) {
-        return userAuthService.newTokens(token.refreshToken());
+        return refreshUserAuthTokensUseCase.handle(token.refreshToken());
     }
 
 }

@@ -7,8 +7,16 @@ import java.util.UUID;
 
 public class TestProjectObjects {
 
+    public static Project newProject(String name, long version) {
+        return new Project(UUID.randomUUID(), UUID.randomUUID(), name, version);
+    }
+
+    public static Project newProject(String name) {
+        return newProject(name, 0);
+    }
+
     public static Project newProject(long version) {
-        return new Project(UUID.randomUUID(), UUID.randomUUID(), TestRandom.string(), version);
+        return newProject(TestRandom.name(), version);
     }
 
     public static Project newProject() {

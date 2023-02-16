@@ -3,7 +3,7 @@ package io.codyn.app.template.user.common.common;
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template.auth.api.UserAuthData;
-import io.codyn.app.template.user.api.UserStateChangedEvent;
+import io.codyn.app.template.user.common.core.UserStateChangedEvent;
 import io.codyn.app.template.user.common.core.cache.CacheableUserAuthDataRepository;
 import io.codyn.app.template.user.common.test.TestUserAuthDataRepository;
 import io.codyn.tools.CacheFactory;

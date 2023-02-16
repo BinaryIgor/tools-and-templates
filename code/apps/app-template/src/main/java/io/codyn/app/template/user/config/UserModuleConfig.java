@@ -1,4 +1,4 @@
-package io.codyn.app.template.user;
+package io.codyn.app.template.user.config;
 
 import io.codyn.app.template.EmailConfig;
 import io.codyn.app.template._common.core.AfterDelayCacheEnabler;

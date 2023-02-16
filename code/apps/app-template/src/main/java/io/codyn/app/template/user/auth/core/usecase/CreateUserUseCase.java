@@ -19,9 +19,9 @@ public class CreateUserUseCase {
 
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
-    private final Transactions transactions;
     private final ActivationTokens activationTokens;
     private final UserEmailSender emailSender;
+    private final Transactions transactions;
 
     public CreateUserUseCase(UserRepository userRepository,
                              PasswordHasher passwordHasher,
