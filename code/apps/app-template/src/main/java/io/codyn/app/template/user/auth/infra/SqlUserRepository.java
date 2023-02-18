@@ -51,6 +51,15 @@ public class SqlUserRepository implements UserRepository, UserUpdateRepository, 
     }
 
     @Override
+    public void updateEmail(UUID id, String email) {
+        contextProvider.context()
+                .update(USER)
+                .set(USER.EMAIL, email)
+                .where(USER.ID.eq(id))
+                .execute();
+    }
+
+    @Override
     public void updateState(UUID id, UserState state) {
         contextProvider.context()
                 .update(USER)

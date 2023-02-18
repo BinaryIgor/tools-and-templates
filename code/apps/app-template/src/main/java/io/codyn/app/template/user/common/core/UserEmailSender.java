@@ -41,6 +41,15 @@ public class UserEmailSender {
         sendEmail(user, Emails.Types.PASSWORD_RESET, variables);
     }
 
+    public void sendEmailChange(EmailUser user, String oldEmail, String confirmationToken) {
+        var variables = Map.of(Emails.Variables.USER, user.name(),
+                Emails.Variables.OLD_EMAIL, oldEmail,
+                Emails.Variables.EMAIL_CHANGE_CONFIRMATION_URL,
+                fullTokenUrl(config.emailChangeConfirmationUrl(), confirmationToken, ActivationTokenType.EMAIL_CHANGE));
+
+        sendEmail(user, Emails.Types.EMAIL_CHANGE, variables);
+    }
+
     private String fullTokenUrl(String endpoint, String token, ActivationTokenType type) {
         var url = String.join("/", config.frontendDomain(), endpoint);
         var params = "token=%s&type=%s".formatted(token, type);

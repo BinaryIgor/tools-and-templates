@@ -35,6 +35,8 @@ public class CreateUserUseCase {
         this.transactions = transactions;
     }
 
+    //TODO: remove expired users!
+    //TODO: outbox for emails
     public void handle(CreateUserCommand command) {
         validateCommand(command);
 

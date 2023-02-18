@@ -8,8 +8,14 @@ import java.util.UUID;
 
 public class TestUserUpdateRepository implements UserUpdateRepository {
 
+    public Pair<UUID, String> updatedEmail;
     public Pair<UUID, UserState> updatedState;
     public Pair<UUID, String> updatedPassword;
+
+    @Override
+    public void updateEmail(UUID id, String email) {
+        updatedEmail = new Pair<>(id, email);
+    }
 
     @Override
     public void updateState(UUID id, UserState state) {

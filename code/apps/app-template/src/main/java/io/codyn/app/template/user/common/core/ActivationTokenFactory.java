@@ -42,7 +42,7 @@ public class ActivationTokenFactory {
     public ActivationToken newEmail(UUID userId, String newEmail) {
         var token = tokenFactory.newToken(ActivationTokenData.withUserIdAndNewEmail(userId, newEmail));
 
-        return new ActivationToken(userId, ActivationTokenType.NEW_EMAIL, token,
+        return new ActivationToken(userId, ActivationTokenType.EMAIL_CHANGE, token,
                 tokenExpiresAt(Duration.ofHours(1)));
     }
 
