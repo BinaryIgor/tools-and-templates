@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.infra;
 
-import io.codyn.app.template._common.core.exception.OptimisticLockException;
+import io.codyn.app.template._common.infra.SqlOptimisticLock;
 import io.codyn.app.template.project.core.ProjectRepository;
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.sqldb.schema.project.tables.records.ProjectRecord;
@@ -25,22 +25,9 @@ public class SqlProjectRepository implements ProjectRepository {
     public Project save(Project project) {
         var newVersionProject = project.withVersion(project.version() + 1);
 
-        if (project.version() == 0) {
-            var record = ProjectRecordsMapper.setFromProject(context.newRecord(PROJECT), newVersionProject);
-            record.insert();
-        } else {
-            var record = ProjectRecordsMapper.setFromProject(new ProjectRecord(), newVersionProject);
+        var record = ProjectRecordsMapper.setFromProject(new ProjectRecord(), newVersionProject);
 
-            var updated = context.update(PROJECT)
-                    .set(record)
-                    .where(PROJECT.ID.eq(project.id())
-                            .and(PROJECT.VERSION.eq(project.version())))
-                    .execute();
-
-            if (updated == 0) {
-                throw new OptimisticLockException("project");
-            }
-        }
+        SqlOptimisticLock.upsert(context, PROJECT, record);
 
         return newVersionProject;
     }

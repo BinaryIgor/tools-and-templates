@@ -1,8 +1,8 @@
 package io.codyn.app.template.project.core.usecase;
 
-import io.codyn.app.template._common.core.exception.AccessForbiddenException;
 import io.codyn.app.template._common.core.exception.InvalidNameException;
 import io.codyn.app.template._common.core.validator.FieldValidator;
+import io.codyn.app.template.project.core.ProjectExceptions;
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.app.template.project.test.FakeProjectRepository;
 import io.codyn.app.template.project.test.TestProjectObjects;
@@ -37,9 +37,10 @@ public class SaveProjectUseCaseTest {
     void shouldCreateProject() {
         var newProject = TestProjectObjects.newProject();
 
-        useCase.handle(newProject);
+        var returnedProject = useCase.handle(newProject);
 
         Assertions.assertThat(projectRepository.savedProject).isEqualTo(newProject);
+        Assertions.assertThat(projectRepository.savedProject).isEqualTo(returnedProject);
     }
 
     @Test
@@ -65,7 +66,7 @@ public class SaveProjectUseCaseTest {
         var toSave = projectWithAnotherOwnerIdAndIncreasedVersion(newProject, anotherOwner);
 
         Assertions.assertThatThrownBy(() -> useCase.handle(toSave))
-                .isEqualTo(projectForbiddenException(anotherOwner, newProject.id()));
+                .isEqualTo(ProjectExceptions.projectForbiddenException(anotherOwner, newProject.id()));
 
         Assertions.assertThat(projectRepository.savedProject).isEqualTo(newProject);
     }
@@ -81,11 +82,6 @@ public class SaveProjectUseCaseTest {
 
     private Project projectWithAnotherOwnerIdAndIncreasedVersion(Project project, UUID ownerId) {
         return new Project(project.id(), ownerId, project.name(), project.version() + 1);
-    }
-
-    private AccessForbiddenException projectForbiddenException(UUID userId, UUID projectId) {
-        return new AccessForbiddenException("%s user doesn't have access to %s project"
-                .formatted(userId, projectId));
     }
 
 }

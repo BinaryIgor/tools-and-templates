@@ -1,7 +1,6 @@
 package io.codyn.app.template.project.app;
 
 import io.codyn.app.template.SpringIntegrationTest;
-import io.codyn.app.template._common.app.IdResponse;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
 import io.codyn.app.template.project.core.model.Project;
@@ -103,16 +102,13 @@ public class ProjectControllerTest extends SpringIntegrationTest {
     private Project createNewProject(UUID ownerId, ApiNewProject project) {
         createUserAndSetAuthToken(ownerId);
 
-        var projectId = testHttpClient.test()
+        return testHttpClient.test()
                 .path("/projects")
                 .POST()
                 .body(project)
                 .execute()
                 .expectStatusCreated()
-                .expectBodyOfObject(IdResponse.class)
-                .id();
-
-        return new Project(projectId, ownerId, project.name(), 1);
+                .expectBodyOfObject(Project.class);
     }
 
     private ProjectWithUsers fetchProjectWithUsers(UUID projectId) {

@@ -15,16 +15,15 @@ public class SaveProjectUseCase {
         this.projectRepository = projectRepository;
     }
 
-    public void handle(Project project) {
+    public Project handle(Project project) {
         validateProject(project);
 
-        if (project.version() == 0) {
-            projectRepository.save(project);
-        } else {
+        if (project.version() != 0) {
             ProjectAccessValidator.getOwnerAndValidateAccess(projectRepository,
                     project.id(), project.ownerId());
-            projectRepository.save(project);
         }
+
+        return projectRepository.save(project);
     }
 
     private void validateProject(Project project) {

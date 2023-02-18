@@ -1,15 +1,12 @@
 package io.codyn.app.template.project.app;
 
-import io.codyn.app.template._common.app.IdResponse;
 import io.codyn.app.template._common.app.JwtSecurityRequirement;
 import io.codyn.app.template._common.app.exception.ExceptionResponse;
 import io.codyn.app.template.auth.api.AuthUserClient;
 import io.codyn.app.template.project.app.model.ApiNewProject;
 import io.codyn.app.template.project.app.model.ApiUpdateProject;
-import io.codyn.app.template.project.core.ProjectService;
-import io.codyn.app.template.project.core.model.AddUsersToProjectCommand;
-import io.codyn.app.template.project.core.model.ProjectWithUsers;
-import io.codyn.app.template.project.core.model.RemoveUsersFromProjectCommand;
+import io.codyn.app.template.project.core.model.*;
+import io.codyn.app.template.project.core.usecase.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,12 +23,24 @@ import java.util.UUID;
 @JwtSecurityRequirement
 public class ProjectController {
 
-    private final ProjectService projectService;
+    private final SaveProjectUseCase saveProjectUseCase;
+    private final GetProjectWithUsersUseCase getProjectWithUsersUseCase;
+    private final DeleteProjectUseCase deleteProjectUseCase;
+    private final AddUsersToProjectUseCase addUsersToProjectUseCase;
+    private final RemoveUsersFromProjectUseCase removeUsersFromProjectUseCase;
     private final AuthUserClient authUserClient;
 
-    public ProjectController(ProjectService projectService,
+    public ProjectController(SaveProjectUseCase saveProjectUseCase,
+                             GetProjectWithUsersUseCase getProjectWithUsersUseCase,
+                             DeleteProjectUseCase deleteProjectUseCase,
+                             AddUsersToProjectUseCase addUsersToProjectUseCase,
+                             RemoveUsersFromProjectUseCase removeUsersFromProjectUseCase,
                              AuthUserClient authUserClient) {
-        this.projectService = projectService;
+        this.saveProjectUseCase = saveProjectUseCase;
+        this.getProjectWithUsersUseCase = getProjectWithUsersUseCase;
+        this.deleteProjectUseCase = deleteProjectUseCase;
+        this.addUsersToProjectUseCase = addUsersToProjectUseCase;
+        this.removeUsersFromProjectUseCase = removeUsersFromProjectUseCase;
         this.authUserClient = authUserClient;
     }
 
@@ -45,32 +54,29 @@ public class ProjectController {
     @Operation(description = """
             Some nice description of create project endpoint
             """)
-    public IdResponse create(@RequestBody ApiNewProject request) {
+    public Project create(@RequestBody ApiNewProject request) {
         var userId = authUserClient.currentId();
         var project = request.toProject(userId);
-
-        projectService.save(project);
-
-        return new IdResponse(project.id());
+        return saveProjectUseCase.handle(project);
     }
 
     @PutMapping("/{id}")
-    public void update(@RequestBody ApiUpdateProject request,
-                       @PathVariable UUID id) {
+    public Project update(@RequestBody ApiUpdateProject request,
+                          @PathVariable UUID id) {
         var userId = authUserClient.currentId();
-        projectService.save(request.toProject(id, userId));
+        return saveProjectUseCase.handle(request.toProject(id, userId));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         var userId = authUserClient.currentId();
-        projectService.delete(id, userId);
+        deleteProjectUseCase.handle(new DeleteProjectCommand(id, userId));
     }
 
     @GetMapping("/{id}")
     public ProjectWithUsers get(@PathVariable UUID id) {
         var userId = authUserClient.currentId();
-        return projectService.get(id, userId);
+        return getProjectWithUsersUseCase.handle(new GetProjectWithUsersQuery(id, userId));
     }
 
     @GetMapping
@@ -84,7 +90,7 @@ public class ProjectController {
                          @RequestBody List<UUID> toAddUserIds) {
         var userId = authUserClient.currentId();
         var command = new AddUsersToProjectCommand(id, userId, toAddUserIds);
-        projectService.addUsers(command);
+        addUsersToProjectUseCase.handle(command);
     }
 
     @DeleteMapping("/{id}/users")
@@ -92,6 +98,6 @@ public class ProjectController {
                             @RequestBody List<UUID> toAddUserIds) {
         var userId = authUserClient.currentId();
         var command = new RemoveUsersFromProjectCommand(id, userId, toAddUserIds);
-        projectService.removeUsers(command);
+        removeUsersFromProjectUseCase.handle(command);
     }
 }

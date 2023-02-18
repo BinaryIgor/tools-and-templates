@@ -1,6 +1,6 @@
 package io.codyn.app.template.project.core.usecase;
 
-import io.codyn.app.template._common.core.exception.AccessForbiddenException;
+import io.codyn.app.template.project.core.ProjectExceptions;
 import io.codyn.app.template.project.core.model.DeleteProjectCommand;
 import io.codyn.app.template.project.test.FakeProjectRepository;
 import io.codyn.app.template.project.test.TestProjectObjects;
@@ -42,11 +42,6 @@ public class DeleteProjectUseCaseTest {
         var command = new DeleteProjectCommand(project.id(), anotherUser);
 
         Assertions.assertThatThrownBy(() -> useCase.handle(command))
-                .isEqualTo(projectForbiddenException(anotherUser, project.id()));
-    }
-
-    private AccessForbiddenException projectForbiddenException(UUID userId, UUID projectId) {
-        return new AccessForbiddenException("%s user doesn't have access to %s project"
-                .formatted(userId, projectId));
+                .isEqualTo(ProjectExceptions.projectForbiddenException(anotherUser, project.id()));
     }
 }

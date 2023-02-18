@@ -7,12 +7,12 @@ import java.util.function.Supplier;
 public class AfterDelayCacheEnabler implements Supplier<Boolean> {
 
     private final Duration delay;
-    private final Instant startAt;
+    private final Instant startedAt;
     private boolean enabled;
 
     public AfterDelayCacheEnabler(Duration delay) {
         this.delay = delay;
-        this.startAt = Instant.now();
+        this.startedAt = Instant.now();
         this.enabled = false;
     }
 
@@ -25,7 +25,7 @@ public class AfterDelayCacheEnabler implements Supplier<Boolean> {
         if (enabled) {
             return true;
         }
-        enabled = Duration.between(startAt, Instant.now()).compareTo(delay) >= 0;
+        enabled = Duration.between(startedAt, Instant.now()).compareTo(delay) >= 0;
         return enabled;
     }
 }

@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public record RemoveUsersFromProjectCommand(UUID projectId,
                                             UUID userId,
-                                            List<UUID> toDeleteUserIds) {
+                                            List<UUID> toRemoveUserIds) {
 }

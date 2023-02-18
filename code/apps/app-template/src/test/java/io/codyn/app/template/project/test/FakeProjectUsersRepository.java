@@ -15,7 +15,8 @@ public class FakeProjectUsersRepository implements ProjectUsersRepository {
 
     @Override
     public void addUsers(UUID id, List<UUID> userIds) {
-        usersOfProjects.put(id, userIds);
+        usersOfProjects.computeIfAbsent(id, k -> new ArrayList<>())
+                .addAll(userIds);
     }
 
     @Override
