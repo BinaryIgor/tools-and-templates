@@ -25,6 +25,7 @@ springdoc:
 
 #Real values
 app:
+  allowed-private-ip-prefix: "10.1"
   jwt:
     issuer: system-template
     token-key: "${JWT_TOKEN_KEY}"

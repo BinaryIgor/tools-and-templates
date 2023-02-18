@@ -17,14 +17,15 @@ public class AuthModuleConfig {
     public SecurityRules securityRules() {
         return new SecurityRules(new SecurityRules.Predicates(
                 SecurityEndpoints::isPublic,
+                SecurityEndpoints::isMetricEndpoint,
                 SecurityEndpoints::isUserOfStateAllowed,
                 SecurityEndpoints::isAdmin));
     }
 
     @Bean
     public JwtAuthTokens jwtAuthTokens(UserAuthDataRepository authDataRepository,
-                                            JwtConfig config,
-                                            Clock clock) {
+                                       JwtConfig config,
+                                       Clock clock) {
         var readTokenKey = PropertiesConverter.valueOrFromFile(config.tokenKey());
         var bytesTokenKey = PropertiesConverter.bytesFromString(readTokenKey);
 

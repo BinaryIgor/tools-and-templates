@@ -55,6 +55,7 @@ public abstract class SpringIntegrationTest {
     protected void tearDown() {
         POSTGRES.clearDb();
         emailServer.clear();
+        testHttpClient.removeAuthorizationHeader();
     }
 
 

@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 
 public class TestHttpClient {
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     private final HttpClient httpClient;
     private final Supplier<String> baseUrl;
     private final Map<String, String> globalHeaders = new HashMap<>();
@@ -40,8 +41,16 @@ public class TestHttpClient {
         globalHeaders.put(name, value);
     }
 
+    public void removeHeader(String name) {
+        globalHeaders.remove(name);
+    }
+
     public void addBearerAuthorizationHeader(String token) {
-        addHeader("Authorization", "Bearer " + token);
+        addHeader(AUTHORIZATION_HEADER, "Bearer " + token);
+    }
+
+    public void removeAuthorizationHeader() {
+        removeHeader(AUTHORIZATION_HEADER);
     }
 
     public TestBuilder test() {

@@ -6,6 +6,7 @@ spring:
     password: ${DB_PASSWORD}
 
 app:
+  test: "sth"
   email:
     fake-server: true
   jwt:

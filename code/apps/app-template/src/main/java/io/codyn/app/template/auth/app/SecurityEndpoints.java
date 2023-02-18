@@ -21,6 +21,10 @@ public class SecurityEndpoints {
         return false;
     }
 
+    public static boolean isMetricEndpoint(String endpoint) {
+        return endpoint.startsWith("/actuator");
+    }
+
     //TODO: implement if needed
     public static boolean isUserOfStateAllowed(String endpoint, UserState state) {
         return true;

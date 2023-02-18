@@ -4,7 +4,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import io.codyn.app.template._common.core.exception.InvalidAuthTokenException;
-import io.codyn.app.template._common.core.exception.NotFoundException;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
 import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.auth.api.UserAuthDataRepository;
@@ -90,7 +89,7 @@ public class JwtAuthTokens implements AuthTokenCreator, AuthTokenAuthenticator {
 
         return authDataRepository.ofId(userId)
                 .map(UserAuthData::toAuthenticatedUser)
-                .orElseThrow(() -> NotFoundException.ofId("User", userId));
+                .orElseThrow(() -> new InvalidAuthTokenException("User %s doesn't exist".formatted(userId)));
     }
 
     private JWTVerifier tokenVerifier(AuthTokenType type) {
