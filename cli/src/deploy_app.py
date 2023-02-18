@@ -46,8 +46,8 @@ def app_latest_package_dir(app_name):
     return f'{app_package_dir(app_name, deploy_config)}/latest'
 
 
-def perform_pre_deploy_actions(remote_host, app, deploy_dir):
-    actions = app.get("pre_deploy_actions")
+def perform_pre_deploy_actions(remote_host, app_config, deploy_dir):
+    actions = app_config.get("pre_deploy_actions")
     if not actions:
         return
 
@@ -178,7 +178,7 @@ copy_app_package(remote_host, previous_deploy_dir, latest_deploy_dir, package_di
 
 log.info("About to start app....")
 
-perform_pre_deploy_actions(remote_host, app, latest_deploy_dir)
+perform_pre_deploy_actions(remote_host, app_config, latest_deploy_dir)
 
 meta.execute_bash_script(f'ssh {remote_host} "cd {latest_deploy_dir}; bash load_and_run.bash"')
 
