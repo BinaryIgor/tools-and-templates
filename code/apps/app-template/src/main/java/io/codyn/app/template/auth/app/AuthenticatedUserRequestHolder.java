@@ -1,28 +1,18 @@
 package io.codyn.app.template.auth.app;
 
+import io.codyn.app.template._common.app.HttpRequestAttributes;
 import io.codyn.app.template.auth.api.AuthenticatedUser;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Optional;
 
 public class AuthenticatedUserRequestHolder {
 
-    static final String USER_ATTRIBUTE = "io.codyn.auth.user";
-
     public static void set(AuthenticatedUser user) {
-        var requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes sa) {
-            sa.setAttribute(USER_ATTRIBUTE, user, RequestAttributes.SCOPE_REQUEST);
-        }
+        HttpRequestAttributes.set(HttpRequestAttributes.USER_ATTRIBUTE, user);
+        HttpRequestAttributes.set(HttpRequestAttributes.USER_ID_ATTRIBUTE, user.id().toString());
     }
 
     public static Optional<AuthenticatedUser> get() {
-        var requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes sa) {
-            return Optional.ofNullable((AuthenticatedUser) sa.getRequest().getAttribute(USER_ATTRIBUTE));
-        }
-        return Optional.empty();
+        return HttpRequestAttributes.get(HttpRequestAttributes.USER_ATTRIBUTE, AuthenticatedUser.class);
     }
 }

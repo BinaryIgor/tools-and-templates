@@ -1,8 +1,8 @@
 package io.codyn.app.template;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.codyn.app.template._common.app.BadRequestsInterceptor;
 import io.codyn.app.template._common.app.EmailModuleProvider;
+import io.codyn.app.template._common.app.LoggingRequestsInterceptor;
 import io.codyn.app.template._common.app.PropertiesConverter;
 import io.codyn.app.template._common.app.SpringEventPublisher;
 import io.codyn.email.factory.EmailFactory;
@@ -80,7 +80,7 @@ public class AppConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new BadRequestsInterceptor());
+        registry.addInterceptor(new LoggingRequestsInterceptor());
     }
 
 

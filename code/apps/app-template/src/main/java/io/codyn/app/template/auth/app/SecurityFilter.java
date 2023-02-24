@@ -68,7 +68,15 @@ public class SecurityFilter implements Filter {
     private boolean isAllowedPrivateClientRequest(HttpServletRequest request) {
         var clientIp = Optional.ofNullable(request.getHeader(REAL_IP_HEADER))
                 .orElseGet(request::getRemoteAddr);
-        return clientIp.startsWith(allowedPrivateIpPrefix);
+
+        System.out.println("Client ip..." + clientIp);
+
+        return clientIp.startsWith(allowedPrivateIpPrefix) || isLocalhost(clientIp);
+    }
+
+    private boolean isLocalhost(String clientIp) {
+        return clientIp.startsWith("localhost") || clientIp.startsWith("0.0.0.0") ||
+                clientIp.startsWith("127.0.0.1") || clientIp.startsWith("::1");
     }
 
     private Optional<AuthenticatedUser> userFromRequest(HttpServletRequest request) {
@@ -86,7 +94,7 @@ public class SecurityFilter implements Filter {
                                        HttpServletResponse response,
                                        int status,
                                        Throwable exception) {
-        log.info("Sending {} status to {}:{} request", status, request.getMethod(), request.getRequestURI());
+        log.warn("Sending {} status to {}: {} request", status, request.getMethod(), request.getRequestURI());
         response.setStatus(status);
         try {
             response.setHeader("content-type", "application/json");
