@@ -4,7 +4,8 @@ import java.util.function.Supplier;
 
 public class InMemoryRemoteEvents implements RemoteEvents {
 
-    private final InMemoryEvents events = new InMemoryEvents();
+    private final InMemoryEvents topicEvents = new InMemoryEvents();
+    private final InMemoryEvents queueEvents = new InMemoryEvents();
     private final Supplier<RemotePublisher> publisher = new Supplier<>() {
 
         private RemotePublisher publisher;
@@ -13,9 +14,15 @@ public class InMemoryRemoteEvents implements RemoteEvents {
         public RemotePublisher get() {
             if (publisher == null) {
                 publisher = new RemotePublisher() {
+
+                    @Override
+                    public <T> void publish(Queue<T> queue, T data) {
+                        queueEvents.publisher().publish(data);
+                    }
+
                     @Override
                     public <T> void publish(Topic<T> topic, T data) {
-                        events.publisher().publish(data);
+                        topicEvents.publisher().publish(data);
                     }
                 };
             }
@@ -25,7 +32,12 @@ public class InMemoryRemoteEvents implements RemoteEvents {
 
     @Override
     public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
-        events.subscribe(topic.dataType(), subscriber);
+        topicEvents.subscribe(topic.dataType(), subscriber);
+    }
+
+    @Override
+    public <T> void subscribe(Queue<T> queue, Subscriber<T> subscriber) {
+        queueEvents.subscribe(queue.dataType(), subscriber);
     }
 
     @Override

@@ -20,6 +20,7 @@
         <module>json</module>
         <module>email</module>
         <module>test-http</module>
+        <module>rabbitmq</module>
     </modules>
 
     <dependencies>

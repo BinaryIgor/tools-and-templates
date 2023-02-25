@@ -42,6 +42,7 @@
         <resilience4j.version>2.0.2</resilience4j.version>
         <java.jwt.version>4.0.0</java.jwt.version>
         <caffeine.version>3.1.2</caffeine.version>
+        <amqp.client.version>5.13.1</amqp.client.version>
     </properties>
 
     <dependencyManagement>
@@ -112,8 +113,20 @@
             </dependency>
 
             <dependency>
+                <groupId>com.rabbitmq</groupId>
+                <artifactId>amqp-client</artifactId>
+                <version>${amqp.client.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>postgresql</artifactId>
+                <version>${testcontainers.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>rabbitmq</artifactId>
                 <version>${testcontainers.version}</version>
                 <scope>test</scope>
             </dependency>
