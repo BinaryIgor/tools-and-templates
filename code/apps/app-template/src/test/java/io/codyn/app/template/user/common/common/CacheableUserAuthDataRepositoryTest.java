@@ -6,30 +6,30 @@ import io.codyn.app.template.auth.api.UserAuthData;
 import io.codyn.app.template.user.common.core.UserStateChangedEvent;
 import io.codyn.app.template.user.common.core.cache.CacheableUserAuthDataRepository;
 import io.codyn.app.template.user.common.test.TestUserAuthDataRepository;
+import io.codyn.test.event.EventsHandlerTest;
 import io.codyn.tools.CacheFactory;
+import io.codyn.types.event.Events;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 import java.util.UUID;
 
-public class CacheableUserAuthDataRepositoryTest {
+public class CacheableUserAuthDataRepositoryTest extends EventsHandlerTest {
 
     private TestUserAuthDataRepository baseRepository;
 
     private CacheableUserAuthDataRepository repository;
     private boolean isCacheEnabled;
 
-    @BeforeEach
-    void setup() {
+    protected void setup(Events events) {
         baseRepository = new TestUserAuthDataRepository();
 
         isCacheEnabled = true;
 
         repository = new CacheableUserAuthDataRepository(baseRepository,
                 CacheFactory.newCache(99),
-                () -> isCacheEnabled);
+                () -> isCacheEnabled, events.local());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class CacheableUserAuthDataRepositoryTest {
         var changedUser1AuthData = new UserAuthData(user1Id, UserState.CREATED, Set.of());
         baseRepository.addUserData(changedUser1AuthData);
 
-        repository.handle(new UserStateChangedEvent(user1Id, UserState.ACTIVATED));
+        localPublisher.publish(new UserStateChangedEvent(user1Id, UserState.ACTIVATED));
 
         assertHasUserAuthDataInCache(changedUser1AuthData);
         assertHasUserAuthDataInCache(user2AuthData);

@@ -9,9 +9,8 @@ import java.util.function.Supplier;
 
 public class InMemoryEvents implements LocalEvents {
 
-
     private static final Logger log = LoggerFactory.getLogger(InMemoryEvents.class);
-    private final Map<Class<?>, Collection<Subscriber<Object>>> topicsSubscribers = new HashMap<>();
+    private final Map<Class<?>, Collection<Subscriber<Object>>> eventsSubscribers = new HashMap<>();
     private final Supplier<LocalPublisher> publisher = new Supplier<>() {
 
         private LocalPublisher publisher;
@@ -32,7 +31,7 @@ public class InMemoryEvents implements LocalEvents {
             public <T> void publish(T event) {
                 var exceptions = new ArrayList<RuntimeException>();
 
-                topicsSubscribers.getOrDefault(event.getClass(), List.of())
+                eventsSubscribers.getOrDefault(event.getClass(), List.of())
                         .forEach(s -> handleSubscriber(s, event, exceptions));
 
                 throwExceptionIf(exceptions, event);
@@ -72,7 +71,7 @@ public class InMemoryEvents implements LocalEvents {
     @Override
     @SuppressWarnings("unchecked")
     public <T> void subscribe(Class<T> event, Subscriber<T> subscriber) {
-        topicsSubscribers.computeIfAbsent(event, k -> new ArrayList<>())
+        eventsSubscribers.computeIfAbsent(event, k -> new ArrayList<>())
                 .add((Subscriber<Object>) subscriber);
     }
 

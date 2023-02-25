@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.codyn.app.template._common.app.EmailModuleProvider;
 import io.codyn.app.template._common.app.LoggingRequestsInterceptor;
 import io.codyn.app.template._common.app.PropertiesConverter;
-import io.codyn.app.template._common.app.SpringEventPublisher;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.server.EmailServer;
 import io.codyn.email.server.PostmarkEmailServer;
@@ -13,12 +12,13 @@ import io.codyn.json.JsonMapper;
 import io.codyn.sqldb.core.DSLContextFactory;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.sqldb.core.SqlTransactions;
-import io.codyn.types.EventPublisher;
 import io.codyn.types.Transactions;
+import io.codyn.types.event.InMemoryEvents;
+import io.codyn.types.event.LocalEvents;
+import io.codyn.types.event.LocalPublisher;
 import org.jooq.DSLContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -41,9 +41,15 @@ public class AppConfig implements WebMvcConfigurer {
         return JsonMapper.MAPPER;
     }
 
+
     @Bean
-    public EventPublisher eventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        return new SpringEventPublisher(applicationEventPublisher);
+    public LocalEvents localEvents() {
+        return new InMemoryEvents();
+    }
+
+    @Bean
+    public LocalPublisher localPublisher(LocalEvents events) {
+        return events.publisher();
     }
 
     @Bean

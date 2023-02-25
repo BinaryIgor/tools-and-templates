@@ -1,4 +1,4 @@
-package io.codyn.test;
+package io.codyn.test.event;
 
 import io.codyn.types.event.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,11 +10,10 @@ public abstract class EventsHandlerTest {
     protected final RemoteEvents remoteEvents = new InMemoryRemoteEvents();
     protected final RemotePublisher remotePublisher = remoteEvents.publisher();
 
-    protected abstract EventsHandler newHandler(Events events);
+    protected abstract void setup(Events events);
 
     @BeforeEach
     void setup() {
-        var handler = newHandler(new Events(localEvents, remoteEvents));
-        handler.subscribe();
+        setup(new Events(localEvents, remoteEvents));
     }
 }

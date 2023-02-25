@@ -14,7 +14,7 @@ public class InMemoryRemoteEvents implements RemoteEvents {
             if (publisher == null) {
                 publisher = new RemotePublisher() {
                     @Override
-                    public <T> void publish(RemoteTopic<T> topic, T data) {
+                    public <T> void publish(Topic<T> topic, T data) {
                         events.publisher().publish(data);
                     }
                 };
@@ -24,7 +24,7 @@ public class InMemoryRemoteEvents implements RemoteEvents {
     };
 
     @Override
-    public <T> void subscribe(RemoteTopic<T> topic, Subscriber<T> subscriber) {
+    public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
         events.subscribe(topic.dataType(), subscriber);
     }
 

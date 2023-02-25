@@ -1,5 +1,5 @@
 package io.codyn.types.event;
 
 public interface RemotePublisher {
-    <T> void publish(RemoteTopic<T> topic, T data);
+    <T> void publish(Topic<T> topic, T data);
 }

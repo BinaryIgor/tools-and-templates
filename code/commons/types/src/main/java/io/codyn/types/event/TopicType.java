@@ -1,6 +1,6 @@
 package io.codyn.types.event;
 
-public enum RemoteTopicType {
+public enum TopicType {
     PUB_SUB, QUEUE;
 
     public boolean isPubSub() {

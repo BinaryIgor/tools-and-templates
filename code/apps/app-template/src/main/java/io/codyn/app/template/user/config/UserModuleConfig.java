@@ -10,6 +10,7 @@ import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.server.EmailServer;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.tools.CacheFactory;
+import io.codyn.types.event.LocalEvents;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -37,11 +38,13 @@ public class UserModuleConfig {
     @Bean
     public CacheableUserAuthDataRepository userAuthDataRepository(DSLContextProvider contextProvider,
                                                                   @Value("${app.cache.user-auth.time-to-live}") long timeToLive,
-                                                                  @Value("${app.cache.user-auth.max-entries}") int maxEntries) {
+                                                                  @Value("${app.cache.user-auth.max-entries}") int maxEntries,
+                                                                  LocalEvents localEvents) {
         var baseRepository = new SqlUserAuthDataRepository(contextProvider);
 
         return new CacheableUserAuthDataRepository(baseRepository,
                 CacheFactory.newCache(maxEntries, timeToLive),
-                new AfterDelayCacheEnabler());
+                new AfterDelayCacheEnabler(),
+                localEvents);
     }
 }

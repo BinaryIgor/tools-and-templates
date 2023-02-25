@@ -1,17 +1,19 @@
 package io.codyn.app.template.user.auth.core.usecase;
 
 import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template._common.test.TestEventHandler;
-import io.codyn.app.template.user.common.core.UserStateChangedEvent;
 import io.codyn.app.template.user.auth.test.TestUserUpdateRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenConsumer;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
+import io.codyn.app.template.user.common.core.UserStateChangedEvent;
 import io.codyn.app.template.user.common.core.exception.InvalidActivationTokenException;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.test.TestActivationTokenRepository;
 import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.test.TestTransactions;
+import io.codyn.test.event.TestLocalEvents;
 import io.codyn.types.Pair;
+import io.codyn.types.event.InMemoryEvents;
+import io.codyn.types.event.LocalEvents;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,18 +31,18 @@ public class ActivateUserUseCaseTest {
     private TestUserUpdateRepository userUpdateRepository;
     private TestTransactions transactions;
     private ActivationTokenFactory activationTokenFactory;
-    private TestEventHandler<UserStateChangedEvent> eventHandler;
+    private LocalEvents events;
 
     @BeforeEach
     void setup() {
         activationTokenRepository = new TestActivationTokenRepository();
         userUpdateRepository = new TestUserUpdateRepository();
         transactions = new TestTransactions();
-        eventHandler = new TestEventHandler<>();
+        events = new InMemoryEvents();
 
         useCase = new ActivateUserUseCase(
                 new ActivationTokenConsumer(activationTokenRepository, transactions),
-                userUpdateRepository, eventHandler);
+                userUpdateRepository, events.publisher());
 
         activationTokenFactory = new ActivationTokenFactory(Clock.systemUTC());
     }
@@ -60,11 +62,13 @@ public class ActivateUserUseCaseTest {
         activationTokenRepository.save(activationToken);
         var activationTokenId = ActivationTokenId.ofNewUser(userId);
 
+        var eventsCaptor = TestLocalEvents.subscribe(events, UserStateChangedEvent.class);
+
         transactions.test()
                 .before(() -> {
                     Assertions.assertThat(activationTokenRepository.ofId(activationTokenId)).isPresent();
                     Assertions.assertThat(userUpdateRepository.updatedState).isNull();
-                    Assertions.assertThat(eventHandler.handledEvent).isNull();
+                    Assertions.assertThat(eventsCaptor.last()).isNull();
                 })
                 .after(() -> {
                     Assertions.assertThat(activationTokenRepository.ofId(activationTokenId)).isEmpty();
@@ -72,7 +76,7 @@ public class ActivateUserUseCaseTest {
                     Assertions.assertThat(userUpdateRepository.updatedState)
                             .isEqualTo(new Pair<>(userId, UserState.ACTIVATED));
 
-                    Assertions.assertThat(eventHandler.handledEvent)
+                    Assertions.assertThat(eventsCaptor.last())
                             .isEqualTo(new UserStateChangedEvent(userId, UserState.ACTIVATED));
                 })
                 .execute(() -> useCase.handle(activationToken.token()));
