@@ -21,6 +21,7 @@
         <module>email</module>
         <module>test-http</module>
         <module>rabbitmq</module>
+        <module>outbox</module>
     </modules>
 
     <dependencies>
