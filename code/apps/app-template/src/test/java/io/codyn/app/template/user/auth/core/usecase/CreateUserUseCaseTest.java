@@ -159,7 +159,7 @@ public class CreateUserUseCaseTest {
         var expectedActivationToken = new ActivationToken(newUserId, ActivationTokenType.NEW_USER, token,
                 clock.instant().plus(Duration.ofMinutes(15)));
 
-        userEmailSender.sendAccountActivation(new EmailUser(command.name(), command.email()), token);
+        userEmailSender.sendAccountActivation(new EmailUser(newUserId, command.name(), command.email()), token);
         var expectedEmail = emailServer.sentEmail;
         emailServer.clear();
 

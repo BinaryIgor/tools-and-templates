@@ -66,7 +66,8 @@ public class UserEmailSender {
                 EmailAddress.ofNameEmail(user.name(), user.email()),
                 user.language().name(),
                 type,
-                variables);
+                variables,
+                Emails.metadata(user.id(), type));
 
         var email = factory.newEmail(emailTemplate);
 

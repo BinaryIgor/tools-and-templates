@@ -32,7 +32,7 @@ public class ResetUserPasswordUseCase {
 
         var resetToken = activationTokens.savePasswordReset(user.id());
 
-        emailSender.sendPasswordReset(new EmailUser(user.name(), user.email()), resetToken.token());
+        emailSender.sendPasswordReset(new EmailUser(user.id(), user.name(), user.email()), resetToken.token());
     }
 
 }

@@ -2,11 +2,14 @@ package io.codyn.app.template.user.common.core.model;
 
 import io.codyn.app.template._common.core.model.ApplicationLanguage;
 
-public record EmailUser(String name,
+import java.util.UUID;
+
+public record EmailUser(UUID id,
+                        String name,
                         String email,
                         ApplicationLanguage language) {
 
-    public EmailUser(String name, String email) {
-        this(name, email, ApplicationLanguage.EN);
+    public EmailUser(UUID id, String name, String email) {
+        this(id, name, email, ApplicationLanguage.EN);
     }
 }

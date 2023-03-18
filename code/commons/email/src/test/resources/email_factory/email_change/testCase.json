@@ -13,7 +13,8 @@
     "variables": {
       "user": "User1",
       "url": "https://url123.com/235adax"
-    }
+    },
+    "emailMetadata": {}
   },
   "output": {
     "from": {
@@ -26,6 +27,7 @@
     },
     "subject": "User1: Zmiana maila idzie",
     "htmlMessage": null,
-    "textMessage": null
+    "textMessage": null,
+    "metadata": {}
   }
 }

@@ -35,7 +35,7 @@ public class ResendUserAccountActivationTokenUseCase {
         var activationToken = activationTokenRepository.ofId(activationTokenId)
                 .orElseThrow(() -> UserExceptions.activationTokenNotFound(activationTokenId));
 
-        emailSender.sendAccountActivation(new EmailUser(user.name(), email),
+        emailSender.sendAccountActivation(new EmailUser(user.id(), user.name(), email),
                 activationToken.token());
     }
 }

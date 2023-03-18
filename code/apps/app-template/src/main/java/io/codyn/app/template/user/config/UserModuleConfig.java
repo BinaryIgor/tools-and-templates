@@ -8,6 +8,7 @@ import io.codyn.app.template.user.common.core.cache.CacheableUserAuthDataReposit
 import io.codyn.app.template.user.common.infra.SqlUserAuthDataRepository;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.server.EmailServer;
+import io.codyn.email.server.PostmarkEmailStatusHandler;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.tools.CacheFactory;
 import io.codyn.types.event.LocalEvents;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Map;
 
 @Configuration
 @EnableConfigurationProperties(UserEmailConfig.class)
@@ -46,5 +49,21 @@ public class UserModuleConfig {
                 CacheFactory.newCache(maxEntries, timeToLive),
                 new AfterDelayCacheEnabler(),
                 localEvents);
+    }
+
+    @Bean
+    //TODO: impl actions!
+    public PostmarkEmailStatusHandler postmarkEmailStatusHandler() {
+        return new PostmarkEmailStatusHandler(new PostmarkEmailStatusHandler.Actions() {
+            @Override
+            public void onBounce(Map<String, String> emailMetadata) {
+
+            }
+
+            @Override
+            public void onDelivery(Map<String, String> emailMetadata) {
+
+            }
+        });
     }
 }

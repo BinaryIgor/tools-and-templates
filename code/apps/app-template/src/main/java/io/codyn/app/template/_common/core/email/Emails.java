@@ -4,6 +4,7 @@ package io.codyn.app.template._common.core.email;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static io.codyn.app.template._common.core.email.Emails.Types.*;
 import static io.codyn.app.template._common.core.email.Emails.Variables.*;
@@ -24,6 +25,11 @@ public class Emails {
             return false;
         }
         return true;
+    }
+
+    public static Map<String, String> metadata(UUID userId, String emailType) {
+        return Map.of("userId", userId.toString(),
+                "emailType", emailType);
     }
 
     public static class Types {

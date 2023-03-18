@@ -36,7 +36,6 @@ public class CreateUserUseCase {
     }
 
     //TODO: remove expired users!
-    //TODO: allow to resend email!
     public void handle(CreateUserCommand command) {
         validateCommand(command);
 
@@ -49,10 +48,11 @@ public class CreateUserUseCase {
 
         var activationToken = transactions.executeAndReturn(() -> {
             userRepository.create(toCreateUser);
-            return activationTokens.saveNewUser(toCreateUser.id());
+            return activationTokens.saveNewUser(toCreateUser.id()).token();
         });
 
-        sendAccountActivationEmail(toCreateUser.name(), toCreateUser.email(), activationToken.token());
+        var emailUser = new EmailUser(toCreateUser.id(), toCreateUser.name(), toCreateUser.email());
+        emailSender.sendAccountActivation(emailUser, activationToken);
     }
 
     private void validateCommand(CreateUserCommand command) {
@@ -69,7 +69,4 @@ public class CreateUserUseCase {
         FieldValidator.validatePassword(command.password());
     }
 
-    private void sendAccountActivationEmail(String name, String email, String activationToken) {
-        emailSender.sendAccountActivation(new EmailUser(name, email), activationToken);
-    }
 }

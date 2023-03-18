@@ -44,7 +44,8 @@ public class TemplatesEmailFactoryTest {
                 EmailAddress.ofEmptyName("admin@admin.io"),
                 TestRandom.oneOf(REQUIRED_LANGUAGES),
                 template,
-                Map.of());
+                Map.of(),
+                Map.of("meta", "112"));
 
         Assertions.assertThatThrownBy(() -> factory.newEmail(newEmailTemplate))
                 .hasMessageContaining("non-existing-template template doesn't exist");
@@ -58,7 +59,7 @@ public class TemplatesEmailFactoryTest {
         var txtEmail = TestDataLoader.classpathResourceContent(prefix + "email.txt");
 
         var email = new Email(testCase.output.from(), testCase.output.to(), testCase.output.subject(),
-                htmlEmail, txtEmail);
+                htmlEmail, txtEmail, testCase.input.emailMetadata());
 
         return new NewEmailTestCase(testCase.input, email);
     }

@@ -34,7 +34,7 @@ public class ChangeUserEmailUseCase {
 
         var activationToken = activationTokens.saveNewEmail(command.id(), command.email());
 
-        var newEmailUser = new EmailUser(user.name(), command.email());
+        var newEmailUser = new EmailUser(user.id(), user.name(), command.email());
         var currentEmail = user.email();
 
         emailSender.sendEmailChange(newEmailUser, currentEmail, activationToken.token());

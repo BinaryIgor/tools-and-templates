@@ -16,6 +16,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class PostmarkEmailServer implements EmailServer {
 
@@ -120,6 +121,7 @@ public class PostmarkEmailServer implements EmailServer {
                          String subject,
                          String htmlBody,
                          String textBody,
+                         Map<String, String> metadata,
                          String messageStream) {
 
         public static PostmarkEmail fromEmail(Email email, String messageStream) {
@@ -128,6 +130,7 @@ public class PostmarkEmailServer implements EmailServer {
                     email.subject(),
                     email.htmlMessage(),
                     email.textMessage(),
+                    email.metadata(),
                     messageStream);
         }
 
