@@ -8,14 +8,15 @@ import io.codyn.app.template._common.test.TestPasswordHasher;
 import io.codyn.app.template.user.auth.core.model.CreateUserCommand;
 import io.codyn.app.template.user.auth.test.TestUserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenData;
-import io.codyn.app.template.user.common.core.ActivationTokenFactory;
 import io.codyn.app.template.user.common.core.ActivationTokens;
 import io.codyn.app.template.user.common.core.UserEmailSender;
-import io.codyn.app.template.user.common.core.model.*;
+import io.codyn.app.template.user.common.core.model.ActivationToken;
+import io.codyn.app.template.user.common.core.model.ActivationTokenId;
+import io.codyn.app.template.user.common.core.model.EmailUser;
+import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.test.*;
 import io.codyn.email.model.Email;
 import io.codyn.test.TestClock;
-import io.codyn.test.TestRandom;
 import io.codyn.test.TestTransactions;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.time.Duration;
 import java.util.stream.Stream;
 
 public class CreateUserUseCaseTest {
@@ -36,7 +36,6 @@ public class CreateUserUseCaseTest {
     private UserEmailSender userEmailSender;
     private TestActivationTokenRepository activationTokenRepository;
     private TestTokenFactory tokenFactory;
-    private TestClock clock;
     private TestTransactions transactions;
 
     @BeforeEach
@@ -50,11 +49,10 @@ public class CreateUserUseCaseTest {
 
         activationTokenRepository = new TestActivationTokenRepository();
 
-        tokenFactory = new TestTokenFactory();
-        clock = new TestClock();
+        tokenFactory = new TestTokenFactory(new TestClock());
 
         var activationTokens = new ActivationTokens(activationTokenRepository,
-                new ActivationTokenFactory(tokenFactory, clock));
+                tokenFactory.activationTokenFactory());
 
         transactions = new TestTransactions();
 
@@ -155,9 +153,8 @@ public class CreateUserUseCaseTest {
 
         var expectedTokenId = ActivationTokenId.ofNewUser(newUserId);
 
-        var token = tokenFactory.addNextToken(ActivationTokenData.withUserId(newUserId), TestRandom.string());
-        var expectedActivationToken = new ActivationToken(newUserId, ActivationTokenType.NEW_USER, token,
-                clock.instant().plus(Duration.ofMinutes(15)));
+        var token = tokenFactory.addNextToken(ActivationTokenData.withUserId(newUserId));
+        var expectedActivationToken = tokenFactory.activationTokenFactory().newUser(newUserId);
 
         userEmailSender.sendAccountActivation(new EmailUser(newUserId, command.name(), command.email()), token);
         var expectedEmail = emailServer.sentEmail;

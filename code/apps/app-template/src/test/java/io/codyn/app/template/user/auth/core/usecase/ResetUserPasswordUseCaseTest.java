@@ -39,8 +39,8 @@ public class ResetUserPasswordUseCaseTest {
 
         activationTokenRepository = new TestActivationTokenRepository();
 
-        tokenFactory = new TestTokenFactory();
-        activationTokenFactory = new ActivationTokenFactory(tokenFactory, new TestClock());
+        tokenFactory = new TestTokenFactory(new TestClock());
+        activationTokenFactory = tokenFactory.activationTokenFactory();
 
         useCase = new ResetUserPasswordUseCase(userRepository,
                 new ActivationTokens(activationTokenRepository, activationTokenFactory),

@@ -4,7 +4,6 @@ import java.util.UUID;
 
 public record ActivationTokenId(UUID userId, ActivationTokenType tokenType) {
 
-
     public static ActivationTokenId ofEmailChange(UUID userId) {
         return new ActivationTokenId(userId, ActivationTokenType.EMAIL_CHANGE);
     }

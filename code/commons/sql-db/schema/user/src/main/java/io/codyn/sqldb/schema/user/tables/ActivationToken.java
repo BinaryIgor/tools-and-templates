@@ -19,7 +19,7 @@ import org.jooq.ForeignKey;
 import org.jooq.Index;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row5;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -60,6 +60,11 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
      * The column <code>user.activation_token.token</code>.
      */
     public final TableField<ActivationTokenRecord, String> TOKEN = createField(DSL.name("token"), SQLDataType.CLOB.nullable(false), this, "");
+
+    /**
+     * The column <code>user.activation_token.status</code>.
+     */
+    public final TableField<ActivationTokenRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.CLOB.nullable(false).defaultValue(DSL.field("'SENDING'::text", SQLDataType.CLOB)), this, "");
 
     /**
      * The column <code>user.activation_token.expires_at</code>.
@@ -165,11 +170,11 @@ public class ActivationToken extends TableImpl<ActivationTokenRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row5 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<UUID, String, Instant, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row5<UUID, String, String, Instant, String> fieldsRow() {
+        return (Row5) super.fieldsRow();
     }
 }

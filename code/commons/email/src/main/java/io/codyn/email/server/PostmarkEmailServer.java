@@ -4,6 +4,7 @@ import io.codyn.email.model.Email;
 import io.codyn.email.model.EmailAddress;
 import io.codyn.json.JsonMapper;
 import io.codyn.tools.CollectionTools;
+import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import org.slf4j.Logger;
@@ -52,8 +53,8 @@ public class PostmarkEmailServer implements EmailServer {
                 batchSize,
                 messageStream,
                 Retry.of("postmark-request", RetryConfig.custom()
-                        .maxAttempts(3)
-                        .waitDuration(Duration.ofSeconds(1))
+                        .maxAttempts(5)
+                        .intervalFunction(IntervalFunction.ofExponentialBackoff(Duration.ofMillis(500), 2))
                         .build()));
     }
 

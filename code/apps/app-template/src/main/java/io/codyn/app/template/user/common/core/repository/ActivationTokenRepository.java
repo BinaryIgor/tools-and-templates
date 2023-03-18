@@ -1,10 +1,11 @@
-package io.codyn.app.template.user.common.core;
+package io.codyn.app.template.user.common.core.repository;
 
 
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 
 import java.util.Optional;
+//TODO: update status
 
 public interface ActivationTokenRepository {
 

@@ -8,7 +8,7 @@ import io.codyn.app.template.user.auth.app.model.ActivationToken;
 import io.codyn.app.template.user.auth.app.model.CreateUserRequest;
 import io.codyn.app.template.user.auth.app.model.RefreshToken;
 import io.codyn.app.template.user.auth.core.model.*;
-import io.codyn.app.template.user.common.core.ActivationTokenRepository;
+import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.test.http.TestHttpClient;

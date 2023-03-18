@@ -4,6 +4,7 @@ import io.codyn.app.template.EmailConfig;
 import io.codyn.app.template._common.core.AfterDelayCacheEnabler;
 import io.codyn.app.template.user.auth.app.UserEmailConfig;
 import io.codyn.app.template.user.common.core.UserEmailSender;
+import io.codyn.app.template.user.common.core.UserEmailStatusHandler;
 import io.codyn.app.template.user.common.core.cache.CacheableUserAuthDataRepository;
 import io.codyn.app.template.user.common.infra.SqlUserAuthDataRepository;
 import io.codyn.email.factory.EmailFactory;
@@ -52,17 +53,16 @@ public class UserModuleConfig {
     }
 
     @Bean
-    //TODO: impl actions!
-    public PostmarkEmailStatusHandler postmarkEmailStatusHandler() {
+    public PostmarkEmailStatusHandler postmarkEmailStatusHandler(UserEmailStatusHandler emailStatusHandler) {
         return new PostmarkEmailStatusHandler(new PostmarkEmailStatusHandler.Actions() {
             @Override
             public void onBounce(Map<String, String> emailMetadata) {
-
+                emailStatusHandler.handleBounce(emailMetadata);
             }
 
             @Override
             public void onDelivery(Map<String, String> emailMetadata) {
-
+                emailStatusHandler.handleDelivery(emailMetadata);
             }
         });
     }

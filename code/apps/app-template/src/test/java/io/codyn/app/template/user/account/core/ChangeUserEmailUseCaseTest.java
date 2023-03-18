@@ -10,9 +10,7 @@ import io.codyn.app.template.user.auth.test.TestUserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenData;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
 import io.codyn.app.template.user.common.core.ActivationTokens;
-import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.test.TestActivationTokenRepository;
 import io.codyn.app.template.user.common.test.TestTokenFactory;
 import io.codyn.app.template.user.common.test.TestUserEmailsProvider;
@@ -26,7 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,13 +37,14 @@ public class ChangeUserEmailUseCaseTest {
     private TestClock clock;
 
 
+    //TODO: refactor
     @BeforeEach
     void setup() {
         userRepository = new TestUserRepository();
         emailServer = new TestEmailServer();
         activationTokenRepository = new TestActivationTokenRepository();
-        tokenFactory = new TestTokenFactory();
         clock = new TestClock();
+        tokenFactory = new TestTokenFactory(clock);
 
         var activationTokens = new ActivationTokens(activationTokenRepository,
                 new ActivationTokenFactory(tokenFactory, clock));
@@ -80,10 +78,10 @@ public class ChangeUserEmailUseCaseTest {
         var command = new ChangeUserEmailCommand(userId, "new-email@gmail.com");
 
         var tokenId = ActivationTokenId.ofEmailChange(userId);
-        var token = tokenFactory.addNextToken(ActivationTokenData.withUserIdAndNewEmail(userId, command.email()),
-                TestRandom.string());
-        var expectedActivationToken = new ActivationToken(userId, ActivationTokenType.EMAIL_CHANGE, token,
-                clock.instant().plus(Duration.ofHours(1)));
+
+        tokenFactory.addNextToken(ActivationTokenData.withUserIdAndNewEmail(userId, command.email()));
+        var expectedActivationToken = tokenFactory.activationTokenFactory()
+                .newEmail(userId, command.email());
 
         useCase.handle(command);
 

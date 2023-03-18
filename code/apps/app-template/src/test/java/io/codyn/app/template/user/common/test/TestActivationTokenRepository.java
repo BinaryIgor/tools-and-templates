@@ -1,6 +1,6 @@
 package io.codyn.app.template.user.common.test;
 
-import io.codyn.app.template.user.common.core.ActivationTokenRepository;
+import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 

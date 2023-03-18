@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
                 @ApiResponse(responseCode = "409", description = "Given resource exist or there was an optimist lock exception")
         }
 )
+//TODO: Lacking exceptions, like EmailException, mapping!
 public class ExceptionsHandler {
 
 

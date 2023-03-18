@@ -16,8 +16,9 @@ CREATE TABLE role (
 );
 
 CREATE TABLE activation_token (
-    user_id UUID REFERENCES "user"(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
     token TEXT NOT NULL UNIQUE,
+    status TEXT NOT NULL DEFAULT 'SENDING',
     expires_at TIMESTAMP NOT NULL,
     type TEXT NOT NULL,
     PRIMARY KEY(user_id, type)

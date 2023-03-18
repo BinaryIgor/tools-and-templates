@@ -10,7 +10,7 @@ import io.codyn.email.server.EmailServer;
 
 import java.util.Map;
 
-//TODO: test, config, tag emails!
+//TODO: test, config, refactor
 public class UserEmailSender {
 
     private final EmailFactory factory;
@@ -29,7 +29,7 @@ public class UserEmailSender {
                 fullTokenUrl(config.userActivationUrl(), activationToken, ActivationTokenType.NEW_USER),
                 Emails.Variables.SIGN_UP_URL, fullUrl(config.signUpUrl()));
 
-        sendEmail(user, Emails.Types.USER_ACTIVATION, variables);
+        sendEmail(user, Emails.Types.USER_ACTIVATION, variables, ActivationTokenType.NEW_USER);
     }
 
     public void sendPasswordReset(EmailUser user, String resetToken) {
@@ -38,7 +38,7 @@ public class UserEmailSender {
                 fullTokenUrl(config.passwordResetUrl(), resetToken, ActivationTokenType.PASSWORD_RESET),
                 Emails.Variables.NEW_PASSWORD_URL, fullUrl(config.newPasswordUrl()));
 
-        sendEmail(user, Emails.Types.PASSWORD_RESET, variables);
+        sendEmail(user, Emails.Types.PASSWORD_RESET, variables, ActivationTokenType.PASSWORD_RESET);
     }
 
     public void sendEmailChange(EmailUser user, String oldEmail, String confirmationToken) {
@@ -47,7 +47,7 @@ public class UserEmailSender {
                 Emails.Variables.EMAIL_CHANGE_CONFIRMATION_URL,
                 fullTokenUrl(config.emailChangeConfirmationUrl(), confirmationToken, ActivationTokenType.EMAIL_CHANGE));
 
-        sendEmail(user, Emails.Types.EMAIL_CHANGE, variables);
+        sendEmail(user, Emails.Types.EMAIL_CHANGE, variables, ActivationTokenType.EMAIL_CHANGE);
     }
 
     private String fullTokenUrl(String endpoint, String token, ActivationTokenType type) {
@@ -61,13 +61,14 @@ public class UserEmailSender {
     }
 
 
-    private void sendEmail(EmailUser user, String type, Map<String, String> variables) {
+    private void sendEmail(EmailUser user, String type, Map<String, String> variables,
+                           ActivationTokenType activationTokenType) {
         var emailTemplate = new NewEmailTemplate(config.fromEmail(),
                 EmailAddress.ofNameEmail(user.name(), user.email()),
                 user.language().name(),
                 type,
                 variables,
-                Emails.metadata(user.id(), type));
+                Emails.Metadata.ofActivationToken(user.id(), type, activationTokenType));
 
         var email = factory.newEmail(emailTemplate);
 

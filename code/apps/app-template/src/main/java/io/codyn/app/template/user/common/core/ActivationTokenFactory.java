@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Component
+//TODO: test independently
 public class ActivationTokenFactory {
 
     private final TokenFactory tokenFactory;
@@ -31,7 +32,7 @@ public class ActivationTokenFactory {
     public ActivationToken newUser(UUID userId) {
         var token = tokenFactory.newToken(ActivationTokenData.withUserId(userId));
 
-        return new ActivationToken(userId, ActivationTokenType.NEW_USER, token,
+        return ActivationToken.ofInitialStatus(userId, ActivationTokenType.NEW_USER, token,
                 tokenExpiresAt(Duration.ofMinutes(15)));
     }
 
@@ -42,14 +43,14 @@ public class ActivationTokenFactory {
     public ActivationToken newEmail(UUID userId, String newEmail) {
         var token = tokenFactory.newToken(ActivationTokenData.withUserIdAndNewEmail(userId, newEmail));
 
-        return new ActivationToken(userId, ActivationTokenType.EMAIL_CHANGE, token,
+        return ActivationToken.ofInitialStatus(userId, ActivationTokenType.EMAIL_CHANGE, token,
                 tokenExpiresAt(Duration.ofHours(1)));
     }
 
     public ActivationToken passwordReset(UUID userId) {
         var token = tokenFactory.newToken(ActivationTokenData.withUserId(userId));
 
-        return new ActivationToken(userId, ActivationTokenType.PASSWORD_RESET, token,
+        return ActivationToken.ofInitialStatus(userId, ActivationTokenType.PASSWORD_RESET, token,
                 tokenExpiresAt(Duration.ofHours(1)));
     }
 

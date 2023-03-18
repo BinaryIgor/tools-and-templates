@@ -4,12 +4,20 @@ import io.codyn.app.template.user.common.core.ActivationTokenData;
 import io.codyn.app.template.user.common.core.ActivationTokenFactory;
 import io.codyn.test.TestRandom;
 
+import java.time.Clock;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TestTokenFactory implements ActivationTokenFactory.TokenFactory {
 
     private final Map<ActivationTokenData, String> nextTokens = new HashMap<>();
+    private final ActivationTokenFactory activationTokenFactory;
+
+
+    public TestTokenFactory(Clock clock) {
+        activationTokenFactory = new ActivationTokenFactory(this, clock);
+    }
+
 
     @Override
     public String newToken(ActivationTokenData data) {
@@ -24,5 +32,9 @@ public class TestTokenFactory implements ActivationTokenFactory.TokenFactory {
 
     public String addNextToken(ActivationTokenData data) {
         return addNextToken(data, TestRandom.string());
+    }
+
+    public ActivationTokenFactory activationTokenFactory() {
+        return activationTokenFactory;
     }
 }

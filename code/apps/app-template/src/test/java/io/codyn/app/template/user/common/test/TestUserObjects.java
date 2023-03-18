@@ -4,6 +4,7 @@ import io.codyn.app.template._common.core.model.UserState;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.user.auth.core.model.CreateUserCommand;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
+import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
 import io.codyn.app.template.user.common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.test.TestRandom;
@@ -52,11 +53,17 @@ public class TestUserObjects {
     }
 
     public static ActivationToken activationToken(UUID userId) {
-        return activationToken(userId, TestRandom.oneOf(ActivationTokenType.values()));
+        return activationToken(userId, TestRandom.oneOf(ActivationTokenType.values()),
+                TestRandom.oneOf(ActivationTokenStatus.values()));
     }
 
     public static ActivationToken activationToken(UUID userId, ActivationTokenType type) {
-        return new ActivationToken(userId, type, TestRandom.string(), TestRandom.instant());
+        return activationToken(userId, type, TestRandom.oneOf(ActivationTokenStatus.values()));
+    }
+
+    public static ActivationToken activationToken(UUID userId, ActivationTokenType type,
+                                                  ActivationTokenStatus status) {
+        return new ActivationToken(userId, type, status, TestRandom.string(), TestRandom.instant());
     }
 
     public static List<String> invalidEmails() {

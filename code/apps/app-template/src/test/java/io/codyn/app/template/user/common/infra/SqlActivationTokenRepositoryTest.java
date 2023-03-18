@@ -3,6 +3,7 @@ package io.codyn.app.template.user.common.infra;
 import io.codyn.app.template.user.auth.infra.SqlUserRepository;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
+import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
 import io.codyn.app.template.user.common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.sqldb.test.DbIntegrationTest;
@@ -26,8 +27,10 @@ public class SqlActivationTokenRepositoryTest extends DbIntegrationTest {
         var user1Id = userRepository.create(TestUserObjects.user1());
         var user2Id = userRepository.create(TestUserObjects.user2());
 
-        var activationToken1 = TestUserObjects.activationToken(user1Id, ActivationTokenType.NEW_USER);
-        var activationToken2 = TestUserObjects.activationToken(user1Id, ActivationTokenType.EMAIL_CHANGE);
+        var activationToken1 = TestUserObjects.activationToken(user1Id, ActivationTokenType.NEW_USER,
+                ActivationTokenStatus.SENDING);
+        var activationToken2 = TestUserObjects.activationToken(user1Id, ActivationTokenType.EMAIL_CHANGE,
+                ActivationTokenStatus.DELIVERED);
         var activationToken3 = TestUserObjects.activationToken(user2Id);
 
         repository.save(activationToken1);
@@ -37,7 +40,7 @@ public class SqlActivationTokenRepositoryTest extends DbIntegrationTest {
         assertActivationTokenEquals(activationToken1);
 
         var updatedActivationToken1 = new ActivationToken(activationToken1.userId(), activationToken1.type(),
-                TestRandom.string(), TestRandom.instant());
+                ActivationTokenStatus.DELIVERY_FAILURE, TestRandom.string(), TestRandom.instant());
 
         repository.save(updatedActivationToken1);
 

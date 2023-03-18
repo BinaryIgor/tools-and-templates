@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.auth.core.usecase;
 
 import io.codyn.app.template._common.core.validator.FieldValidator;
-import io.codyn.app.template.user.common.core.ActivationTokenRepository;
+import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
 import io.codyn.app.template.user.common.core.UserEmailSender;
 import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;

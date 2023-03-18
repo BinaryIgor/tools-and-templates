@@ -28,4 +28,18 @@ public class TestEmailServer implements EmailServer {
         sentEmail = null;
         sentEmailBatch = null;
     }
+
+    public Email sendAndCaptureExpectedEmail(Runnable send) {
+        send.run();
+        var last = sentEmail;
+        clear();
+        return last;
+    }
+
+    public Collection<Email> sendAndCaptureExpectedEmailBatch(Runnable send) {
+        send.run();
+        var last = sentEmailBatch;
+        clear();
+        return last;
+    }
 }

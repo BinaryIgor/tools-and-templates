@@ -1,9 +1,12 @@
 package io.codyn.app.template._common.core.email;
 
 
+import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static io.codyn.app.template._common.core.email.Emails.Types.*;
@@ -27,11 +30,6 @@ public class Emails {
         return true;
     }
 
-    public static Map<String, String> metadata(UUID userId, String emailType) {
-        return Map.of("userId", userId.toString(),
-                "emailType", emailType);
-    }
-
     public static class Types {
         public static final String USER_ACTIVATION = "user_activation";
         public static final String PASSWORD_RESET = "password_reset";
@@ -48,5 +46,30 @@ public class Emails {
         public static final String NEW_PASSWORD_URL = "newPasswordUrl";
         public static final String PASSWORD_RESET_URL = "passwordResetUrl";
         public static final String CODE = "code";
+    }
+
+    public static class Metadata {
+        public static final String USER_ID = "userId";
+        public static final String EMAIL_TYPE = "emailType";
+        public static final String ACTIVATION_TOKEN_TYPE = "activationTokenType";
+
+
+        public static Map<String, String> ofActivationToken(UUID userId,
+                                                            String emailType,
+                                                            ActivationTokenType activationTokenType) {
+            return Map.of(USER_ID, userId.toString(),
+                    EMAIL_TYPE, emailType,
+                    ACTIVATION_TOKEN_TYPE, activationTokenType.name());
+        }
+
+        public static Optional<UUID> userId(Map<String, String> metadata) {
+            return Optional.ofNullable(metadata.get(USER))
+                    .map(UUID::fromString);
+        }
+
+        public static Optional<ActivationTokenType> activationTokenType(Map<String, String> metadata) {
+            return Optional.ofNullable(metadata.get(ACTIVATION_TOKEN_TYPE))
+                    .map(ActivationTokenType::valueOf);
+        }
     }
 }

@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
 
-    private static final int REQUEST_ATTEMPTS = 3;
+    private static final int REQUEST_ATTEMPTS = 5;
     private static final int BATCH_SIZE = 2;
     private static final String MESSAGE_STREAM = "outbound";
     private PostmarkEmailServer emailServer;
