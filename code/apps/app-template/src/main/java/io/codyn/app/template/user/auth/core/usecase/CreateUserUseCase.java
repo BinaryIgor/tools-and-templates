@@ -36,7 +36,7 @@ public class CreateUserUseCase {
     }
 
     //TODO: remove expired users!
-    //TODO: outbox for emails
+    //TODO: allow to resend email!
     public void handle(CreateUserCommand command) {
         validateCommand(command);
 
@@ -47,13 +47,12 @@ public class CreateUserUseCase {
         var toCreateUser = User.newUser(command.id(), command.name(), command.email(),
                 passwordHasher.hash(command.password()));
 
-        transactions.execute(() -> {
+        var activationToken = transactions.executeAndReturn(() -> {
             userRepository.create(toCreateUser);
-
-            var activationToken = activationTokens.saveNewUser(toCreateUser.id());
-
-            sendAccountActivationEmail(toCreateUser.name(), toCreateUser.email(), activationToken.token());
+            return activationTokens.saveNewUser(toCreateUser.id());
         });
+
+        sendAccountActivationEmail(toCreateUser.name(), toCreateUser.email(), activationToken.token());
     }
 
     private void validateCommand(CreateUserCommand command) {

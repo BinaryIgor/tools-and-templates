@@ -10,7 +10,7 @@ import io.codyn.email.server.EmailServer;
 
 import java.util.Map;
 
-//TODO: test, config
+//TODO: test, config, tag emails!
 public class UserEmailSender {
 
     private final EmailFactory factory;

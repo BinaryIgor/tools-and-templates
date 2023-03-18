@@ -89,7 +89,7 @@ public class CreateUserUseCaseTest {
     }
 
     @Test
-    void shouldCreateUserInTransaction() {
+    void shouldCreateUserInTransactionAndSendActivationEmail() {
         var testCase = prepareCreatesUserTestCase();
 
         transactions.test()
@@ -106,12 +106,14 @@ public class CreateUserUseCaseTest {
                     Assertions.assertThat(savedToken)
                             .isEqualTo(testCase.expectedActivationToken);
 
-                    var sentEmail = emailServer.sentEmail;
-
-                    Assertions.assertThat(sentEmail).isEqualTo(testCase.expectedEmail);
-                    EmailAssertions.messageContains(sentEmail, savedToken.token());
+                    Assertions.assertThat(emailServer.sentEmail).isNull();
                 })
                 .execute(() -> useCase.handle(testCase.command));
+
+        var sentEmail = emailServer.sentEmail;
+
+        Assertions.assertThat(sentEmail).isEqualTo(testCase.expectedEmail);
+        EmailAssertions.messageContains(sentEmail, testCase.expectedActivationToken.token());
     }
 
     static Stream<Arguments> invalidUserCases() {
