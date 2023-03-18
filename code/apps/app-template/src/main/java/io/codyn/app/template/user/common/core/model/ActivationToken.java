@@ -3,6 +3,7 @@ package io.codyn.app.template.user.common.core.model;
 import java.time.Instant;
 import java.util.UUID;
 
+//TODO status!
 public record ActivationToken(UUID userId,
                               ActivationTokenType type,
                               String token,

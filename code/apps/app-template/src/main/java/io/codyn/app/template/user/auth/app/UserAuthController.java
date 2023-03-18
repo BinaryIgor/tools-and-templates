@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserAuthController {
 
     private final CreateUserUseCase createUserUseCase;
+    private final ResendUserAccountActivationTokenUseCase resendUserAccountActivationTokenUseCase;
     private final ActivateUserUseCase activateUserUseCase;
     private final SignInFirstStepUseCase signInFirstStepUseCase;
     private final ResetUserPasswordUseCase resetUserPasswordUseCase;
@@ -28,12 +29,14 @@ public class UserAuthController {
     private final RefreshUserAuthTokensUseCase refreshUserAuthTokensUseCase;
 
     public UserAuthController(CreateUserUseCase createUserUseCase,
+                              ResendUserAccountActivationTokenUseCase resendUserAccountActivationTokenUseCase,
                               ActivateUserUseCase activateUserUseCase,
                               SignInFirstStepUseCase signInFirstStepUseCase,
                               ResetUserPasswordUseCase resetUserPasswordUseCase,
                               SetNewUserPasswordUseCase setNewUserPasswordUseCase,
                               RefreshUserAuthTokensUseCase refreshUserAuthTokensUseCase) {
         this.createUserUseCase = createUserUseCase;
+        this.resendUserAccountActivationTokenUseCase = resendUserAccountActivationTokenUseCase;
         this.activateUserUseCase = activateUserUseCase;
         this.signInFirstStepUseCase = signInFirstStepUseCase;
         this.resetUserPasswordUseCase = resetUserPasswordUseCase;
@@ -45,6 +48,11 @@ public class UserAuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@RequestBody CreateUserRequest request) {
         createUserUseCase.handle(request.toCommand());
+    }
+
+    @PostMapping("/resend-account-activation-token/{email}")
+    public void resendAccountActivationToken(@PathVariable("email") String email) {
+        resendUserAccountActivationTokenUseCase.handle(email);
     }
 
     @PostMapping("/activate-account")

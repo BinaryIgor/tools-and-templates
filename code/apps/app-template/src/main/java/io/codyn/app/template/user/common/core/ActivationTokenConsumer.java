@@ -1,6 +1,5 @@
 package io.codyn.app.template.user.common.core;
 
-import io.codyn.app.template._common.core.exception.NotFoundException;
 import io.codyn.app.template.user.common.core.exception.InvalidActivationTokenException;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.model.ActivationTokenType;
@@ -56,7 +55,7 @@ public class ActivationTokenConsumer {
 
     private void validateToken(ActivationTokenId id, String receivedToken) {
         var token = activationTokenRepository.ofId(id)
-                .orElseThrow(() -> NotFoundException.ofId("ActivationToken", id));
+                .orElseThrow(() -> UserExceptions.activationTokenNotFound(id));
 
         if (!receivedToken.equals(token.token())) {
             throw InvalidActivationTokenException.ofToken(id, "Received token is not equal to saved one");
