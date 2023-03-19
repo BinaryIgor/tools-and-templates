@@ -1,0 +1,23 @@
+spring:
+  profiles:
+    active: "${ENV}"
+  application:
+    name: app-processor-template
+  datasource:
+    url: "${DB_URL}"
+    username: "${DB_USER}"
+    password: "${DB_PASSWORD}"
+
+server:
+  port: "${SERVER_MANAGEMENT_PORT:9090}"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [ "health", "info", "prometheus" ]
+
+app:
+  user:
+    max-not-activated-user-duration: "PT15M"
+    delete-not-activated-delay: "PT1M"

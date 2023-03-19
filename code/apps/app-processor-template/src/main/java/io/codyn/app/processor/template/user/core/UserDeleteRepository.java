@@ -1,4 +1,4 @@
-package io.codyn.app.template.user.auth.core.repository;
+package io.codyn.app.processor.template.user.core;
 
 import java.time.Instant;
 

@@ -94,9 +94,10 @@ POSTGRES_DB="postgres-db"
 NGINX_GATEWAY="nginx-gateway"
 
 APP_TEMPLATE="app-template"
+APP_PROCESSOR_TEMPLATE="app-processor-template"
 
-COMPONENTS=("$POSTGRES_DB" "$APP_TEMPLATE" "$NGINX_GATEWAY")
-COMPONENTS_REVERSED=("$NGINX_GATEWAY" "$APP_TEMPLATE" "$POSTGRES_DB")
+COMPONENTS=("$POSTGRES_DB" "$APP_TEMPLATE" "$NGINX_GATEWAY" "$APP_PROCESSOR_TEMPLATE")
+COMPONENTS_REVERSED=("$APP_PROCESSOR_TEMPLATE" "$NGINX_GATEWAY" "$APP_TEMPLATE" "$POSTGRES_DB")
 
 echo "Building all..."
 
@@ -195,6 +196,18 @@ wait_for_container $NGINX_GATEWAY
 
 echo
 echo "$NGINX_GATEWAY is up!"
+echo
+
+echo "Starting ${APP_PROCESSOR_TEMPLATE}..."
+cd $PACKAGES_DIR
+cd $APP_PROCESSOR_TEMPLATE
+
+bash run.bash
+
+wait_for_container $APP_PROCESSOR_TEMPLATE 5
+
+echo
+echo "$APP_PROCESSOR_TEMPLATE is up!"
 echo
 
 echo "Checking if all system components are healthy..."

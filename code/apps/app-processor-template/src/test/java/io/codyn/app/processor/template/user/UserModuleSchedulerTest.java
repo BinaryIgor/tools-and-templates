@@ -1,8 +1,8 @@
-package io.codyn.app.template.user.auth;
+package io.codyn.app.processor.template.user;
 
-import io.codyn.app.template.SpringIntegrationTest;
-import io.codyn.app.template._common.core.model.UserState;
-import io.codyn.app.template.user.common.test.TestSqlUserClient;
+import io.codyn.app.processor.template.SpringIntegrationTest;
+import io.codyn.app.processor.template.user.test.TestSqlUserClient;
+import io.codyn.app.processor.template.user.core.UserState;
 import io.codyn.sqldb.core.DSLContextProvider;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,17 +14,17 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-public class UserAuthModuleSchedulerTest extends SpringIntegrationTest {
+public class UserModuleSchedulerTest extends SpringIntegrationTest {
 
     @Autowired
-    private UserAuthModuleScheduler scheduler;
+    private UserModuleScheduler scheduler;
     @Autowired
     private DSLContextProvider contextProvider;
-    private TestSqlUserClient testSqlUserClient;
+    private TestSqlUserClient userClient;
 
     @BeforeEach
     void setup() {
-        testSqlUserClient = new TestSqlUserClient(contextProvider);
+        userClient = new TestSqlUserClient(contextProvider);
     }
 
     @Test
@@ -32,16 +32,16 @@ public class UserAuthModuleSchedulerTest extends SpringIntegrationTest {
         var testCase = prepareDeleteNotActivatedUsersTestCase();
 
         testCase.beforeDeleteUsers.forEach(uid ->
-                Assertions.assertThat(testSqlUserClient.userOfId(uid))
+                Assertions.assertThat(userClient.userOfId(uid))
                         .isPresent());
 
         scheduler.deleteNotActivatedUsers();
 
         testCase.expectedDeletedUsers.forEach(uid ->
-                Assertions.assertThat(testSqlUserClient.userOfId(uid))
+                Assertions.assertThat(userClient.userOfId(uid))
                         .isEmpty());
         testCase.expectedExistingUsers.forEach(uid ->
-                Assertions.assertThat(testSqlUserClient.userOfId(uid))
+                Assertions.assertThat(userClient.userOfId(uid))
                         .isPresent());
     }
 
@@ -75,8 +75,8 @@ public class UserAuthModuleSchedulerTest extends SpringIntegrationTest {
     }
 
     private UUID prepareUser(UserState state, Instant createdAt) {
-        var user = testSqlUserClient.createRandomUser(UUID.randomUUID(), state);
-        testSqlUserClient.updateUserCreatedAt(user.id(), createdAt);
+        var user = userClient.createRandomUser(UUID.randomUUID(), state);
+        userClient.updateUserCreatedAt(user.id(), createdAt);
         return user.id();
     }
 

@@ -9,6 +9,10 @@
     "dir": "code/apps/app-template"
   },
   {
+    "name": "app-processor-template",
+    "dir": "code/apps/app-processor-template"
+  },
+  {
     "name": "prometheus",
     "dir": "tools/prometheus"
   },

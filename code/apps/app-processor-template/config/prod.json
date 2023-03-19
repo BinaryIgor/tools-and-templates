@@ -1,0 +1,19 @@
+{
+  "build_cmd": "bash build_cmd.bash",
+  "volumes": [
+    "${secrets-path}:/secrets:ro"
+  ],
+  "env": {
+    "JVM_OPTS": "-Xmx450m",
+    "ENV": "prod",
+    "DB_URL": "${db-url}",
+    "DB_USER": "${db-user}",
+    "DB_PASSWORD": "file:/secrets/db-password.txt"
+  },
+  "secrets": [
+    "db-password"
+  ],
+  "network": "host",
+  "memory": "500M",
+  "cpus": "1"
+}

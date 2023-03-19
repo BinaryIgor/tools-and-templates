@@ -1,10 +1,12 @@
-package io.codyn.app.template.user.auth.core.usecase;
+package io.codyn.app.processor.template.user.core;
 
-import io.codyn.app.template.user.auth.core.repository.UserDeleteRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.Duration;
 
+@Component
 public class DeleteNotActivatedUsersUseCase {
 
     private final UserDeleteRepository userDeleteRepository;
@@ -12,7 +14,7 @@ public class DeleteNotActivatedUsersUseCase {
     private final Clock clock;
 
     public DeleteNotActivatedUsersUseCase(UserDeleteRepository userDeleteRepository,
-                                          Duration maxNotActivatedUser,
+                                          @Value("${app.user.max-not-activated-user-duration}") Duration maxNotActivatedUser,
                                           Clock clock) {
         this.userDeleteRepository = userDeleteRepository;
         this.maxNotActivatedUser = maxNotActivatedUser;
