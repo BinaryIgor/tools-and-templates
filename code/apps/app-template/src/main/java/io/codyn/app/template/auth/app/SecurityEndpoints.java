@@ -11,7 +11,7 @@ public class SecurityEndpoints {
     public static final String WEBHOOKS = "/webhooks";
 
     //This is fine since swagger is on only locally. See _docs module
-    public static final List<String> PUBLIC_ENDPOINTS = List.of(USER_AUTH, WEBHOOKS, "/swagger", "/docs");
+    public static final List<String> PUBLIC_ENDPOINTS = List.of(USER_AUTH, WEBHOOKS, "/swagger", "/docs", "/ws");
 
     public static boolean isPublic(String endpoint) {
         for (var e : PUBLIC_ENDPOINTS) {
