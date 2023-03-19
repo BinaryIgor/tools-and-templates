@@ -50,3 +50,5 @@ app:
     user-auth:
       time-to-live: 600
       max-entries: 1000
+  user:
+    delete-not-activated-delay: "PT1M"

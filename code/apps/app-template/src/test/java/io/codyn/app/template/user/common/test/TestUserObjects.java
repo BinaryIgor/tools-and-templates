@@ -27,6 +27,7 @@ public class TestUserObjects {
         return USERS;
     }
 
+
     public static User user1() {
         return USERS.get(0);
     }

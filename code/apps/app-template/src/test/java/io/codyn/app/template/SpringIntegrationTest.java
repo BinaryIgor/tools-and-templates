@@ -2,7 +2,7 @@ package io.codyn.app.template;
 
 import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.auth.api.AuthClient;
-import io.codyn.app.template.user.common.test.TestUserClient;
+import io.codyn.app.template.user.common.test.TestSqlUserClient;
 import io.codyn.sqldb.core.DSLContextProvider;
 import io.codyn.sqldb.test.CustomPostgreSQLContainer;
 import io.codyn.test.http.TestHttpClient;
@@ -30,7 +30,7 @@ public abstract class SpringIntegrationTest {
     @Autowired
     protected AuthClient authClient;
     @Autowired
-    protected TestUserClient userClient;
+    protected TestSqlUserClient userClient;
     @Autowired
     protected TestHttpClient testHttpClient;
     @Autowired
@@ -74,8 +74,8 @@ public abstract class SpringIntegrationTest {
 
         @Bean
         @Primary
-        TestUserClient userClient(DSLContextProvider contextProvider) {
-            return new TestUserClient(contextProvider);
+        TestSqlUserClient userClient(DSLContextProvider contextProvider) {
+            return new TestSqlUserClient(contextProvider);
         }
 
         @Bean

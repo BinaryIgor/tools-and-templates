@@ -7,6 +7,7 @@ CREATE TABLE "user" (
     second_factor_auth BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
+CREATE INDEX user_state on "user"(state);
 
 CREATE TABLE role (
     user_id UUID NOT NULL REFERENCES "user" (id) ON DELETE CASCADE,

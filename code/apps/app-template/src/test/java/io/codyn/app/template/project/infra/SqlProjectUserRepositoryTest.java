@@ -2,7 +2,7 @@ package io.codyn.app.template.project.infra;
 
 import io.codyn.app.template.project.core.model.Project;
 import io.codyn.app.template.project.test.TestProjectObjects;
-import io.codyn.app.template.user.common.test.TestUserClient;
+import io.codyn.app.template.user.common.test.TestSqlUserClient;
 import io.codyn.sqldb.test.DbIntegrationTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,13 +14,13 @@ public class SqlProjectUserRepositoryTest extends DbIntegrationTest {
 
     private SqlProjectUsersRepository repository;
     private SqlProjectRepository projectRepository;
-    private TestUserClient userClient;
+    private TestSqlUserClient userClient;
 
     @Override
     protected void setup() {
         repository = new SqlProjectUsersRepository(context);
         projectRepository = new SqlProjectRepository(context);
-        userClient = new TestUserClient(contextProvider);
+        userClient = new TestSqlUserClient(contextProvider);
     }
 
     @Test

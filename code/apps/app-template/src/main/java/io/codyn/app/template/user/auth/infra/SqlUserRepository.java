@@ -2,6 +2,7 @@ package io.codyn.app.template.user.auth.infra;
 
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template._common.core.model.UserState;
+import io.codyn.app.template.user.auth.core.repository.UserDeleteRepository;
 import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.core.repository.UserAuthRepository;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
@@ -10,6 +11,7 @@ import io.codyn.app.template.user.common.infra.UserRecordsMapper;
 import io.codyn.sqldb.core.DSLContextProvider;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,7 +21,8 @@ import static io.codyn.sqldb.schema.user.tables.User.USER;
 
 @Repository
 //TODO: lacking tests!
-public class SqlUserRepository implements UserRepository, UserUpdateRepository, UserAuthRepository {
+public class SqlUserRepository implements UserRepository, UserUpdateRepository, UserAuthRepository,
+        UserDeleteRepository {
 
     private final DSLContextProvider contextProvider;
 
@@ -84,5 +87,14 @@ public class SqlUserRepository implements UserRepository, UserUpdateRepository, 
                 .from(ROLE)
                 .where(ROLE.USER_ID.eq(id))
                 .fetch(r -> UserRole.valueOf(r.value1()));
+    }
+
+    @Override
+    public void deleteAllNotActivatedCreatedBefore(Instant before) {
+        contextProvider.context()
+                .deleteFrom(USER)
+                .where(USER.STATE.eq(UserState.CREATED.name())
+                        .and(USER.CREATED_AT.lessThan(before)))
+                .execute();
     }
 }

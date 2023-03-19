@@ -2,7 +2,7 @@ package io.codyn.app.template.user.common.infra;
 
 import io.codyn.app.template._common.core.model.UserRole;
 import io.codyn.app.template.auth.api.UserAuthData;
-import io.codyn.app.template.user.common.test.TestUserClient;
+import io.codyn.app.template.user.common.test.TestSqlUserClient;
 import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.sqldb.test.DbIntegrationTest;
 import org.assertj.core.api.Assertions;
@@ -13,12 +13,12 @@ import java.util.Set;
 public class SqlUserAuthDataRepositoryTest extends DbIntegrationTest {
 
     private SqlUserAuthDataRepository repository;
-    private TestUserClient userClient;
+    private TestSqlUserClient userClient;
 
     @Override
     protected void setup() {
         repository = new SqlUserAuthDataRepository(contextProvider);
-        userClient = new TestUserClient(contextProvider);
+        userClient = new TestSqlUserClient(contextProvider);
     }
 
     @Test

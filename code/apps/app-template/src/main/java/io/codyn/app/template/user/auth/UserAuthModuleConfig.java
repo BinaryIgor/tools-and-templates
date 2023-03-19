@@ -1,6 +1,7 @@
 package io.codyn.app.template.user.auth;
 
 import io.codyn.app.template.auth.api.AuthClient;
+import io.codyn.app.template.user.auth.core.repository.UserDeleteRepository;
 import io.codyn.app.template.user.auth.core.usecase.*;
 import io.codyn.app.template.user.auth.infra.SqlUserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenConsumer;
@@ -17,6 +18,9 @@ import io.codyn.types.event.LocalPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+
+import java.time.Clock;
+import java.time.Duration;
 
 @Configuration
 public class UserAuthModuleConfig {
@@ -43,6 +47,12 @@ public class UserAuthModuleConfig {
                                         Transactions transactions) {
         return new CreateUserUseCase(userRepository, passwordHasher, activationTokens,
                 emailSender, transactions);
+    }
+
+    @Bean
+    DeleteNotActivatedUsersUseCase deleteNotActivatedUsersUseCase(UserDeleteRepository userDeleteRepository,
+                                                                  Clock clock) {
+        return new DeleteNotActivatedUsersUseCase(userDeleteRepository, Duration.ofMinutes(15), clock);
     }
 
     @Bean
