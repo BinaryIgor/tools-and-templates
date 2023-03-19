@@ -7,6 +7,7 @@ public record Email(EmailAddress from,
                     String subject,
                     String htmlMessage,
                     String textMessage,
+                    String tag,
                     Map<String, String> metadata) {
 
 }

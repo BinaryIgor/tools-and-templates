@@ -31,7 +31,7 @@ public class TemplatesEmailFactory implements EmailFactory {
         var renderedText = Templates.rendered(emailTemplate.text(), allVariables);
 
         return new Email(template.from(), template.to(), renderedSubject, renderedHtml, renderedText,
-                template.emailMetadata());
+                template.emailTag(), template.emailMetadata());
     }
 
     private Map<String, String> mergedVariables(String language,

@@ -15,6 +15,7 @@
       "activationUrl": "https://hairo.io/sign-in?token=988jxAadada9",
       "signUpUrl": "https://hairo.io/sign-up"
     },
+    "emailTag": "user_activation",
     "emailMetadata": {
       "userId": "91234",
       "type": "USER_ACTIVATION"
@@ -32,6 +33,7 @@
     "subject": "Your account is ready to use!",
     "htmlMessage": null,
     "textMessage": null,
+    "tag": "user_activation",
     "metadata": {
       "userId": "91234",
       "type": "USER_ACTIVATION"

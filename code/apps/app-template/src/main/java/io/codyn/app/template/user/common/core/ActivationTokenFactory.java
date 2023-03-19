@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.common.core;
 
 import io.codyn.app.template.user.common.core.model.ActivationToken;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.tools.DataTokens;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

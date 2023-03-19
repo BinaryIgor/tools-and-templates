@@ -3,7 +3,7 @@ package io.codyn.app.template.user.common.core;
 import io.codyn.app.template._common.core.email.Emails;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenStatusUpdateRepository;
 import io.codyn.types.Pair;
 import org.springframework.stereotype.Component;

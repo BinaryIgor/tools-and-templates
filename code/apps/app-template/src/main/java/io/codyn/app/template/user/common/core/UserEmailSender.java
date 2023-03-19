@@ -1,7 +1,7 @@
 package io.codyn.app.template.user.common.core;
 
 import io.codyn.app.template._common.core.email.Emails;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.model.EmailUser;
 import io.codyn.email.factory.EmailFactory;
 import io.codyn.email.model.EmailAddress;
@@ -68,7 +68,8 @@ public class UserEmailSender {
                 user.language().name(),
                 type,
                 variables,
-                Emails.Metadata.ofActivationToken(user.id(), type, activationTokenType));
+                type,
+                Emails.Metadata.ofActivationToken(user.id(), activationTokenType));
 
         var email = factory.newEmail(emailTemplate);
 

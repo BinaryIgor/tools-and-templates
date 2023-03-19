@@ -1,5 +1,6 @@
 package io.codyn.app.template.user.auth.core.usecase;
 
+import io.codyn.app.template._common.core.email.Emails;
 import io.codyn.app.template._common.core.exception.InvalidEmailException;
 import io.codyn.app.template._common.test.EmailAssertions;
 import io.codyn.app.template._common.test.TestEmailServer;
@@ -83,8 +84,11 @@ public class ResetUserPasswordUseCaseTest {
         Assertions.assertThat(activationTokenRepository.ofId(activationTokenId))
                 .get()
                 .isEqualTo(expectedActivationToken);
-        EmailAssertions.messageContains(emailServer.sentEmail,
-                user.name(), expectedActivationToken.token());
+
+        EmailAssertions.meetsExpectations(emailServer.sentEmail,
+                EmailAssertions.expectations()
+                        .messageContains(user.name(), expectedActivationToken.token())
+                        .tagIsEqual(Emails.Types.PASSWORD_RESET));
     }
 
     static List<String> invalidEmailCases() {

@@ -105,6 +105,7 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
                 "Some email",
                 "some html message",
                 "some text message",
+                "some tag",
                 Map.of());
 
         var body = JsonMapper.json(new PostmarkEmailServer.PostmarkEmail(
@@ -113,6 +114,7 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
                 "Some email",
                 "some html message",
                 "some text message",
+                "some tag",
                 Map.of(),
                 MESSAGE_STREAM
         ));
@@ -134,7 +136,9 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
         var fromEmail = EmailAddress.ofNameEmail("Hairo App", "app@hairo.io");
         var fromEmailString = "Hairo App <app@hairo.io>";
 
+        var email2Tag = TestRandom.string();
         var email2Metadata = Map.of("meta-1", "some secret and useful data");
+        var email3Tag = "Some email tag";
         var email3Metadata = Map.of("meta-222", "meta data", "anotherKey", "even more data");
 
         var emails = List.of(
@@ -143,18 +147,21 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
                         "Some email1",
                         "some html message1",
                         "some text message1",
+                        "",
                         Map.of()),
                 new Email(fromEmail,
                         EmailAddress.ofNameEmail("User2 < 3", "user2@user.io"),
                         "Some email2",
                         "some html message2",
                         "some text message2",
+                        email2Tag,
                         email2Metadata),
                 new Email(fromEmail,
                         EmailAddress.ofNameEmail("User3", "user3@user.io"),
                         "Some email3",
                         "some html message3",
                         "some text message3",
+                        email3Tag,
                         email3Metadata));
 
         var firstRequestBody = JsonMapper.json(List.of(
@@ -164,6 +171,7 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
                         "Some email1",
                         "some html message1",
                         "some text message1",
+                        "",
                         Map.of(),
                         MESSAGE_STREAM
                 ),
@@ -173,6 +181,7 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
                         "Some email2",
                         "some html message2",
                         "some text message2",
+                        email2Tag,
                         email2Metadata,
                         MESSAGE_STREAM
                 )));
@@ -187,6 +196,7 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
                         "Some email3",
                         "some html message3",
                         "some text message3",
+                        email3Tag,
                         email3Metadata,
                         MESSAGE_STREAM
                 )));
@@ -205,7 +215,7 @@ public class PostmarkEmailServerTest extends HttpServerIntegrationTest {
 
     private Email randomEmail() {
         return new Email(EmailAddress.ofEmptyName(TestRandom.name()), EmailAddress.ofEmptyName(TestRandom.name()),
-                TestRandom.string(), TestRandom.string(), TestRandom.string(),
+                TestRandom.string(), TestRandom.string(), TestRandom.string(), TestRandom.string(),
                 Map.of(TestRandom.string(), TestRandom.string()));
     }
 

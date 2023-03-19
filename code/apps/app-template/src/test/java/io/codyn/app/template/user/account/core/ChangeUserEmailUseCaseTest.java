@@ -1,21 +1,21 @@
 package io.codyn.app.template.user.account.core;
 
+import io.codyn.app.template._common.core.email.Emails;
 import io.codyn.app.template._common.core.exception.EmailNotReachableException;
 import io.codyn.app.template._common.core.exception.InvalidEmailException;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template._common.test.EmailAssertions;
 import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.user.account.core.model.ChangeUserEmailCommand;
 import io.codyn.app.template.user.account.core.usecase.ChangeUserEmailUseCase;
 import io.codyn.app.template.user.auth.test.TestUserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenData;
-import io.codyn.app.template.user.common.core.ActivationTokenFactory;
 import io.codyn.app.template.user.common.core.ActivationTokens;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.test.TestActivationTokenRepository;
 import io.codyn.app.template.user.common.test.TestTokenFactory;
 import io.codyn.app.template.user.common.test.TestUserEmailsProvider;
 import io.codyn.app.template.user.common.test.TestUserObjects;
-import io.codyn.email.model.EmailAddress;
 import io.codyn.test.TestClock;
 import io.codyn.test.TestRandom;
 import org.assertj.core.api.Assertions;
@@ -34,20 +34,17 @@ public class ChangeUserEmailUseCaseTest {
     private TestEmailServer emailServer;
     private TestActivationTokenRepository activationTokenRepository;
     private TestTokenFactory tokenFactory;
-    private TestClock clock;
 
 
-    //TODO: refactor
     @BeforeEach
     void setup() {
         userRepository = new TestUserRepository();
         emailServer = new TestEmailServer();
         activationTokenRepository = new TestActivationTokenRepository();
-        clock = new TestClock();
-        tokenFactory = new TestTokenFactory(clock);
+        tokenFactory = new TestTokenFactory(new TestClock());
 
         var activationTokens = new ActivationTokens(activationTokenRepository,
-                new ActivationTokenFactory(tokenFactory, clock));
+                tokenFactory.activationTokenFactory());
 
         useCase = new ChangeUserEmailUseCase(userRepository, activationTokens,
                 TestUserEmailsProvider.sender(emailServer));
@@ -90,18 +87,24 @@ public class ChangeUserEmailUseCaseTest {
         Assertions.assertThat(savedToken)
                 .isEqualTo(expectedActivationToken);
 
-        assertEmailWithChangeConfirmationTokenWasSent(user.name(), command.email(),
+
+        assertEmailWithChangeConfirmationTokenWasSent(user.id(),
+                user.name(), command.email(),
                 user.email(), savedToken.token());
     }
 
-    private void assertEmailWithChangeConfirmationTokenWasSent(String name,
+    private void assertEmailWithChangeConfirmationTokenWasSent(UUID userId,
+                                                               String name,
                                                                String newEmail,
                                                                String oldEmail,
                                                                String savedToken) {
-        var sentEmail = emailServer.sentEmail;
+        var emailExpectations = EmailAssertions.expectations()
+                .sentTo(name, newEmail)
+                .messageContains(name, oldEmail, savedToken)
+                .tagIsEqual(Emails.Types.EMAIL_CHANGE)
+                .hasUserIdActivationTokenMetadata(userId, ActivationTokenType.EMAIL_CHANGE);
 
-        EmailAssertions.toIsEqualTo(sentEmail, EmailAddress.ofNameEmail(name, newEmail));
-        EmailAssertions.messageContains(sentEmail, name, oldEmail, savedToken);
+        EmailAssertions.meetsExpectations(emailServer.sentEmail, emailExpectations);
     }
 
     static List<String> invalidEmailCases() {

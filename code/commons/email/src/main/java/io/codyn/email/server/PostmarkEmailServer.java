@@ -22,7 +22,7 @@ import java.util.Map;
 public class PostmarkEmailServer implements EmailServer {
 
     private static final Logger log = LoggerFactory.getLogger(PostmarkEmailServer.class);
-    private static final List<String> NEEDED_QUOTES_NAME_CHARACTERS = List.of("<", ">");
+    private static final List<String> NEEDED_QUOTES_NAME_CHARACTERS = List.of("<", ">", ",");
     private final HttpClient httpClient;
     private final String postmarkUrl;
     private final String postmarkToken;
@@ -122,6 +122,7 @@ public class PostmarkEmailServer implements EmailServer {
                          String subject,
                          String htmlBody,
                          String textBody,
+                         String tag,
                          Map<String, String> metadata,
                          String messageStream) {
 
@@ -131,6 +132,7 @@ public class PostmarkEmailServer implements EmailServer {
                     email.subject(),
                     email.htmlMessage(),
                     email.textMessage(),
+                    email.tag(),
                     email.metadata(),
                     messageStream);
         }

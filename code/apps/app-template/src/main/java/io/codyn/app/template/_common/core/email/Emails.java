@@ -1,7 +1,7 @@
 package io.codyn.app.template._common.core.email;
 
 
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 
 import java.net.InetAddress;
 import java.util.List;
@@ -50,15 +50,12 @@ public class Emails {
 
     public static class Metadata {
         public static final String USER_ID = "userId";
-        public static final String EMAIL_TYPE = "emailType";
         public static final String ACTIVATION_TOKEN_TYPE = "activationTokenType";
 
 
         public static Map<String, String> ofActivationToken(UUID userId,
-                                                            String emailType,
                                                             ActivationTokenType activationTokenType) {
             return Map.of(USER_ID, userId.toString(),
-                    EMAIL_TYPE, emailType,
                     ACTIVATION_TOKEN_TYPE, activationTokenType.name());
         }
 

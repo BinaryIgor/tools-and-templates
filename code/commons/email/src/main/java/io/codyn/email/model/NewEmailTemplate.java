@@ -7,5 +7,6 @@ public record NewEmailTemplate(EmailAddress from,
                                String language,
                                String name,
                                Map<String, String> variables,
+                               String emailTag,
                                Map<String, String> emailMetadata) {
 }

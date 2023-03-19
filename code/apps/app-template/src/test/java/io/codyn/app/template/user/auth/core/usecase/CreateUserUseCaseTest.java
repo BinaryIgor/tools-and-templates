@@ -1,6 +1,8 @@
 package io.codyn.app.template.user.auth.core.usecase;
 
+import io.codyn.app.template._common.core.email.Emails;
 import io.codyn.app.template._common.core.exception.*;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template._common.test.EmailAssertions;
 import io.codyn.app.template._common.test.TestEmailServer;
@@ -9,13 +11,8 @@ import io.codyn.app.template.user.auth.core.model.CreateUserCommand;
 import io.codyn.app.template.user.auth.test.TestUserRepository;
 import io.codyn.app.template.user.common.core.ActivationTokenData;
 import io.codyn.app.template.user.common.core.ActivationTokens;
-import io.codyn.app.template.user.common.core.UserEmailSender;
-import io.codyn.app.template.user.common.core.model.ActivationToken;
-import io.codyn.app.template.user.common.core.model.ActivationTokenId;
-import io.codyn.app.template.user.common.core.model.EmailUser;
-import io.codyn.app.template.user.common.core.model.User;
+import io.codyn.app.template.user.common.core.model.*;
 import io.codyn.app.template.user.common.test.*;
-import io.codyn.email.model.Email;
 import io.codyn.test.TestClock;
 import io.codyn.test.TestTransactions;
 import org.assertj.core.api.Assertions;
@@ -33,7 +30,6 @@ public class CreateUserUseCaseTest {
     private TestUserRepository userRepository;
     private TestPasswordHasher passwordHasher;
     private TestEmailServer emailServer;
-    private UserEmailSender userEmailSender;
     private TestActivationTokenRepository activationTokenRepository;
     private TestTokenFactory tokenFactory;
     private TestTransactions transactions;
@@ -45,7 +41,6 @@ public class CreateUserUseCaseTest {
         transactions = new TestTransactions();
 
         emailServer = new TestEmailServer();
-        userEmailSender = TestUserEmailsProvider.sender(emailServer);
 
         activationTokenRepository = new TestActivationTokenRepository();
 
@@ -56,8 +51,8 @@ public class CreateUserUseCaseTest {
 
         transactions = new TestTransactions();
 
-        useCase = new CreateUserUseCase(userRepository, passwordHasher, activationTokens, userEmailSender,
-                transactions);
+        useCase = new CreateUserUseCase(userRepository, passwordHasher, activationTokens,
+                TestUserEmailsProvider.sender(emailServer), transactions);
     }
 
     @ParameterizedTest
@@ -108,10 +103,7 @@ public class CreateUserUseCaseTest {
                 })
                 .execute(() -> useCase.handle(testCase.command));
 
-        var sentEmail = emailServer.sentEmail;
-
-        Assertions.assertThat(sentEmail).isEqualTo(testCase.expectedEmail);
-        EmailAssertions.messageContains(sentEmail, testCase.expectedActivationToken.token());
+        EmailAssertions.meetsExpectations(emailServer.sentEmail, testCase.emailExpectations);
     }
 
     static Stream<Arguments> invalidUserCases() {
@@ -156,20 +148,22 @@ public class CreateUserUseCaseTest {
         var token = tokenFactory.addNextToken(ActivationTokenData.withUserId(newUserId));
         var expectedActivationToken = tokenFactory.activationTokenFactory().newUser(newUserId);
 
-        userEmailSender.sendAccountActivation(new EmailUser(newUserId, command.name(), command.email()), token);
-        var expectedEmail = emailServer.sentEmail;
-        emailServer.clear();
+        var emailExpectations = EmailAssertions.expectations()
+                .sentTo(command.name(), command.email())
+                .messageContains(command.name(), token)
+                .tagIsEqual(Emails.Types.USER_ACTIVATION)
+                .hasMetadata(Emails.Metadata.ofActivationToken(newUserId, ActivationTokenType.NEW_USER));
 
         return new CreatesUserTestCase(command, expectedUser,
                 expectedTokenId, expectedActivationToken,
-                expectedEmail);
+                emailExpectations);
     }
 
     private record CreatesUserTestCase(CreateUserCommand command,
                                        User expectedUser,
                                        ActivationTokenId expectedActivationTokenId,
                                        ActivationToken expectedActivationToken,
-                                       Email expectedEmail) {
+                                       EmailAssertions.Expectations emailExpectations) {
 
     }
 }

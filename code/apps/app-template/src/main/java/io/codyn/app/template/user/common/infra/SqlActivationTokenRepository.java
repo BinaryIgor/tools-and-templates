@@ -3,7 +3,7 @@ package io.codyn.app.template.user.common.infra;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenStatusUpdateRepository;
 import io.codyn.sqldb.core.DSLContextProvider;

@@ -45,6 +45,7 @@ public class TemplatesEmailFactoryTest {
                 TestRandom.oneOf(REQUIRED_LANGUAGES),
                 template,
                 Map.of(),
+                "Tagging",
                 Map.of("meta", "112"));
 
         Assertions.assertThatThrownBy(() -> factory.newEmail(newEmailTemplate))
@@ -59,7 +60,7 @@ public class TemplatesEmailFactoryTest {
         var txtEmail = TestDataLoader.classpathResourceContent(prefix + "email.txt");
 
         var email = new Email(testCase.output.from(), testCase.output.to(), testCase.output.subject(),
-                htmlEmail, txtEmail, testCase.input.emailMetadata());
+                htmlEmail, txtEmail, testCase.input.emailTag(), testCase.input.emailMetadata());
 
         return new NewEmailTestCase(testCase.input, email);
     }

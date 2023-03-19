@@ -1,14 +1,13 @@
 package io.codyn.app.template.user.auth.core.usecase;
 
+import io.codyn.app.template._common.core.email.Emails;
 import io.codyn.app.template._common.core.exception.InvalidEmailException;
 import io.codyn.app.template._common.test.EmailAssertions;
 import io.codyn.app.template._common.test.TestEmailServer;
 import io.codyn.app.template.user.auth.test.TestUserRepository;
-import io.codyn.app.template.user.common.core.UserEmailSender;
 import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
-import io.codyn.app.template.user.common.core.model.EmailUser;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.test.TestActivationTokenRepository;
 import io.codyn.app.template.user.common.test.TestUserEmailsProvider;
 import io.codyn.app.template.user.common.test.TestUserObjects;
@@ -26,7 +25,6 @@ public class ResendUserAccountActivationTokenUseCaseTest {
     private TestUserRepository userRepository;
     private TestActivationTokenRepository activationTokenRepository;
     private TestEmailServer emailServer;
-    private UserEmailSender userEmailSender;
 
     @BeforeEach
     void setup() {
@@ -34,10 +32,9 @@ public class ResendUserAccountActivationTokenUseCaseTest {
         activationTokenRepository = new TestActivationTokenRepository();
 
         emailServer = new TestEmailServer();
-        userEmailSender = TestUserEmailsProvider.sender(emailServer);
 
         useCase = new ResendUserAccountActivationTokenUseCase(userRepository,
-                activationTokenRepository, userEmailSender);
+                activationTokenRepository, TestUserEmailsProvider.sender(emailServer));
     }
 
     @ParameterizedTest
@@ -75,19 +72,15 @@ public class ResendUserAccountActivationTokenUseCaseTest {
         var activationToken = TestUserObjects.activationToken(user.id(), ActivationTokenType.NEW_USER);
         activationTokenRepository.save(activationToken);
 
-        var expectedEmail = emailServer.sendAndCaptureExpectedEmail(() -> {
-            userEmailSender.sendAccountActivation(new EmailUser(user.id(), user.name(), user.email()),
-                    activationToken.token());
-        });
-
-        Assertions.assertThat(emailServer.sentEmail).isNull();
+        var emailExpectations = EmailAssertions.expectations()
+                .sentTo(user.name(), user.email())
+                .messageContains(user.name(), activationToken.token())
+                .tagIsEqual(Emails.Types.USER_ACTIVATION)
+                .hasMetadata(Emails.Metadata.ofActivationToken(user.id(), ActivationTokenType.NEW_USER));
 
         useCase.handle(user.email());
 
-        var sentEmail = emailServer.sentEmail;
-
-        Assertions.assertThat(sentEmail).isEqualTo(expectedEmail);
-        EmailAssertions.messageContains(sentEmail, activationToken.token());
+        EmailAssertions.meetsExpectations(emailServer.sentEmail, emailExpectations);
     }
 
     static List<String> invalidEmailCases() {

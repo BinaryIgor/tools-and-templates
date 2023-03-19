@@ -5,7 +5,7 @@ import io.codyn.app.template._common.core.validator.FieldValidator;
 import io.codyn.app.template.user.auth.core.model.CreateUserCommand;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.test.TestRandom;
 

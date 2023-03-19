@@ -1,5 +1,7 @@
 package io.codyn.app.template.user.common.core.model;
 
+import io.codyn.app.template._common.core.model.ActivationTokenType;
+
 import java.time.Instant;
 import java.util.UUID;
 

@@ -4,7 +4,7 @@ import io.codyn.app.template.user.auth.infra.SqlUserRepository;
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.test.TestUserObjects;
 import io.codyn.sqldb.test.DbIntegrationTest;
 import io.codyn.test.TestRandom;

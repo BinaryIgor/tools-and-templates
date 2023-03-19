@@ -2,7 +2,7 @@ package io.codyn.app.template.user.common.core;
 
 import io.codyn.app.template.user.common.core.exception.InvalidActivationTokenException;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
 import io.codyn.tools.DataTokens;
 import io.codyn.types.Transactions;

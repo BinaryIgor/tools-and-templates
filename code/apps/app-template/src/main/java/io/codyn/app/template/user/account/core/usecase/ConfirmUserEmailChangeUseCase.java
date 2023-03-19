@@ -2,7 +2,7 @@ package io.codyn.app.template.user.account.core.usecase;
 
 import io.codyn.app.template.user.account.core.model.ConfirmUserEmailChangeCommand;
 import io.codyn.app.template.user.common.core.ActivationTokenConsumer;
-import io.codyn.app.template.user.common.core.model.ActivationTokenType;
+import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.UserUpdateRepository;
 import org.springframework.stereotype.Component;
 
