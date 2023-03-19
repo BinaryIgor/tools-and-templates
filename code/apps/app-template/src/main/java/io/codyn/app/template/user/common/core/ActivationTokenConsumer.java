@@ -6,13 +6,11 @@ import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
 import io.codyn.tools.DataTokens;
 import io.codyn.types.Transactions;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-@Component
 //TODO: tests
 public class ActivationTokenConsumer {
 

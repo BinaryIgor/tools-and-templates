@@ -8,14 +8,12 @@ import io.codyn.app.template.user.common.core.repository.ActivationTokenReposito
 import io.codyn.app.template.user.common.core.repository.ActivationTokenStatusUpdateRepository;
 import io.codyn.sqldb.core.DSLContextProvider;
 import org.jooq.Condition;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 import static io.codyn.sqldb.schema.user.tables.ActivationToken.ACTIVATION_TOKEN;
 
 //TODO: lacking tests
-@Repository
 public class SqlActivationTokenRepository implements ActivationTokenRepository, ActivationTokenStatusUpdateRepository {
 
     private final DSLContextProvider contextProvider;

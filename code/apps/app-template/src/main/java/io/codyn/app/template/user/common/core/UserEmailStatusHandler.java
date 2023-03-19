@@ -6,13 +6,11 @@ import io.codyn.app.template.user.common.core.model.ActivationTokenStatus;
 import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenStatusUpdateRepository;
 import io.codyn.types.Pair;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
 //TODO: tests
 public class UserEmailStatusHandler {
 

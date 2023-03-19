@@ -2,11 +2,9 @@ package io.codyn.app.template.user.common.core;
 
 import io.codyn.app.template.user.common.core.model.ActivationToken;
 import io.codyn.app.template.user.common.core.repository.ActivationTokenRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Component
 public class ActivationTokens {
 
     private final ActivationTokenRepository tokenRepository;

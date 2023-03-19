@@ -12,9 +12,7 @@ import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.core.repository.UserAuthRepository;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
-import org.springframework.stereotype.Component;
 
-@Component
 public class SignInFirstStepUseCase {
 
     private final AuthClient authClient;
@@ -37,6 +35,7 @@ public class SignInFirstStepUseCase {
 
         var user = validatedUser(command.email(), command.password());
         if (user.secondFactorAuth()) {
+            //TODO: impl!
             throw new RuntimeException("Two factor authentication not supported!");
         }
 

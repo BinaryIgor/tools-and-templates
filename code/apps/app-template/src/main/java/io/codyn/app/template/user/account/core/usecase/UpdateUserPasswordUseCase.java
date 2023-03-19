@@ -7,9 +7,7 @@ import io.codyn.app.template.user.common.core.PasswordHasher;
 import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.app.template.user.common.core.repository.UserUpdateRepository;
-import org.springframework.stereotype.Component;
 
-@Component
 public class UpdateUserPasswordUseCase {
 
     private final UserRepository userRepository;

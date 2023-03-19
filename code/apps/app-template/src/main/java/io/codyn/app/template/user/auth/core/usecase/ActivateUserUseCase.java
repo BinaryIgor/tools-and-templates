@@ -6,9 +6,7 @@ import io.codyn.app.template.user.common.core.UserStateChangedEvent;
 import io.codyn.app.template._common.core.model.ActivationTokenType;
 import io.codyn.app.template.user.common.core.repository.UserUpdateRepository;
 import io.codyn.types.event.LocalPublisher;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ActivateUserUseCase {
 
     private final ActivationTokenConsumer activationTokenConsumer;

@@ -12,9 +12,7 @@ import io.codyn.app.template.user.common.core.model.EmailUser;
 import io.codyn.app.template.user.common.core.model.User;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
 import io.codyn.types.Transactions;
-import org.springframework.stereotype.Component;
 
-@Component
 public class CreateUserUseCase {
 
     private final UserRepository userRepository;

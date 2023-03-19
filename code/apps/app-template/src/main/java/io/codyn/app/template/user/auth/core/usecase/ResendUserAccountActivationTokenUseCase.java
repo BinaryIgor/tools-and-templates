@@ -7,10 +7,7 @@ import io.codyn.app.template.user.common.core.UserExceptions;
 import io.codyn.app.template.user.common.core.model.ActivationTokenId;
 import io.codyn.app.template.user.common.core.model.EmailUser;
 import io.codyn.app.template.user.common.core.repository.UserRepository;
-import org.springframework.stereotype.Component;
 
-@Component
-//TODO: tests!
 public class ResendUserAccountActivationTokenUseCase {
 
     private final UserRepository userRepository;
