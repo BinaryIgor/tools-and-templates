@@ -9,6 +9,10 @@
     "dir": "code/apps/app-template"
   },
   {
+    "name": "app-sockets-server-template",
+    "dir": "code/apps/app-sockets-server-template"
+  },
+  {
     "name": "app-processor-template",
     "dir": "code/apps/app-processor-template"
   },
@@ -43,6 +47,10 @@
   {
     "name": "nginx-gateway",
     "dir": "tools/nginx/gateway"
+  },
+  {
+    "name": "nginx-sockets-server-gateway",
+    "dir": "tools/nginx/sockets-server-gateway"
   },
   {
     "name": "nginx-api",

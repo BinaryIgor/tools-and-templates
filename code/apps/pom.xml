@@ -16,6 +16,7 @@
         <module>app-template</module>
         <module>system-monitor</module>
         <module>app-processor-template</module>
+        <module>app-sockets-server-template</module>
     </modules>
 
 </project>

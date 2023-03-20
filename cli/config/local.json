@@ -1,8 +1,11 @@
 {
   "app-template-url-file": "app_url.txt",
   "current-app-template-url-file-path": "$PWD/../app-template/app_url.txt",
+  "current-app-sockets-server-template-url-file-path": "$PWD/../app-sockets-server-template/latest/app_url.txt",
   "upstream-app-template-nginx-dir": "$PWD/../nginx-gateway",
+  "upstream-app-sockets-server-template-nginx-dir": "$PWD/../nginx-sockets-server-gateway",
   "frontend-domain": "system-template.io",
+  "sockets-server-domain": "sockets.system-template.io",
   "static-path": "/home/monitor/static",
   "files-path": "/home/monitor/system-logs",
   "monitor-port": "10101",

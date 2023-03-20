@@ -1,8 +1,11 @@
 {
   "app-template-url-file": "app_url.txt",
   "current-app-template-url-file-path": "$PWD/../../app-template/latest/app_url.txt",
+  "current-app-sockets-server-template-url-file-path": "$PWD/../../app-sockets-server-template/latest/app_url.txt",
   "upstream-app-template-nginx-dir": "$PWD/../../nginx-gateway/latest",
+  "upstream-app-sockets-server-template-nginx-dir": "$PWD/../../nginx-sockets-server-gateway/latest",
   "frontend-domain": "droplet.roztropinski.com",
+  "sockets-server-domain": "sockets.system-template.io",
   "static-path": "/home/monitor/static",
   "certs-path": "/etc/letsencrypt",
   "files-path": "/home/monitor/system-logs",

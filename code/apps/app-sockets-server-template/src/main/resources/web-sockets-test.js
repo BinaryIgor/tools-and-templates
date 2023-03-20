@@ -1,4 +1,4 @@
-const webSocketsUrl = "wss://localhost/ws";
+const webSocketsUrl = "wss://localhost:543";
 
 console.log("Starting js to test websockets...");
 
