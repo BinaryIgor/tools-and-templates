@@ -1,5 +1,7 @@
 package io.codyn.app.sockets.server.template;
 
+import io.codyn.app.sockets.server.template.connection.ApiConnectionAuthenticator;
+import io.codyn.app.sockets.server.template.connection.ConnectionAuthenticator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -29,9 +31,9 @@ public class WebSocketConfig implements WebSocketConfigurer {
                                                    org.springframework.web.socket.WebSocketHandler wsHandler,
                                                    Map<String, Object> attributes) throws Exception {
 
-                        System.out.println("Intercepting request with %d headers...".formatted(request.getHeaders().size()));
+                        System.out.printf("Intercepting request with %d headers...%n", request.getHeaders().size());
                         request.getHeaders().forEach((k, v) -> {
-                            System.out.println("%s - %s".formatted(k, v));
+                            System.out.printf("%s - %s%n", k, v);
                         });
                         System.out.println(".....");
 
@@ -51,7 +53,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                         System.out.println(response);
                     }
                 });
-                //.setAllowedOrigins(); etc
+        //.setAllowedOrigins(); etc
     }
 
     @Bean
@@ -63,7 +65,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     }
 
     @Bean
-    public WebSocketHandler webSocketHandler() {
-        return new WebSocketHandler();
+    public WebSocketsHandler webSocketHandler() {
+        return new WebSocketsHandler(new ApiConnectionAuthenticator());
     }
 }
