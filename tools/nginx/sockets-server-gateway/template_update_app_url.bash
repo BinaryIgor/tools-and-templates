@@ -18,11 +18,13 @@ mv nginx_tmp.conf conf/default.conf
 echo "Config updated!"
 
 if [ -z "${SKIP_RELOAD:-}" ]; then
+    echo "Reloading nginx config.."
     docker exec ${nginx_container} nginx -s reload
+    sleep 5
     echo "Nginx is running with new app url ($APP_URL)!"
 
     echo "Checking proxied app connection.."
-    curl --silent --retry-connrefused --retry 15 --retry-delay 1 --fail ${app_health_check_url}
+    curl --retry-connrefused --retry 10 --retry-delay 1 --fail ${app_health_check_url} -k
     echo
 
     echo "Proxied app is healthy!"

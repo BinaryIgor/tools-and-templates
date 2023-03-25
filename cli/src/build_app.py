@@ -22,10 +22,6 @@ args = meta.cmd_args({
         "help": "Name of the app",
         "required": True
     },
-    "skip_build": {
-        "help": "Skip build, package ready artifact",
-        "action": "store_true"
-    },
     "skip_commons": {
         "help": "Skip commons, if you have them built",
         "action": "store_true"
@@ -197,7 +193,13 @@ def run_script_placeholders(comment, app_name,
         placeholders['upstream_nginx_dir'] = zero_downtime_deploy_config['upstream_nginx_dir']
         new_app_url_file = path.join(meta.cli_app_package_dir(app_name),
                                      zero_downtime_deploy_config['app_url_file'])
-        placeholders['app_url'] = meta.file_content(new_app_url_file).strip()
+
+        app_url = meta.file_content(new_app_url_file).strip()
+        placeholders['app_url'] = app_url
+
+        app_health_check_path = zero_downtime_deploy_config.get('app_health_check_path')
+        placeholders[
+            'app_health_check_url'] = f'{app_url}/{app_health_check_path}' if app_health_check_path else app_url
 
     return placeholders
 
@@ -313,19 +315,16 @@ if path.exists(app_package_dir):
     shutil.rmtree(app_package_dir)
 meta.create_dir(app_package_dir)
 
-if args["skip_build"]:
-    log.info("Skipping build, using existing files to create a package...")
-else:
-    build_env = {}
-    if args["skip_commons"]:
-        build_env[CI_BUILD_COMMONS] = "false"
-    if args["skip_commons_tests"]:
-        build_env[CI_SKIP_COMMONS_TESTS] = "true"
-    if args["skip_tests"]:
-        build_env[CI_SKIP_TESTS] = "true"
+build_env = {}
+if args["skip_commons"]:
+    build_env[CI_BUILD_COMMONS] = "false"
+if args["skip_commons_tests"]:
+    build_env[CI_SKIP_COMMONS_TESTS] = "true"
+if args["skip_tests"]:
+    build_env[CI_SKIP_TESTS] = "true"
 
-    log.info("About to build app...")
-    build_app(app, app_name, tag, build_env_vars=build_env)
+log.info("About to build app...")
+build_app(app, app_name, tag, build_env_vars=build_env)
 
 log.info(f"Packaging app...")
 package_app(app, app_name, tag, skip_image_export)

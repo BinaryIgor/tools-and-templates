@@ -1,10 +1,18 @@
 #!/bin/bash
 
+fail_deployment() {
+  echo "App is not running/healthy, renaming ${app_backup} back to ${app}..."
+  docker rename ${app_backup} ${app}
+  echo "App renamed, try deploying again!"
+  exit 1
+}
+
 found_container=$(docker ps -q -f name="${app}")
 app_backup="${app}-backup"
 
 if [ "$found_container" ]; then
   echo "Renaming current ${app} container to ${app_backup}..."
+  docker rm ${app_backup}
   docker rename ${app} ${app_backup}
 fi
 
@@ -26,14 +34,16 @@ sleep 5
 status=$(docker container inspect -f '{{.State.Status}}' ${app})
 if [ ${status} == 'running' ]; then
   echo "App is running, checking its health-check..."
-  curl --silent --retry-connrefused --retry 10 --retry-delay 1 --fail ${app_url}
+  #TODO: check http code (if needed)
+  curl --retry-connrefused --retry 10 --retry-delay 1 --fail ${app_health_check_url}
   echo
-  echo "App is healthy!"
+  if [ $? == 0 ]; then
+    echo "App is healthy!"
+  else
+    fail_deployment
+  fi
 else
-  echo "App is not running, renaming ${app_backup} back to ${app}..."
-  docker rename ${app_backup} ${app}
-  echo "App renamed, try deploying again!"
-  exit 1
+  fail_deployment
 fi
 
 cwd=$PWD

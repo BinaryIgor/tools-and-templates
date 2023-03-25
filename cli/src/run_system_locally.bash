@@ -118,10 +118,7 @@ if [[ $1 == *build ]]; then
     fi
   done
 else
-  echo "Skipping build, prepare packages..."
-  for c in "${COMPONENTS[@]}"; do
-      python build_app.py --env local --app $c --skip_build --skip_image_export
-  done
+  echo "Skipping build, using prepared packages..."
 fi
 
 set +e
@@ -209,7 +206,7 @@ bash run.bash
 wait_for_container $APP_PROCESSOR_TEMPLATE 5
 
 echo
-echo "$APP_APP_PROCESSOR_TEMPLATE is up!"
+echo "$APP_PROCESSOR_TEMPLATE is up!"
 echo
 
 echo "Starting ${APP_SOCKETS_SERVER_TEMPLATE}..."

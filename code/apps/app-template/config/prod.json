@@ -23,7 +23,8 @@
   "pre_run_cmd": "export SERVER_PORT=$(cat app_server_port.txt)",
   "zero_downtime_deploy": {
     "upstream_nginx_dir": "${upstream-app-template-nginx-dir}",
-    "app_url_file": "${app-template-url-file}"
+    "app_url_file": "${app-template-url-file}",
+    "app_health_check_path": "actuator/health"
   },
   "network": "host",
   "memory": "500M",
