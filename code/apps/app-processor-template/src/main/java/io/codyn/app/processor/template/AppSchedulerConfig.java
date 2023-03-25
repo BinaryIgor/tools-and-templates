@@ -19,6 +19,8 @@ public class AppSchedulerConfig {
         var poolScheduler = new ThreadPoolTaskScheduler();
         poolScheduler.setClock(clock);
         poolScheduler.setPoolSize(5);
+        poolScheduler.setWaitForTasksToCompleteOnShutdown(true);
+        poolScheduler.setAwaitTerminationSeconds(30);
         return poolScheduler;
     }
 }
