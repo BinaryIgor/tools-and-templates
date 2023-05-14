@@ -1,7 +1,7 @@
 {
   "env": {
-    "METRICS_TARGET_URL": "http://localhost:10101/metrics",
-    "MACHINE_NAME": "monitor",
+    "METRICS_TARGET_URL": "${monitor-url}/metrics",
+    "MACHINE_NAME": "${CI_MACHINE_NAME}",
     "COLLECTION_INTERVAL": "10"
   },
   "volumes": [

@@ -10,6 +10,7 @@ from os import environ
 import docker
 from docker.errors import NotFound
 import requests
+from requests.exceptions import InvalidJSONError
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s.%(msecs)03d;%(levelname)s;%(message)s",
@@ -18,10 +19,6 @@ LOG = logging.getLogger(__file__)
 
 CONTAINER_ID_FIELD = "containerId"
 CONTAINER_NAME_FIELD = "containerName"
-
-INSTANCE_ID_FIELD = "instanceId"
-DEFAULT_INSTANCE_ID_SUFFIX = "default"
-INSTANCE_ID_LABEL = environ.get("INSTANCE_ID_LABEL", "")
 
 MACHINE_NAME = environ.get("MACHINE_NAME", "anonymous-machine")
 
@@ -36,6 +33,9 @@ COLLECTION_INTERVAL = int(environ.get("COLLECTION_INTERVAL", 10))
 LAST_DATA_READ_AT_FILE_PATH = environ.get("LAST_DATA_READ_AT_FILE",
                                           "/tmp/docker-metrics-collector-last-data-read-at.txt")
 
+SEND_METRICS_RETRIES = 5
+SEND_METRICS_RETRY_DELAY = 2
+
 
 class DockerContainers:
     """
@@ -49,19 +49,11 @@ class DockerContainers:
         self.client = docker_client
 
     def get(self):
-        def instance_id_label(container):
-            labels = container['Labels']
-            instance_id = labels.get(INSTANCE_ID_LABEL, None)
-            if not instance_id:
-                instance_id = f'{container_name(container)}-{DEFAULT_INSTANCE_ID_SUFFIX}'
-            return instance_id
-
         def container_name(container):
             return container["Names"][0].replace("/", "")
 
         fetched = [{CONTAINER_ID_FIELD: c['Id'],
-                    CONTAINER_NAME_FIELD: container_name(c),
-                    INSTANCE_ID_FIELD: instance_id_label(c)}
+                    CONTAINER_NAME_FIELD: container_name(c)}
                    for c in self.client.containers()]
 
         all_containers = []
@@ -191,7 +183,7 @@ def send_metrics_if_present(c_metrics):
             LOG.info(f"Sending metrics of {len(c_metrics)} containers...")
 
             metrics_object = {
-                'source': MACHINE_NAME,
+                'machine': MACHINE_NAME,
                 'metrics': c_metrics
             }
 
@@ -209,8 +201,8 @@ def send_metrics_if_present(c_metrics):
         LOG.info("No metrics to send")
 
 
-def send_metrics(containers_metrics, retries=3):
-    for i in range(1 + retries):
+def send_metrics(containers_metrics):
+    for i in range(1 + SEND_METRICS_RETRIES):
         try:
             if METRICS_TARGET_HEADERS:
                 r = requests.post(
@@ -222,11 +214,10 @@ def send_metrics(containers_metrics, retries=3):
 
             return
         except Exception:
-            if i < retries:
-                retry_interval = random_retry_interval()
+            if i < SEND_METRICS_RETRIES:
                 LOG.info(
-                    f"Fail to send metrics, will retry in {retry_interval}s")
-                time.sleep(retry_interval)
+                    f"Fail to send metrics, will retry in {SEND_METRICS_RETRY_DELAY}s")
+                time.sleep(SEND_METRICS_RETRY_DELAY)
             else:
                 raise
 
@@ -237,14 +228,12 @@ def containers_metrics(containers):
     for c in containers:
         c_id = c[CONTAINER_ID_FIELD]
         c_name = c[CONTAINER_NAME_FIELD]
-        i_id = c[INSTANCE_ID_FIELD]
 
         print()
         LOG.info(f"Checking {c_name}:{c_id} container metrics...")
 
         c_metrics = fetched_container_metrics(container_id=c_id,
-                                              container_name=c_name,
-                                              instance_id=i_id)
+                                              container_name=c_name)
 
         if c_metrics:
             containers_metrics.append(c_metrics)
@@ -255,7 +244,7 @@ def containers_metrics(containers):
     return containers_metrics
 
 
-def fetched_container_metrics(container_id, container_name, instance_id):
+def fetched_container_metrics(container_id, container_name):
     try:
         LOG.info("Gathering metrics...")
 
@@ -269,7 +258,6 @@ def fetched_container_metrics(container_id, container_name, instance_id):
         started_at = inspection_result['State'].get('StartedAt', datetime.utcnow().isoformat(sep="T"))
 
         metrics_object = formatted_container_metrics(name=container_name,
-                                                     instance_id=instance_id,
                                                      started_at=started_at,
                                                      memory_metrics=memory_metrics,
                                                      cpu_metrics=cpu_metrics,
@@ -282,16 +270,19 @@ def fetched_container_metrics(container_id, container_name, instance_id):
         LOG.info(f"Container {container_name}:{container_id} not found, skipping!")
         print()
         return None
+    except InvalidJsonError:
+        LOG.info(f"Container {container_name}:{container_id} returned invalid json, skipping!")
+        print()
+        return None
     except Exception:
         log_exception("Failed to gather metrics")
         return None
 
 
-def formatted_container_metrics(name, instance_id, started_at, memory_metrics, cpu_metrics, precpu_metrics):
+def formatted_container_metrics(name, started_at, memory_metrics, cpu_metrics, precpu_metrics):
     try:
         return {
             'containerName': name,
-            'instanceId': instance_id,
             'startedAt': started_at,
             'timestamp': current_timestamp_millis(),
             'usedMemory': memory_metrics['usage'],

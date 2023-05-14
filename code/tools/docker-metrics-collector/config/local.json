@@ -1,6 +1,6 @@
 {
   "env": {
-    "METRICS_TARGET_URL": "http://localhost:10101/metrics",
+    "METRICS_TARGET_URL": "http://localhost:${monitor-port}/metrics",
     "MACHINE_NAME": "monitor",
     "COLLECTION_INTERVAL": "10"
   },
