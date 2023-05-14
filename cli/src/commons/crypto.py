@@ -12,7 +12,7 @@ KEYS_BYTES_LENGTH = 32
 PASSWORD_LENGTH = 48
 PASSWORD_CHARACTERS = f'{string.ascii_letters}{string.digits}'
 
-# TODO: change its name!
+# TODO: customize
 CLI_SECRETS_PASSWORD_ENV = "CLI_SECRETS_PASSWORD"
 
 

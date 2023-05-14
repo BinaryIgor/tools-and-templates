@@ -1,9 +1,13 @@
 #!/bin/bash
-docker rm grafana-exp
+name="system-template-grafana"
 
-docker build . -t grafana-exp
+docker stop $name || true
+
+docker rm $name || true
+
+docker build . -t $name
 
 # docker volume create grafana-exp-volume
 # docker run --network host -v "grafana-exp-volume:/var/lib/grafana" --name grafana-exp grafana-exp
 
-docker run --network host --name grafana-exp grafana-exp
+docker run -d --network host --name $name $name

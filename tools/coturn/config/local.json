@@ -1,0 +1,14 @@
+{
+  "volumes": [
+    "${PWD}/coturn.conf:/etc/turnserver.conf:ro"
+  ],
+  "build_cmd": "bash build.bash",
+  "build_env": {
+    "COTURN_OLD_AUTH_SECRET": "secrets:turn-server-secret",
+    "COTURN_AUTH_SECRET": "secrets:turn-server-secret"
+  },
+  "pre_run_cmd": "bash set_coturn_realm.bash",
+  "memory": "1000m",
+  "cpus": 1,
+  "network": "host"
+}

@@ -6,15 +6,17 @@
   "upstream-app-sockets-server-template-nginx-dir": "$PWD/../../nginx-sockets-server-gateway/latest",
   "frontend-domain": "droplet.roztropinski.com",
   "sockets-server-domain": "sockets.system-template.io",
-  "static-path": "/home/monitor/static",
+  "static-path": "/home/system-template/static",
   "certs-path": "/etc/letsencrypt",
-  "files-path": "/home/monitor/system-logs",
-  "secrets-path": "/home/monitor/.secrets",
+  "files-path": "/home/system-template/system-logs",
+  "secrets-path": "/home/system-template/.secrets",
   "monitor-port": "10101",
   "db-url": "jdbc:postgresql://localhost:5432/system-template",
+  "db-local-url": "jdbc:postgresql://localhost:5432/system-template",
   "db-host": "localhost",
   "db-port": "5432",
   "db-local-port": "5678",
   "db-user": "system-template",
-  "db-name": "system-template"
+  "db-name": "system-template",
+  "private-ip-range": "10.114.16.0/20"
 }

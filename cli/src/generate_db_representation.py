@@ -27,11 +27,11 @@ db_url = env_config['db-url']
 db_user = env_config['db-user']
 db_password = crypto.system_secrets()[f'db-password']
 
-root_code_path = path.join(meta.root_code_dir(), "commons", "sql-db")
+root_src_path = path.join(meta.root_src_dir(), "commons", "sql-db")
 for s in schemas:
     log.info(f"Generating representation for {s} schema...")
 
-    generator_path = path.join(root_code_path, "schema", s)
+    generator_path = path.join(root_src_path, "schema", s)
 
     meta.execute_bash_script(f"""
     cd {generator_path}

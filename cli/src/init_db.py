@@ -5,7 +5,7 @@ log = meta.new_log("init_db")
 
 args = meta.cmd_args(
     args_definitions={
-        "initial_root_password": {
+        "init_root_password": {
             "help": "initial root password, if not given, it's taken from secrets",
             "default": "postgres"
         }
@@ -16,18 +16,19 @@ env_config = meta.env_config()
 
 secrets = crypto.system_secrets()
 
+root_user = env_config['db-root-user']
 root_password = secrets['db-root-password']
-initial_root_password = args['initial_root_password']
+initial_root_password = args['init_root_password']
 
 trials = 5
 
 for i in range(trials):
     try:
         try:
-            conn = db.root_connection(initial_root_password)
+            conn = db.root_connection(root_user, initial_root_password)
         except Exception:
             log.info("Failed to use initial root password, will use next one instead")
-            conn = db.root_connection(root_password)
+            conn = db.root_connection(root_user, root_password)
             break
     except Exception:
         if (i + 1) < trials:
@@ -49,6 +50,8 @@ db.create_user_if_does_not_exist(cur, db_reader_user, secrets['db-reader-passwor
 
 log.info(f"{db_user} and {db_reader_user} users for {db_name} created, rotating root password...")
 
-db.alter_user_password(cur, "postgres", secrets['db-root-password'])
+if meta.is_local_env():
+    # Not possible to change root password on digital ocean like that!
+    db.alter_user_password(cur, root_user, secrets['db-root-password'])
 
 log.info("Db initialized")

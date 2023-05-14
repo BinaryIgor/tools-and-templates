@@ -1,7 +1,7 @@
 {
-  "user": "monitor",
-  "secrets-path": "/home/monitor/.secrets",
-  "deploy-dir": "/home/monitor/deploy",
+  "user": "system-template",
+  "secrets-path": "/home/system-template/.secrets",
+  "deploy-dir": "/home/system-template/deploy",
   "machines": [
     {
       "name": "monitor-droplet",

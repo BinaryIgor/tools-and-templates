@@ -4,19 +4,23 @@ import psycopg2
 log = meta.new_log("db")
 
 
-def root_connection(root_password=None, db_name=None):
+def root_connection(root_user=None, root_password=None, db_name=None):
     env_config = meta.env_config()
-    db_host = env_config['db-host']
-    # Local port != remote port for prod environment, where we set up tunel for admin tasks
+    db_host = env_config['db-local-host']
+    # Local port != remote port for prod environment, where we set up tunel for admin tasks, same with host
     db_port = env_config['db-local-port']
 
+    if root_user is None:
+        root_user = env_config['db-root-user']
+
     if root_password is None:
-        root_password = crypto.system_secrets()[f'db-root-password']
+        root_password = crypto.system_secrets()['db-root-password']
 
-    if db_name is None:
-        db_name = "postgres"
-
-    conn = psycopg2.connect(host=db_host, port=db_port, dbname=db_name, user='postgres', password=root_password,
+    conn = psycopg2.connect(host=db_host,
+                            port=db_port,
+                            dbname=db_name if db_name else env_config['db-root-name'],
+                            user=root_user,
+                            password=root_password,
                             connect_timeout=3)
     conn.autocommit = True
     return conn
@@ -67,10 +71,13 @@ def grant_read_privileges(cursor, user, db, schemas=None):
 
     for s in schemas:
         log.info(f"Granting read privileges to {user} on schema {s}")
-        cursor.execute(f"""
-        GRANT USAGE ON SCHEMA "{s}" TO "{user}";
-        GRANT SELECT ON ALL TABLES IN SCHEMA "{s}" TO "{user}";
-        """)
+        try:
+            cursor.execute(f"""
+            GRANT USAGE ON SCHEMA "{s}" TO "{user}";
+            GRANT SELECT ON ALL TABLES IN SCHEMA "{s}" TO "{user}";
+            """)
+        except Exception:
+            log.exception(f"Failed to grant permissions on {s} schema for {user}")
 
 
 def alter_user_password(cursor, user, password):

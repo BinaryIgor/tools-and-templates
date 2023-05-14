@@ -69,8 +69,8 @@ if [ -z "$SYSTEM_DATA_PATH" ]; then
 fi
 
 export PG_DB_VOLUME_PATH=$SYSTEM_DATA_PATH/pg-db-volume
-export SYSTEM_DATA_VOLUME_PATH=$SYSTEM_DATA_PATH/system-data-volume
-export SYSTEM_LOGS_VOLUME_PATH=$SYSTEM_DATA_PATH/logs-volume
+export FILES_VOLUME_PATH=$SYSTEM_DATA_PATH/files-volume
+export LOGS_VOLUME_PATH=$SYSTEM_DATA_PATH/logs-volume
 
 export STATIC_FILES_PATH=${STATIC_FILES_PATH:-$PWD}
 
@@ -81,8 +81,8 @@ export PACKAGES_DIR="${PWD}/../target"
 echo "Creating volume directories, if they don't exist..."
 mkdir -p "$SYSTEM_DATA_PATH"
 mkdir -p "$PG_DB_VOLUME_PATH"
-mkdir -p "$SYSTEM_DATA_VOLUME_PATH"
-mkdir -p "$SYSTEM_LOGS_VOLUME_PATH"
+mkdir -p "$FILES_VOLUME_PATH"
+mkdir -p "$LOGS_VOLUME_PATH"
 
 echo
 echo "Volumes created"
@@ -90,16 +90,23 @@ echo
 
 WAIT_FOR_CONTAINER_INTERVAL=1
 
+FLUENTD="fluentd"
+MONITOR="monitor"
+DOCKER_METRICS_COLLECTOR="docker-metrics-collector"
+
 POSTGRES_DB="postgres-db"
-NGINX_GATEWAY="nginx-gateway"
-NGINX_SOCKETS_SERVER_GATEWAY="nginx-sockets-server-gateway"
 
-APP_TEMPLATE="app-template"
-APP_PROCESSOR_TEMPLATE="app-processor-template"
-APP_SOCKETS_SERVER_TEMPLATE="app-sockets-server-template"
+NGINX_API_GATEWAY="nginx-api-gateway"
+NGINX_SOCKET_SERVER_GATEWAY="nginx-socket-server-gateway"
 
-COMPONENTS=("$POSTGRES_DB" "$APP_TEMPLATE" "$NGINX_GATEWAY" "$APP_PROCESSOR_TEMPLATE" "$APP_SOCKETS_SERVER_TEMPLATE" "$NGINX_SOCKETS_SERVER_GATEWAY")
-COMPONENTS_REVERSED=("$NGINX_SOCKETS_SERVER_GATEWAY" "$APP_SOCKETS_SERVER_TEMPLATE" "$APP_PROCESSOR_TEMPLATE" "$NGINX_GATEWAY" "$APP_TEMPLATE" "$POSTGRES_DB")
+API="api"
+PROCESSOR="processor"
+SOCKET_SERVER="socket-server"
+
+COTURN="coturn"
+
+COMPONENTS=("$FLUENTD" "$MONITOR" "$DOCKER_METRICS_COLLECTOR" "$POSTGRES_DB" "$API" "$NGINX_API_GATEWAY" "$PROCESSOR" "$SOCKET_SERVER" "$NGINX_SOCKET_SERVER_GATEWAY" "$COTURN")
+COMPONENTS_REVERSED=("$COTURN" "$NGINX_SOCKET_SERVER_GATEWAY" "$SOCKET_SERVER" "$PROCESSOR" "$NGINX_API_GATEWAY" "$API" "$POSTGRES_DB" "$DOCKER_METRICS_COLLECTOR" "$MONITOR" "$FLUENTD")
 
 echo "Building all..."
 
@@ -113,7 +120,7 @@ if [[ $1 == *build ]]; then
       python build_app.py --env local --app $c --skip_tests --skip_image_export
     fi
 
-    if [ $c == $APP_TEMPLATE ]; then
+    if [ $c == $API ]; then
       skip_commons="true"
     fi
   done
@@ -126,6 +133,44 @@ set +e
 trap break INT
 
 echo "Images are ready to use, starting them in the right order"
+
+echo "Starting ${FLUENTD}..."
+cd $PACKAGES_DIR
+cd $FLUENTD
+
+bash run.bash
+
+wait_for_container $FLUENTD
+#echo "..this can take a while and can fail sometimes!"
+#sleep 20
+
+echo
+echo "$FLUENTD is up!"
+echo
+
+echo "Starting ${MONITOR}..."
+cd $PACKAGES_DIR
+cd $MONITOR
+
+bash run.bash
+
+wait_for_container $MONITOR
+
+echo
+echo "$MONITOR is up!"
+echo
+
+echo "Starting ${DOCKER_METRICS_COLLECTOR}..."
+cd $PACKAGES_DIR
+cd $DOCKER_METRICS_COLLECTOR
+
+bash run.bash
+
+wait_for_container $DOCKER_METRICS_COLLECTOR
+
+echo
+echo "$DOCKER_METRICS_COLLECTOR is up!"
+echo
 
 echo "Starting ${POSTGRES_DB}..."
 cd $PACKAGES_DIR
@@ -158,79 +203,76 @@ echo
 echo "$POSTGRES_DB migrations executed with code: $db_migration_code"
 echo
 
-#echo "Starting ${MONITOR}..."
-#cd $PACKAGES_DIR
-#cd $MONITOR
-#
-#export HM_LOGS_VOLUME_PATH=$HAIRO_LOGS_VOLUME_PATH
-#export HM_SECRETS_DIR=$SECRETS_DIR
-#
-#bash run.bash
-#
-#wait_for_container $MONITOR
-#
-#echo
-#echo "$MONITOR is up!"
-#echo
-
-echo "Starting ${APP_TEMPLATE}..."
+echo "Starting ${API}..."
 cd $PACKAGES_DIR
-cd $APP_TEMPLATE
+cd $API
 
 bash run.bash
 
-wait_for_container $APP_TEMPLATE 5
+wait_for_container $API 5
 
 echo
-echo "$APP_TEMPLATE is up!"
+echo "$API is up!"
 echo
 
-echo "Starting ${NGINX_GATEWAY}..."
+echo "Starting ${NGINX_API_GATEWAY}..."
 cd $PACKAGES_DIR
-cd $NGINX_GATEWAY
+cd $NGINX_API_GATEWAY
 
 bash run.bash
 
-wait_for_container $NGINX_GATEWAY
+wait_for_container $NGINX_API_GATEWAY
 
 echo
-echo "$NGINX_GATEWAY is up!"
+echo "$NGINX_API_GATEWAY is up!"
 echo
 
-echo "Starting ${APP_PROCESSOR_TEMPLATE}..."
+echo "Starting ${PROCESSOR}..."
 cd $PACKAGES_DIR
-cd $APP_PROCESSOR_TEMPLATE
+cd $PROCESSOR
 
 bash run.bash
 
-wait_for_container $APP_PROCESSOR_TEMPLATE 5
+wait_for_container $PROCESSOR 5
 
 echo
-echo "$APP_PROCESSOR_TEMPLATE is up!"
+echo "$PROCESSOR is up!"
 echo
 
-echo "Starting ${APP_SOCKETS_SERVER_TEMPLATE}..."
+echo "Starting ${SOCKET_SERVER}..."
 cd $PACKAGES_DIR
-cd $APP_SOCKETS_SERVER_TEMPLATE
+cd $SOCKET_SERVER
 
 bash run.bash
 
-wait_for_container $APP_SOCKETS_SERVER_TEMPLATE 5
+wait_for_container $SOCKET_SERVER 5
 
 echo
-echo "$APP_SOCKETS_SERVER_TEMPLATE is up!"
+echo "$SOCKET_SERVER is up!"
 echo
 
-echo "Starting ${NGINX_SOCKETS_SERVER_GATEWAY}..."
+echo "Starting ${NGINX_SOCKET_SERVER_GATEWAY}..."
 cd $PACKAGES_DIR
-cd $NGINX_SOCKETS_SERVER_GATEWAY
+cd $NGINX_SOCKET_SERVER_GATEWAY
 
 bash run.bash
 
-wait_for_container $NGINX_SOCKETS_SERVER_GATEWAY
+wait_for_container $NGINX_SOCKET_SERVER_GATEWAY
 
 echo
-echo "$NGINX_SOCKETS_SERVER_GATEWAY is up!"
+echo "$NGINX_SOCKET_SERVER_GATEWAY is up!"
+echo
+
+echo "Starting ${COTURN}..."
+cd $PACKAGES_DIR
+cd $COTURN
+
+bash run.bash
+
+wait_for_container $COTURN
+
+echo
+echo "$COTURN is up!"
 echo
 
 echo "Checking if all system components are healthy..."

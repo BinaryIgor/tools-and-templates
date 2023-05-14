@@ -65,10 +65,10 @@ templates_names = args["templates_names"]
 send_to = args['send_to']
 
 if not code_variables:
-    domain = "https://codyn.io"
+    domain = "https://collybri.codyn.io"
     code_variables = [
         "user=Pierwszy",
-        f"oldEmail=codyn@o2.pl",
+        f"oldEmail=collybri@o2.pl",
         f"emailChangeConfirmationUrl={domain}/user-account",
         f"newPasswordUrl={domain}/new-password",
         f"passwordResetUrl={domain}/forgot-password",

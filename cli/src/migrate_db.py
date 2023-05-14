@@ -2,6 +2,7 @@ from commons import meta, crypto, db
 from os import path
 
 SCHEMAS = "schemas"
+FLYWAY_IMAGE = "flyway/flyway:9-alpine"
 
 log = meta.new_log("migrate_db")
 
@@ -31,11 +32,9 @@ if meta.is_local_env():
 
 env_config = meta.env_config()
 
-# Local port != remote port for prod env, where we set up tunnel for admin tasks
-db_local_port = env_config['db-local-port']
 db_port = env_config['db-port']
 
-jdbc_url = env_config['db-url'].replace(db_port, db_local_port)
+jdbc_url = env_config['db-local-url']
 db_user = env_config['db-user']
 db_reader_user = f'{db_user}_reader'
 db_name = env_config['db-name']
@@ -58,12 +57,9 @@ for s in schemas:
     log.info(f"{cmd} {s} schema from path: {schema_dir}..")
 
     meta.execute_bash_script(f"""
-    docker rm db-migration || true
-    
     docker run --rm -v "{schema_dir}:/flyway/sql" \
         --network host \
-        --name db-migration \
-        flyway/flyway:9-alpine -url="{jdbc_url}" \
+        {FLYWAY_IMAGE} -url="{jdbc_url}" \
         -schemas="{s}" \
         -user="{db_user}" \
         -password="{db_password}" \

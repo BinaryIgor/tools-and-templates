@@ -11,7 +11,12 @@ SECRETS_NAMES = [
     "db-password",
     "db-reader-password",
     "db-root-password",
-    "jwt-token-key"
+    "jwt-token-key",
+    "do-space-access-key",
+    "do-space-secret-key",
+    "postmark-webhook-token",
+    "turn-cli-password",
+    "turn-server-secret"
 ]
 
 SECRETS_PATH = crypto.secrets_path()

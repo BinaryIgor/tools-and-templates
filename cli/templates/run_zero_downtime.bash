@@ -1,18 +1,39 @@
 #!/bin/bash
 
 fail_deployment() {
-  echo "App is not running/healthy, renaming ${app_backup} back to ${app}..."
+  echo "App is not running/healthy, stopping and renaming ${app_backup} back to ${app}..."
+  stop_container
+  docker rm ${app}
   docker rename ${app_backup} ${app}
   echo "App renamed, try deploying again!"
   exit 1
 }
 
+stop_container() {
+  echo "Stopping current ${app} container..."
+  docker stop ${app} --time ${stop_timeout}
+}
+
+stop_backup_container() {
+  echo "Stopping previous ${app_backup} container..."
+  docker stop ${app_backup} --time ${stop_timeout}
+}
+
+echo "Sourcing deploy variables, if they're present..."
+source deploy.env || true
+
 found_container=$(docker ps -q -f name="${app}")
 app_backup="${app}-backup"
+found_backup_container=$(docker ps -q -f name="${app_backup}")
+
+if [ "$found_backup_container" ]; then
+  echo "For some reason, backup container is still running..."
+  stop_backup_container
+  docker rm ${app_backup}
+fi
 
 if [ "$found_container" ]; then
   echo "Renaming current ${app} container to ${app_backup}..."
-  docker rm ${app_backup}
   docker rename ${app} ${app_backup}
 fi
 
@@ -35,10 +56,11 @@ status=$(docker container inspect -f '{{.State.Status}}' ${app})
 if [ ${status} == 'running' ]; then
   echo "App is running, checking its health-check..."
   #TODO: check http code (if needed)
-  curl --retry-connrefused --retry 10 --retry-delay 1 --fail ${app_health_check_url}
+  curl --retry-connrefused --retry 10 --retry-delay 3 --fail ${app_health_check_url}
+  health_check_status=$?
   echo
-  if [ $? == 0 ]; then
-    echo "App is healthy!"
+  if [ $health_check_status == 0 ]; then
+    echo "${app} app is healthy!"
   else
     fail_deployment
   fi
@@ -48,6 +70,7 @@ fi
 
 cwd=$PWD
 cd ${upstream_nginx_dir}
+echo
 bash "update_app_url.bash" ${app_url}
 cd ${cwd}
 
@@ -57,8 +80,7 @@ sleep 5
 echo
 
 if [ "$found_container" ]; then
-  echo "Stopping previous ${app_backup} container..."
-  docker stop ${app_backup} --time ${stop_timeout}
+  stop_backup_container
 fi
 
 echo "Removing previous container...."

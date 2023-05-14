@@ -109,7 +109,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "time() - monitoring_application_up_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
+          "expr": "time() - monitoring_application_up_timestamp_seconds{application=\"$application\", machine=\"$machine\"}",
           "instant": true,
           "legendFormat": "{{source}}-{{application}}-{{instance_id}}",
           "range": false,
@@ -203,7 +203,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "time() - monitoring_application_started_at_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"}",
+          "expr": "time() - monitoring_application_started_at_timestamp_seconds{application=\"$application\", machine=\"$machine\"}",
           "instant": true,
           "intervalFactor": 1,
           "legendFormat": "{{source}}-{{application}}-{{instance_id}}",
@@ -301,7 +301,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_used_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"} / monitoring_application_max_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
+          "expr": "monitoring_application_used_memory_bytes{application=\"$application\", machine=\"$machine\"} / monitoring_application_max_memory_bytes{application=\"$application\", machine=\"$machine\"}",
           "legendFormat": "Memory usage",
           "range": true,
           "refId": "A"
@@ -396,7 +396,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_cpu_usage_percent{application=\"$application\", instance_id=\"$instance_id\"}",
+          "expr": "monitoring_application_cpu_usage_percent{application=\"$application\", machine=\"$machine\"}",
           "interval": "",
           "legendFormat": "CPU usage",
           "range": true,
@@ -491,7 +491,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_used_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
+          "expr": "monitoring_application_used_memory_bytes{application=\"$application\", machine=\"$machine\"}",
           "legendFormat": "Used memory",
           "range": true,
           "refId": "A"
@@ -502,7 +502,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "monitoring_application_max_memory_bytes{application=\"$application\", instance_id=\"$instance_id\"}",
+          "expr": "monitoring_application_max_memory_bytes{application=\"$application\", machine=\"$machine\"}",
           "hide": false,
           "legendFormat": "Total memory",
           "range": true,
@@ -755,7 +755,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "(monitoring_application_logs_warning_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"} * 1000)  > $__from < $__to",
+          "expr": "(monitoring_application_logs_warning_timestamp_seconds{application=\"$application\", machine=\"$machine\"} * 1000)  > $__from < $__to",
           "legendFormat": "Warnings",
           "range": true,
           "refId": "A"
@@ -766,7 +766,7 @@
             "uid": "P1809F7CD0C75ACF3"
           },
           "editorMode": "code",
-          "expr": "(monitoring_application_logs_error_timestamp_seconds{application=\"$application\", instance_id=\"$instance_id\"} * 1000)  > $__from < $__to",
+          "expr": "(monitoring_application_logs_error_timestamp_seconds{application=\"$application\", machine=\"$machine\"} * 1000)  > $__from < $__to",
           "hide": false,
           "legendFormat": "Errors",
           "range": true,
@@ -786,9 +786,9 @@
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "nginx-reverse-proxy",
-          "value": "nginx-reverse-proxy"
+          "selected": true,
+          "text": "nginx-api-gateway",
+          "value": "nginx-api-gateway"
         },
         "datasource": {
           "type": "prometheus",
@@ -813,22 +813,22 @@
       {
         "current": {
           "selected": false,
-          "text": "nginx-reverse-proxy-default",
-          "value": "nginx-reverse-proxy-default"
+          "text": "front-api",
+          "value": "front-api"
         },
         "datasource": {
           "type": "prometheus",
           "uid": "P1809F7CD0C75ACF3"
         },
-        "definition": "label_values(monitoring_application_up_timestamp_seconds{application=\"$application\"}, instance_id)",
+        "definition": "label_values(monitoring_application_up_timestamp_seconds{application=\"$application\"}, machine)",
         "hide": 0,
         "includeAll": false,
-        "label": "instance",
+        "label": "machine",
         "multi": false,
-        "name": "instance_id",
+        "name": "machine",
         "options": [],
         "query": {
-          "query": "label_values(monitoring_application_up_timestamp_seconds{application=\"$application\"}, instance_id)",
+          "query": "label_values(monitoring_application_up_timestamp_seconds{application=\"$application\"}, machine)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

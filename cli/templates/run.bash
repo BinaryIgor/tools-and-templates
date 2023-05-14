@@ -1,4 +1,6 @@
 #!/bin/bash
+echo "Sourcing deploy variables, if they're present..."
+source deploy.env || true
 
 found_container=$(docker ps -q -f name="${app}")
 if [ "$found_container" ]; then

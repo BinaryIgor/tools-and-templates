@@ -9,7 +9,7 @@ import re
 import subprocess as sp
 import pathlib
 
-# TODO: change it!
+# TODO: customize
 CLI_NAME = "system-template-cli"
 
 APPS_JSON = "apps.json"
@@ -37,7 +37,7 @@ def new_log(name=None):
     root_logger.setLevel(level=logging.INFO)
 
     if not root_logger.handlers:
-        console_formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(name)s:%(message)s')
+        console_formatter = logging.Formatter('%(asctime)s %(levelname)s %(name)s: %(message)s')
         sh = logging.StreamHandler()
         sh.setFormatter(console_formatter)
         root_logger.addHandler(sh)
@@ -123,6 +123,13 @@ def multiline_description(*lines):
     return "\n".join(lines)
 
 
+def str_arg_as_list(arg):
+    if arg:
+        return [a.strip() for a in arg.split(",")]
+
+    return []
+
+
 def root_cli_dir():
     start_cwd = os.getcwd()
     cwd = start_cwd
@@ -141,8 +148,8 @@ def root_dir():
     return root
 
 
-def root_code_dir():
-    return path.join(root_dir(), "code")
+def root_src_dir():
+    return path.join(root_dir(), "src")
 
 
 def root_tools_dir():
@@ -214,8 +221,12 @@ def app_name(app):
 
 
 def env_config():
-    with open(path.join(config_dir(), f'{current_env()}.json')) as f:
+    with open(current_env_file_path('vars.json')) as f:
         return json.load(f)
+
+
+def current_env_file_path(file_name):
+    return path.join(config_dir(), current_env(), file_name)
 
 
 def app_config(app):
@@ -225,8 +236,16 @@ def app_config(app):
 
 
 def deploy_config():
-    with open(path.join(config_dir(), "deploy.json")) as f:
+    with open(current_env_file_path("deploy.json")) as f:
         return json.load(f)
+
+
+def domains(https_only=True):
+    with open(current_env_file_path("domains.json")) as f:
+        ds = json.load(f)
+        if https_only:
+            return [d for d in ds if d.get("https", True)]
+        return ds
 
 
 def current_env():
@@ -266,13 +285,16 @@ def replaced_placeholders_content(content, placeholders_values, objects_values=N
     return replaced_vars_content
 
 
-def execute_script(script):
+def execute_script(script, exit_on_failure=True):
     try:
         code = sp.run(script, shell=True).returncode
         if code != 0:
-            log.error(f"Fail to execute script: {script}")
-            log.error(f"Exiting: {code}")
-            sys.exit(code)
+            if exit_on_failure:
+                log.error(f"Fail to execute script: {script}")
+                log.error(f"Exiting: {code}")
+                sys.exit(code)
+            else:
+                raise Exception(f"Fail to execute script ({code}): {script}")
     except KeyboardInterrupt:
         log.info("Script executing interrupted by user, exiting!")
         sys.exit(0)
@@ -294,13 +316,13 @@ def execute_script_returning_process_output(script, raise_on_error=True):
     return process.stdout.decode("utf8")
 
 
-def execute_bash_script(script):
+def execute_bash_script(script, exit_on_failure=True):
     execute_script(f"""
     #!/bin/bash
     set -e
 
     {script}
-    """)
+    """, exit_on_failure=exit_on_failure)
 
 
 def create_dir(path, parents=True, exist_ok=True):
