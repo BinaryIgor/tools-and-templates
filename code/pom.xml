@@ -23,6 +23,7 @@
         <surefire.plugin.version>3.0.0-M4</surefire.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.excludedGroups>integration</junit.excludedGroups>
+        <maven.exec.plugin.version>3.0.0</maven.exec.plugin.version>
 
         <!--tests dependencies-->
         <junit.version>5.9.0</junit.version>
