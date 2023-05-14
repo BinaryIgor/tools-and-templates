@@ -1,5 +1,3 @@
 logs-storage:
   max-files: 2
 
-logs-cleaner:
-  initial-delay: "PT1S"

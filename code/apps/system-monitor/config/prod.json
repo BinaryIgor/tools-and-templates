@@ -1,14 +1,15 @@
 {
   "build_cmd": "bash build_cmd.bash",
   "env": {
-    "LOGS_STORAGE_FILE_PATH": "/home/monitor/system-logs",
-    "JVM_OPTS": "-Xmx450m"
+    "LOGS_STORAGE_FILE_PATH": "/logs",
+    "JVM_OPTS": "-Xmx450m",
+    "SERVER_PORT": "${monitor-port}"
   },
   "volumes": [
-    "/home/monitor/system-logs:/home/monitor/system-logs"
+    "${logs-path}:/logs"
   ],
   "secrets": {},
   "network": "host",
   "memory": "500M",
-  "cpus": "0.5"
+  "cpus": "1"
 }

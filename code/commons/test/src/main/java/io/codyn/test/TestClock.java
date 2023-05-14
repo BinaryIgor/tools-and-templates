@@ -4,17 +4,24 @@ import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 
 public class TestClock extends Clock {
 
+    private final Instant initialTime;
     private Instant instant;
 
     public TestClock(Instant instant) {
+        initialTime = instant;
         this.instant = instant;
     }
 
     public TestClock() {
-        this(Instant.now());
+        this(Instant.now().truncatedTo(ChronoUnit.MILLIS));
+    }
+
+    public void setInitialTime() {
+        instant = initialTime;
     }
 
     @Override
@@ -40,8 +47,24 @@ public class TestClock extends Clock {
         instant = instant.plus(duration);
     }
 
+    public void moveForwardByReasonableAmount() {
+        moveForward(Duration.ofMinutes(1));
+    }
+
     public void moveBack(Duration duration) {
         instant = instant.minus(duration);
+    }
+
+    public Instant instantPlus(Duration duration) {
+        return instant.plus(duration);
+    }
+
+    public Instant instantPlusMinutes(int minutes) {
+        return instantPlus(Duration.ofMinutes(minutes));
+    }
+
+    public Instant instantMinus(Duration duration) {
+        return instant.minus(duration);
     }
 
 }

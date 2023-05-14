@@ -1,5 +1,9 @@
+spring:
+  application:
+    name: system-monitor
+
 server:
-  port: 10101
+  port: "${SERVER_PORT:9999}"
 
 management:
   endpoints:
@@ -21,6 +25,9 @@ logs-mappings:
           - "[ALERT]"
           - "[emerg]"
           - "[EMERG]"
+        messages-to-swallow:
+          - "SSL_do_handshake() failed"
+          - "access forbidden by rule"
 
   default-mapping:
     warning-keywords: [ "WARNING", "warning", "WARN", "warn" ]
@@ -30,7 +37,7 @@ logs-storage:
   file-path: "${LOGS_STORAGE_FILE_PATH:/tmp/logs}"
   # 10MB
   max-file-size: 10_000_000
-  max-files: 50
+  max-files: 25
 
 logs-cleaner:
   initial-delay: "PT1M"
@@ -38,6 +45,8 @@ logs-cleaner:
 
 prometheus-health-check:
   initial-delay: "PT5S"
-  fixed-delay: "PT60S"
+  fixed-delay: "PT1M"
   url: "http://localhost:9090/-/healthy"
+  retry-times: 10
+  retry-interval: 2000
 

@@ -1,6 +1,6 @@
 package io.codyn.system.monitor;
 
-import io.codyn.system.monitor._shared.app.ExceptionResponse;
+import io.codyn.system.monitor.common.ExceptionResponse;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.converter.HttpMessageNotReadableException;
