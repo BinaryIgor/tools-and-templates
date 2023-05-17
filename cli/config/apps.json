@@ -45,12 +45,12 @@
     "dir": "src/tools/test-app"
   },
   {
-    "name": "nginx-gateway",
-    "dir": "tools/nginx/gateway"
+    "name": "nginx-api-gateway",
+    "dir": "tools/nginx/api-gateway"
   },
   {
-    "name": "nginx-sockets-server-gateway",
-    "dir": "tools/nginx/sockets-server-gateway"
+    "name": "nginx-socket-server-gateway",
+    "dir": "tools/nginx/socket-server-gateway"
   },
   {
     "name": "nginx-api",

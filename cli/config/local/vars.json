@@ -1,11 +1,11 @@
 {
   "app-template-url-file": "app_url.txt",
   "current-app-template-url-file-path": "$PWD/../app-template/app_url.txt",
-  "current-app-sockets-server-template-url-file-path": "$PWD/../app-sockets-server-template/latest/app_url.txt",
-  "upstream-app-template-nginx-dir": "$PWD/../nginx-gateway",
-  "upstream-app-sockets-server-template-nginx-dir": "$PWD/../nginx-sockets-server-gateway",
+  "current-socket-server-url-file-path": "$PWD/../app-sockets-server-template/latest/app_url.txt",
+  "upstream-app-template-nginx-dir": "$PWD/../nginx-api-gateway",
+  "upstream-app-socket-server-template-nginx-dir": "$PWD/../nginx-socket-server-gateway",
   "frontend-domain": "system-template.io",
-  "sockets-server-domain": "sockets.system-template.io",
+  "socket-server-domain": "sockets.system-template.io",
   "static-path": "/home/system-template/static",
   "files-path": "/home/system-template/system-logs",
   "monitor-port": "10101",
@@ -15,5 +15,6 @@
   "db-port": "5555",
   "db-local-port": "5678",
   "db-user": "system-template",
-  "db-name": "system-template"
+  "db-name": "system-template",
+  "private-ip-range": "10.114.16.0/20"
 }

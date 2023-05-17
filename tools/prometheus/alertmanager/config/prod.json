@@ -1,8 +1,18 @@
 {
-  "volumes": [],
+  "build_env": {
+    "WEBHOOK_RECEIVER_URL": "${monitor-url}/alerts",
+    "EMAIL_RECEIVER_TO_EMAILS": "system-template@gmail.com",
+    "EMAIL_RECEIVER_FROM_EMAIL": "monitoring@codyn.io",
+    "EMAIL_RECEIVER_HOST": "smtp.postmarkapp.com:587",
+    "EMAIL_RECEIVER_USERNAME": "secrets:postmark-smtp-username",
+    "EMAIL_RECEIVER_PASSWORD": "secrets:postmark-smtp-password",
+    "EMAIL_REVEIVER_EMAIL_TAG": "monitoring"
+
+  }, 
   "env": {},
+  "build_cmd": "bash build.bash",
   "secrets": {},
   "network": "host",
-  "memory": "250M",
+  "memory": "500M",
   "cpus": "0.5"
 }

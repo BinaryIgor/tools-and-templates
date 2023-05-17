@@ -1,0 +1,71 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 5s
+  evaluation_interval: 30s
+
+rule_files:
+  - alert_rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - localhost:${ALERTMANAGER_PORT}
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: prometheus-alertmanager
+    static_configs:
+      - targets: ['localhost:${ALERTMANAGER_PORT}']
+  - job_name: monitor-node
+    static_configs:
+      - targets: ['localhost:${NODE_EXPORTER_PORT}']
+  - job_name: fluentd-monitor
+    static_configs:
+      - targets: ['localhost:${FLUENTD_PORT}']
+  - job_name: monitor
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ['localhost:${MONITOR_PORT}']
+  - job_name: api-node
+    static_configs:
+      - targets: ['api:${NODE_EXPORTER_PORT}']
+  - job_name: fluentd-api
+    static_configs:
+      - targets: ['api:${FLUENTD_PORT}']
+  - job_name: api
+    metrics_path: "/api/actuator/prometheus"
+    static_configs:
+      - targets: ['api']
+  - job_name: processor-node
+    static_configs:
+      - targets: ['processor:${NODE_EXPORTER_PORT}']
+  - job_name: fluentd-processor
+    static_configs:
+      - targets: ['processor:${FLUENTD_PORT}']
+  - job_name: processor
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ['processor']
+  - job_name: socket-server-node
+    static_configs:
+      - targets: ['socket-server:${NODE_EXPORTER_PORT}']
+  - job_name: fluentd-socket-server
+    static_configs:
+      - targets: ['socket-server:${FLUENTD_PORT}']
+  - job_name: socket-server
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ['socket-server']
+  - job_name: turn-server-1-node
+    static_configs:
+      - targets: ['turn-server-1:${NODE_EXPORTER_PORT}']
+  - job_name: fluentd-turn-server-1
+    static_configs:
+      - targets: ['turn-server-1:${FLUENTD_PORT}']
+  - job_name: turn-server-1
+    metrics_path: "/metrics"
+    static_configs:
+      - targets: ['turn-server-1:${TURN_PORT}']
